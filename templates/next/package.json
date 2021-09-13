@@ -41,7 +41,10 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/next": "latest",
+    "@riseup/next": "file:../../packages/next/pkg/tarball.tgz",
+    "@riseup/tooling": "file:../../packages/tooling/pkg/tarball.tgz",
+    "@riseup/universal": "file:../../packages/universal/pkg/tarball.tgz",
+    "@riseup/utils": "file:../../packages/utils/pkg/tarball.tgz",
     "@testing-library/dom": "^7.30.4",
     "@testing-library/react": "^11.2.6",
     "@types/react": "^17.0.11",
@@ -52,7 +55,6 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "multitude": "^0.0.6",
     "next": "^11.0.0",
     "next-pwa": "^5.2.21",
     "react": "^17.0.2",

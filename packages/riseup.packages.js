@@ -12,7 +12,7 @@ module.exports = library(
           ? ['static/']
           : [],
       types: true,
-      tarball: true,
+      tarball: 'pkg/tarball',
       destination: 'pkg/',
       targets: { node: '12.0.0' },
       multitarget: false,
