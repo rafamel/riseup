@@ -1,5 +1,5 @@
 import { Deep, Serial } from 'type-core';
-import { capture } from 'errorish';
+import { ensure } from 'errorish';
 import { context, copy, create, exec, mkdir, run, series, Task } from 'kpo';
 import path from 'path';
 import fs from 'fs';
@@ -43,7 +43,7 @@ export async function build({
     const task = transpile(output, hydrateConfigurePika(options), config);
     await run({ cwd }, task);
   } catch (err) {
-    throw capture(err);
+    throw ensure(err, null, { capture: true });
   }
 }
 
