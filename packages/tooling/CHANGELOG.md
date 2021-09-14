@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/rafamel/riseup/compare/v0.9.2...v0.10.0) (2021-09-14)
+
+
+### Bug Fixes
+
+* **packages:** update dependencies ([fda9969](https://github.com/rafamel/riseup/commit/fda9969aaf64671eccaea5916f80eaa8867dc9e0))
+
+
+### Features
+
+* **packages/tooling:** independent prettierignore resolution; parse formatting only with prettier ([1a32f85](https://github.com/rafamel/riseup/commit/1a32f851c5601bc90a9f5c549c275131b56c8123))
+
+
+
+
+
 ## [0.9.2](https://github.com/rafamel/riseup/compare/v0.9.1...v0.9.2) (2021-06-30)
 
 
