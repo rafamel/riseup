@@ -19,6 +19,7 @@ const tasks = {
   release: context({ args: ['--no-verify'] }, riseup.release),
   distribute: riseup.distribute,
   validate: series(
+    exec('lerna', ['link']),
     context({ args: ['validate'] }, riseup.run),
     create(() => tasks.version)
   ),
