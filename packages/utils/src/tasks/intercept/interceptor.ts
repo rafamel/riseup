@@ -1,6 +1,5 @@
 /* eslint-disable no-eval */
 import { Dictionary } from 'type-core';
-import { ufs as unionfs } from 'unionfs';
 import { fs as memfs } from 'memfs';
 import nativefs from 'fs';
 import path from 'path';
@@ -8,7 +7,7 @@ import mockery from 'mockery';
 import { coerce } from 'ensurism';
 import { constants } from '../../constants';
 
-const filesArr: any[] = coerce(
+const inputArr: any[] = coerce(
   process.env[constants.interceptor.env],
   {
     type: 'array',
@@ -27,16 +26,16 @@ const filesArr: any[] = coerce(
   { assert: true }
 );
 
-// Native filesystem with memfs backup
-unionfs.use(memfs as any).use(nativefs);
+// Only intercept files that don't exist in the local filesystem.
+const filesArr = inputArr.filter((file) => !nativefs.existsSync(file.path));
 
 // Create a native fs compatible object
 const pathsArr = filesArr.map((file) => file.path);
-const proxyfs = interceptMethods(nativefs, unionfs, pathsArr);
+const proxyfs = interceptMethods(nativefs, memfs, pathsArr);
 if (nativefs.promises) {
   proxyfs.promises = interceptMethods(
     nativefs.promises,
-    unionfs.promises,
+    memfs.promises,
     pathsArr
   );
 }
