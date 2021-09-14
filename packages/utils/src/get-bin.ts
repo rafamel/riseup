@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import fs from 'fs';
 import path from 'path';
+import up from 'find-up';
 import resolve from 'resolve-from';
 import { TypeGuard } from 'type-core';
 
@@ -7,18 +8,35 @@ import { TypeGuard } from 'type-core';
  * Resolves the path for a module bin file.
  */
 export function getBin(lib: string, bin: string, from: string | null): string {
-  const relativePath = path.join(lib, 'package.json');
+  let pkgPath: string | null = null;
 
-  let pkgPath: any;
+  // ES Modules
   try {
+    const entryPath = from ? resolve(from, lib) : require.resolve(lib);
+    pkgPath =
+      up.sync('package.json', {
+        type: 'file',
+        cwd: path.dirname(entryPath)
+      }) || null;
+  } catch (_) {}
+
+  // Modules wo/ an entry point
+  try {
+    const relativePath = path.join(lib, 'package.json');
     pkgPath = from
       ? resolve(from, relativePath)
       : require.resolve(relativePath);
-  } catch (_) {
-    throw Error(`Module "${lib}" not found`);
+  } catch (_) {}
+
+  if (!pkgPath) {
+    throw Error(`No module "${lib}" found`);
   }
 
-  const pkg = require(pkgPath);
+  const pkg = JSON.parse(fs.readFileSync(pkgPath).toString());
+
+  if (pkg.name !== lib) {
+    throw Error(`No matching package.json found for "${lib}"`);
+  }
 
   if (!pkg.bin) {
     throw Error(`No executable found for ${lib}`);
