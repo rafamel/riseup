@@ -12,7 +12,10 @@ const riseup = require('./riseup.config');
 const tasks = {
   run: riseup.run,
   execute: riseup.execute,
-  build: context({ args: ['build'] }, riseup.run),
+  build: series(
+    exec('lerna', ['link']),
+    context({ args: ['build'] }, riseup.run)
+  ),
   lint: riseup.lintmd,
   coverage: riseup.coverage,
   commit: riseup.commit,
