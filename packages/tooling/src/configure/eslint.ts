@@ -32,7 +32,6 @@ export interface ConfigureEslintOptions extends ConfigureEslintParams {
 export interface ConfigureEslintConfig {
   babel: Serial.Object;
   typescript: Serial.Object;
-  prettier: Serial.Object | null;
 }
 
 export function hydrateConfigureEslint(
@@ -83,7 +82,7 @@ export function configureEslint(
   const eslint = {
     extends: [
       paths.eslint.configStandard,
-      'plugin:prettier/recommended',
+      ...(opts.prettier ? ['plugin:prettier/recommended'] : []),
       'plugin:import/recommended'
     ],
     env: opts.env,
@@ -91,7 +90,7 @@ export function configureEslint(
       impliedStrict: true,
       sourceType: 'module'
     },
-    plugins: ['prettier', 'import'],
+    plugins: [...(opts.prettier ? ['prettier'] : []), 'import'],
     globals: {},
     rules: {
       /* DISABLED */
@@ -110,11 +109,7 @@ export function configureEslint(
       /* ERRORS */
       'lines-between-class-members': [1, 'never'],
       // Prettier
-      'prettier/prettier': opts.prettier
-        ? config.prettier
-          ? [2, config.prettier]
-          : 2
-        : 0
+      ...(opts.prettier ? { 'prettier/prettier': 0 } : {})
     },
     settings: {
       'import/extensions': codeExtensions.map((x) =>

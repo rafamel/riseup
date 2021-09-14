@@ -1,6 +1,7 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
+import up from 'find-up';
 import path from 'path';
 import {
   getTypeScriptPath,
@@ -79,25 +80,32 @@ export function lint(
           ]);
         }
       ),
-      create((ctx) => {
-        const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
-          (dir) => {
-            return dir.endsWith(path.posix.sep)
-              ? dir.slice(0, dir.lastIndexOf(path.posix.sep))
-              : dir.endsWith(path.win32.sep)
-              ? dir.slice(0, dir.lastIndexOf(path.win32.sep))
-              : dir;
-          }
-        );
-        return opts.prettier
-          ? exec(constants.node, [
+      opts.prettier
+        ? create(async (ctx) => {
+            const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
+              (dir) => {
+                return dir.endsWith(path.posix.sep)
+                  ? dir.slice(0, dir.lastIndexOf(path.posix.sep))
+                  : dir.endsWith(path.win32.sep)
+                  ? dir.slice(0, dir.lastIndexOf(path.win32.sep))
+                  : dir;
+              }
+            );
+
+            const ignore = await up('.prettierignore', {
+              cwd: ctx.cwd,
+              type: 'file'
+            });
+
+            return exec(constants.node, [
               paths.bin.prettier,
               ...['--check', '--ignore-unknown'],
+              ...(ignore ? ['--ignore-path', ignore] : []),
               ...(isLevelActive('debug', ctx) ? [] : ['--loglevel=warn']),
               ...dirs
-            ])
-          : null;
-      }),
+            ]);
+          })
+        : null,
       create((ctx) => {
         if (!opts.types || !getTypeScriptPath(ctx.cwd)) {
           return null;

@@ -1,6 +1,5 @@
 import { Empty } from 'type-core';
 import { create } from 'kpo';
-import up from 'find-up';
 import { withReconfigure, Riseup } from '@riseup/utils';
 import { node, lint, test, fix } from './tasks';
 import {
@@ -48,17 +47,12 @@ export function tooling(
       return configureTypescript(context.cwd);
     },
     eslint(context: Riseup.Context) {
-      const prettier = up.sync('.prettierrc', {
-        cwd: context.cwd,
-        type: 'file'
-      });
       return configureEslint(
         context.cwd,
         context.task === 'fix' ? { ...opts.lint, highlight: [] } : opts.lint,
         {
           babel: configure.babel(context),
-          typescript: configure.typescript(context),
-          prettier: prettier ? require(prettier) : null
+          typescript: configure.typescript(context)
         }
       );
     },

@@ -1,6 +1,7 @@
 import { Deep, Empty, Serial } from 'type-core';
 import { merge } from 'merge-strategies';
 import { context, exec, Task, silence, finalize, create } from 'kpo';
+import up from 'find-up';
 import path from 'path';
 import { temporal, constants } from '@riseup/utils';
 import { hydrateToolingGlobal } from '../global';
@@ -72,7 +73,7 @@ export function fix(
         }
       ),
       opts.prettier
-        ? create(() => {
+        ? create(async (ctx) => {
             const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
               (dir) => {
                 return dir.endsWith(path.posix.sep)
@@ -82,10 +83,17 @@ export function fix(
                   : dir;
               }
             );
+
+            const ignore = await up('.prettierignore', {
+              cwd: ctx.cwd,
+              type: 'file'
+            });
+
             return silence(
               exec(constants.node, [
                 paths.bin.prettier,
                 ...['--write', '--ignore-unknown'],
+                ...(ignore ? ['--ignore-path', ignore] : []),
                 ...dirs
               ])
             );
