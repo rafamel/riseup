@@ -18,7 +18,9 @@ module.exports = monorepo(
       // Push repository and tags upon distribution (publication)
       push: true,
       // Folder to publish -for all packages
-      contents: 'pkg/'
+      contents: 'pkg/',
+      // Package registry for publication
+      registry: null
     }
   },
   { markdownlint: (config) => config }

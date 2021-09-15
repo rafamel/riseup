@@ -10,6 +10,8 @@ export interface DistributeParams {
   push?: boolean;
   /** Subdirectory to publish for all packages */
   contents?: string | null;
+  /** Package registry for publication */
+  registry?: string | null;
 }
 
 export type DistributeOptions = DistributeParams;
@@ -20,7 +22,8 @@ export function hydrateDistribute(
   return shallow(
     {
       push: defaults.distribute.push,
-      contents: defaults.distribute.contents
+      contents: defaults.distribute.contents,
+      registry: defaults.distribute.registry
     },
     options || undefined
   );
@@ -30,11 +33,15 @@ export function distribute(options: DistributeOptions | Empty): Task.Async {
   const opts = hydrateDistribute(options);
 
   return series(
-    exec(constants.node, [
-      paths.bin.lerna,
-      ...['publish', 'from-package'],
-      ...(opts.contents ? ['--contents', opts.contents] : [])
-    ]),
+    exec(
+      constants.node,
+      [
+        paths.bin.lerna,
+        ...['publish', 'from-package'],
+        ...(opts.contents ? ['--contents', opts.contents] : [])
+      ],
+      opts.registry ? { env: { npm_config_registry: opts.registry } } : {}
+    ),
     opts.push
       ? context({ args: [] }, exec('git', ['push', '--follow-tags']))
       : null
