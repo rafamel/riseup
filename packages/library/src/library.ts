@@ -9,7 +9,7 @@ import {
   reconfigureBabelEnv,
   reconfigureBabelStubs
 } from '@riseup/tooling';
-import { build, distribute, docs } from './tasks';
+import { build, tarball, distribute, docs } from './tasks';
 import { configurePika, configureTypedoc } from './configure';
 import {
   LibraryConfigure,
@@ -29,13 +29,15 @@ export function hydrateLibrary(
   const library = options
     ? {
         build: { ...global, ...options.build },
-        docs: { ...options.docs },
-        distribute: { ...global, ...options.distribute }
+        tarball: { ...global, ...options.tarball },
+        distribute: { ...global, ...options.distribute },
+        docs: { ...options.docs }
       }
     : {
         build: { ...global },
-        docs: {},
-        distribute: { ...global }
+        tarball: { ...global },
+        distribute: { ...global },
+        docs: {}
       };
 
   return {
@@ -105,6 +107,7 @@ export function library(
         }
       );
     }),
+    tarball: create(() => tarball(opts.tarball)),
     distribute: create(() => distribute(opts.distribute)),
     docs: create(({ cwd }) => {
       return docs(opts.docs, {

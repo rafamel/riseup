@@ -8,10 +8,16 @@ export const defaults: Deep.Required<LibraryParams> = {
   build: {
     assets: [],
     types: true,
-    tarball: false,
     targets: { node: '12.0.0' },
     multitarget: true,
     manifest: {}
+  },
+  tarball: {
+    destination: null,
+    monorepo: {
+      contents: null,
+      allowPrivate: true
+    }
   },
   docs: {
     build: true,

@@ -15,14 +15,20 @@ module.exports = library(
       assets: [],
       // Build types
       types: true,
-      // Package tarball -takes a boolean or a path relative to destination
-      tarball: false,
       // Babel env targets
       targets: { node: '12.0.0' },
       // Build as a standard js and bundle for web
       multitarget: true,
       // Overwrite keys on package.json
       manifest: {}
+    },
+    tarball: {
+      // Package tarball file name
+      destination: null,
+      // Enable monorepo dependencies inclusion in tarball
+      // by setting a relative contents (build) folder
+      // -must be the same for all packages
+      monorepo: { contents: null }
     },
     docs: {
       // Build typedoc documentation

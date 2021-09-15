@@ -13,13 +13,14 @@ import {
   UniversalReconfigure,
   UniversalTasks
 } from '@riseup/universal';
-import { BuildParams, DistributeParams, DocsParams } from './tasks';
+import { TarballParams, DistributeParams, DocsParams } from './tasks';
 import { ConfigurePikaParams, ConfigureTypedocParams } from './configure';
 import { LibraryGlobalParams } from './global';
 
 export interface LibraryParams {
   global?: LibraryGlobalParams;
-  build?: BuildParams & ConfigurePikaParams;
+  build?: ConfigurePikaParams;
+  tarball?: TarballParams;
   distribute?: DistributeParams;
   docs?: ConfigureTypedocParams & DocsParams;
 }
@@ -41,6 +42,7 @@ export type LibraryConfigure = UniversalConfigure &
 export type LibraryTasks = UniversalTasks &
   ToolingTasks & {
     build: Task;
+    tarball: Task;
     distribute: Task;
     docs: Task;
   };
