@@ -1,7 +1,7 @@
 {
   "name": "@riseup/monorepo",
   "description": "Riseup tasks and configurations for monorepos",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "author": "Rafa Mel",
   "license": "MIT",
   "private": false,
@@ -44,8 +44,8 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
-    "@riseup/universal": "^0.10.0",
-    "@riseup/utils": "^0.10.0",
+    "@riseup/universal": "^0.11.0",
+    "@riseup/utils": "^0.11.0",
     "kpo": "^0.22.0",
     "lcov-result-merger": "^3.1.0",
     "lerna": "^4.0.0",

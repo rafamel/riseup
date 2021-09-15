@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/rafamel/riseup/compare/v0.10.0...v0.11.0) (2021-09-15)
+
+
+### Features
+
+* **packages/library:** consolidate build destination directory option in output global option ([a15b3ed](https://github.com/rafamel/riseup/commit/a15b3edcf71536eb4e1130825f48a1e792831f9c))
+* **packages/library:** separate tarball/pack task from build; add monorepo dependency resolution/inclusion ([d0381f8](https://github.com/rafamel/riseup/commit/d0381f8453b8a393488b4cfe28197ae154703503))
+* **packages/monorepo:** add registry option for distribute ([50a72ec](https://github.com/rafamel/riseup/commit/50a72ec0ebf5ee8bd5f1f160503efb258b542d57))
+
+
+
+
+
 # [0.10.0](https://github.com/rafamel/riseup/compare/v0.9.2...v0.10.0) (2021-09-14)
 
 
