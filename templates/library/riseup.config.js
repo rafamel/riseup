@@ -3,6 +3,8 @@ const { library } = require('@riseup/library');
 module.exports = library(
   {
     global: {
+      // Build output directory
+      output: 'pkg/',
       // Enable prettier
       prettier: true,
       // Path aliases -must be set in tsconfig too
@@ -15,8 +17,6 @@ module.exports = library(
       types: true,
       // Package tarball -takes a boolean or a path relative to destination
       tarball: false,
-      // Destination for package
-      destination: 'pkg/',
       // Babel env targets
       targets: { node: '12.0.0' },
       // Build as a standard js and bundle for web
@@ -74,9 +74,7 @@ module.exports = library(
     },
     distribute: {
       // Push repository and tags upon distribution (publication)
-      push: true,
-      // Folder to publish -should be build folder
-      contents: 'pkg/'
+      push: true
     }
   },
   {

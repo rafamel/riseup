@@ -3,17 +3,18 @@ import { shallow } from 'merge-strategies';
 import { hydrateToolingGlobal } from '@riseup/tooling';
 import { paths } from '../../paths';
 import { defaults } from '../../defaults';
+import { hydrateLibraryGlobal } from '../../global';
 
 export interface ConfigurePikaParams {
   assets?: string[];
   types?: boolean;
-  destination?: string;
   targets?: Serial.Object;
   multitarget?: boolean;
   manifest?: Serial.Object;
 }
 
 export interface ConfigurePikaOptions extends ConfigurePikaParams {
+  output?: string;
   extensions?: {
     js?: string[];
     ts?: string[];
@@ -28,12 +29,13 @@ export interface ConfigurePikaConfig {
 export function hydrateConfigurePika(
   options: ConfigurePikaOptions | Empty
 ): Deep.Required<ConfigurePikaOptions> {
+  const { output } = hydrateLibraryGlobal(options);
   return shallow(
     {
       ...hydrateToolingGlobal(options),
+      output,
       assets: defaults.build.assets,
       types: defaults.build.types,
-      destination: defaults.build.destination,
       targets: defaults.build.targets,
       multitarget: defaults.build.multitarget,
       manifest: defaults.build.manifest

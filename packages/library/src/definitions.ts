@@ -1,7 +1,5 @@
 import { Serial } from 'type-core';
 import { Task } from 'kpo';
-import { BuildParams, DistributeParams, DocsParams } from './tasks';
-import { ConfigurePikaParams, ConfigureTypedocParams } from './configure';
 import { Riseup } from '@riseup/utils';
 import {
   ToolingConfigure,
@@ -15,9 +13,13 @@ import {
   UniversalReconfigure,
   UniversalTasks
 } from '@riseup/universal';
+import { BuildParams, DistributeParams, DocsParams } from './tasks';
+import { ConfigurePikaParams, ConfigureTypedocParams } from './configure';
+import { LibraryGlobalParams } from './global';
 
 export interface LibraryParams {
-  build?: ConfigurePikaParams & BuildParams;
+  global?: LibraryGlobalParams;
+  build?: BuildParams & ConfigurePikaParams;
   distribute?: DistributeParams;
   docs?: ConfigureTypedocParams & DocsParams;
 }
@@ -39,6 +41,6 @@ export type LibraryConfigure = UniversalConfigure &
 export type LibraryTasks = UniversalTasks &
   ToolingTasks & {
     build: Task;
-    docs: Task;
     distribute: Task;
+    docs: Task;
   };

@@ -18,7 +18,7 @@ import {
   hydrateConfigurePika
 } from './index';
 
-const output = 'dist/';
+const OUTPUT = 'dist/';
 
 export function manifest(
   manifest: Serial.Object,
@@ -27,11 +27,11 @@ export function manifest(
   const opts = hydrateConfigurePika(options);
   const isTypeScript = Boolean(opts.types && getTypeScriptPath(cwd));
 
-  manifest.main = output;
-  if (isTypeScript) manifest.types = output;
+  manifest.main = OUTPUT;
+  if (isTypeScript) manifest.types = OUTPUT;
 
   manifest.files = ((manifest.files || []) as string[])
-    .concat(output)
+    .concat(OUTPUT)
     .filter((x, i, arr) => arr.indexOf(x) === i);
 }
 
@@ -40,7 +40,7 @@ export async function build({
   options: { options, config }
 }: BuilderOptions): Promise<void> {
   try {
-    const task = transpile(output, hydrateConfigurePika(options), config);
+    const task = transpile(OUTPUT, hydrateConfigurePika(options), config);
     await run({ cwd }, task);
   } catch (err) {
     throw ensure(err, null, { capture: true });
@@ -52,7 +52,7 @@ function transpile(
   options: Deep.Required<ConfigurePikaOptions>,
   config: ConfigurePikaConfig
 ): Task.Async {
-  const destination = path.join(options.destination, dir);
+  const destination = path.join(options.output, dir);
   return context(
     { args: [] },
     series(

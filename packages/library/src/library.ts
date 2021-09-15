@@ -18,19 +18,25 @@ import {
   LibraryTasks
 } from './definitions';
 import { defaults } from './defaults';
+import { hydrateLibraryGlobal } from './global';
 
 export function hydrateLibrary(
   options: LibraryOptions | Empty
 ): Required<LibraryOptions> {
+  const global = hydrateLibraryGlobal(options ? options.global : null);
   const universal = hydrateUniversal(options);
   const tooling = hydrateTooling(options);
   const library = options
     ? {
-        build: { ...options.global, ...options.build },
+        build: { ...global, ...options.build },
         docs: { ...options.docs },
-        distribute: { ...options.distribute }
+        distribute: { ...global, ...options.distribute }
       }
-    : { build: {}, docs: {}, distribute: {} };
+    : {
+        build: { ...global },
+        docs: {},
+        distribute: { ...global }
+      };
 
   return {
     ...universal,
@@ -40,18 +46,8 @@ export function hydrateLibrary(
       ...tooling.test,
       ignore: [
         ...(tooling.test.ignore || []),
-        path.join(
-          '<rootDir>',
-          library.build.destination || defaults.build.destination
-        )
+        path.join('<rootDir>', global.output || defaults.global.output)
       ]
-    },
-    distribute: {
-      ...library.distribute,
-      contents:
-        library.distribute.contents ||
-        library.build.destination ||
-        defaults.distribute.contents
     }
   };
 }
@@ -94,23 +90,26 @@ export function library(
     ...deps.universal.tasks,
     ...deps.tooling.tasks,
     build: create(({ cwd }) => {
-      return build(opts.build, {
-        pika: configure.pika({ cwd, task: 'build' }),
-        babel: reconfigureBabelEnv(
-          {
-            spec: true,
-            modules: false,
-            targets: { esmodules: true }
-          },
-          configure.babel({ cwd, task: 'build' })
-        )
-      });
+      return build(
+        { ...opts.global, ...opts.build },
+        {
+          pika: configure.pika({ cwd, task: 'build' }),
+          babel: reconfigureBabelEnv(
+            {
+              spec: true,
+              modules: false,
+              targets: { esmodules: true }
+            },
+            configure.babel({ cwd, task: 'build' })
+          )
+        }
+      );
     }),
+    distribute: create(() => distribute(opts.distribute)),
     docs: create(({ cwd }) => {
       return docs(opts.docs, {
         typedoc: configure.typedoc({ cwd, task: 'docs' })
       });
-    }),
-    distribute: create(() => distribute(opts.distribute))
+    })
   };
 }

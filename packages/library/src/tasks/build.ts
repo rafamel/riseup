@@ -17,13 +17,15 @@ import {
 import { constants, intercept } from '@riseup/utils';
 import { paths } from '../paths';
 import { defaults } from '../defaults';
+import { hydrateLibraryGlobal } from '../global';
 
 export interface BuildParams {
-  tarball?: boolean | string;
-  destination?: string;
+  tarball?: boolean;
 }
 
-export type BuildOptions = BuildParams;
+export interface BuildOptions extends BuildParams {
+  output?: string;
+}
 
 export interface BuildConfig {
   pika: Serial.Array;
@@ -33,10 +35,11 @@ export interface BuildConfig {
 export function hydrateBuild(
   options: BuildOptions | Empty
 ): Deep.Required<BuildOptions> {
+  const { output } = hydrateLibraryGlobal(options);
   return shallow(
     {
-      tarball: defaults.build.tarball,
-      destination: defaults.build.destination
+      output,
+      tarball: defaults.build.tarball
     },
     options || undefined
   );
@@ -58,7 +61,7 @@ export function build(
         },
         paths.bin.pika,
         [
-          ...['--out', opts.destination],
+          ...['--out', opts.output],
           ...['--pipeline', JSON.stringify(config.pika)]
         ]
       ),
@@ -66,9 +69,7 @@ export function build(
         if (!opts.tarball) return;
 
         const custom = TypeGuard.isString(opts.tarball);
-        const dir = custom
-          ? path.resolve(constants.tmp, uuid())
-          : opts.destination;
+        const dir = custom ? path.resolve(constants.tmp, uuid()) : opts.output;
         return context(
           { args: [] },
           progress(
@@ -76,7 +77,7 @@ export function build(
             finalize(
               series(
                 custom ? mkdir(dir, { ensure: false }) : null,
-                exec('npm', ['pack', path.resolve(ctx.cwd, opts.destination)], {
+                exec('npm', ['pack', path.resolve(ctx.cwd, opts.output)], {
                   cwd: dir
                 }),
                 custom
