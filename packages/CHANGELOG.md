@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/rafamel/riseup/compare/v0.11.0...v0.12.0) (2021-09-16)
+
+
+### Bug Fixes
+
+* **packages/library:** tarball task w/ monorepo resolution doesn't error when there are no local dependencies ([b14021d](https://github.com/rafamel/riseup/commit/b14021d1db4dcb5b67ced3b53b609d1c6299bcbd))
+
+
+### Features
+
+* **packages/library:** improve error descriptiveness for monorepo resolution ([48cc7d1](https://github.com/rafamel/riseup/commit/48cc7d1f6c39edcbb219d772e9f9889a36c53d5d))
+
+
+
+
+
 # [0.11.0](https://github.com/rafamel/riseup/compare/v0.10.0...v0.11.0) (2021-09-15)
 
 
