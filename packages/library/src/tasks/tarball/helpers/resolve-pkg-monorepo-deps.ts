@@ -98,13 +98,15 @@ async function trunk(
       !semver.satisfies(pkgInfo.version, pkgVersionStr)
     ) {
       throw Error(
-        `Package requires ${pkgVersionStr} which is ` +
-          `not satisfied by current ${pkgInfo.version}: "${dir}"`
+        `Package ${pkgInfo.name} version ${pkgVersionStr} ` +
+          `is not satisfied by ${pkgInfo.version}: "${pkgPath}"`
       );
     }
 
     if (!allowPrivate && pkgInfo.private) {
-      throw Error(`Package requires private package ${pkgInfo.name}: "${dir}"`);
+      throw Error(
+        `Package requires private package ${pkgInfo.name}: "${pkgPath}"`
+      );
     }
   }
 
