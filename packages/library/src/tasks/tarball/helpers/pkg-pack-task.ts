@@ -27,7 +27,6 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
   return context(
     { args: [] },
     create((ctx) => {
-      // const custom = TypeGuard.isString(options.destination);
       const tmpDir = path.resolve(constants.tmp, uuid());
 
       return finalize(

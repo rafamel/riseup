@@ -7,6 +7,7 @@ import {
   create,
   edit,
   finalize,
+  mkdir,
   progress,
   remove,
   run,
@@ -79,6 +80,7 @@ export function tarball(options: TarballOptions | Empty): Task.Async {
 
           return finalize(
             series(
+              mkdir(tmpDir, { ensure: true }),
               create(async (ctx) => {
                 const builtArr: string[] = [];
 
