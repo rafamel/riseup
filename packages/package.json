@@ -15,6 +15,7 @@
     "run": "kpo run --",
     "execute": "kpo execute --",
     "build": "kpo build --",
+    "lint": "kpo lint --",
     "coverage": "kpo coverage --",
     "commit": "kpo commit --",
     "release": "kpo release --",
@@ -33,8 +34,8 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/library": "^0.10.0",
-    "@riseup/monorepo": "^0.10.0",
+    "@riseup/library": "^0.12.0",
+    "@riseup/monorepo": "^0.12.0",
     "kpo": "^0.22.0",
     "lerna": "^4.0.0",
     "simple-git-hooks": "^2.4.1",

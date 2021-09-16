@@ -5,14 +5,14 @@ const {
   series,
   lift,
   exec,
-  catches,
-  log
+  catches
 } = require('kpo');
 const riseup = require('./riseup.packages');
 
 const tasks = {
   node: riseup.node,
   build: riseup.build,
+  tarball: riseup.tarball,
   docs: riseup.docs,
   fix: riseup.fix,
   lint: series(riseup.lintmd, riseup.lint),
