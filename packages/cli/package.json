@@ -1,7 +1,7 @@
 {
   "name": "@riseup/cli",
   "description": "Riseup CLI",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "author": "Rafa Mel",
   "license": "MIT",
   "private": false,

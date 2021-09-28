@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.1](https://github.com/rafamel/riseup/compare/v0.12.0...v0.13.1) (2021-09-28)
+
+
+### Features
+
+* **packages/tooling:** set allowDeclareFields as true for @babel/preset-typescript ([dff7d49](https://github.com/rafamel/riseup/commit/dff7d4945352a16f7f67ad44e1741b4359b26134))
+
+
+
+
+
 # [0.12.0](https://github.com/rafamel/riseup/compare/v0.11.0...v0.12.0) (2021-09-16)
 
 
