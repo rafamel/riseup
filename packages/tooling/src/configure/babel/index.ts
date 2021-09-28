@@ -35,7 +35,7 @@ export function configureBabel(
   return {
     presets: [
       ...(opts.env === null ? [] : [[paths.babel.presetEnv, opts.env]]),
-      paths.babel.presetTypeScript
+      [paths.babel.presetTypeScript, { allowDeclareFields: true }]
     ],
     plugins: [
       [paths.babel.pluginModuleResolver, { alias: opts.alias }],
