@@ -1,7 +1,7 @@
 {
   "name": "@riseup/cli",
   "description": "Riseup CLI",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "author": "Rafa Mel",
   "license": "MIT",
   "private": false,
@@ -25,7 +25,6 @@
   "scripts": {
     "node": "kpo node --",
     "build": "kpo build --",
-    "tarball": "kpo tarball --",
     "docs": "kpo docs --",
     "fix": "kpo fix --",
     "lint": "kpo lint --",

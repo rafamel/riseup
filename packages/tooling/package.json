@@ -29,7 +29,6 @@
   "scripts": {
     "node": "kpo node --",
     "build": "kpo build --",
-    "tarball": "kpo tarball --",
     "docs": "kpo docs --",
     "fix": "kpo fix --",
     "lint": "kpo lint --",
