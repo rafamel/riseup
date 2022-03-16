@@ -2,6 +2,7 @@ import { loadPackage } from 'cli-belt';
 import { cli as _cli } from 'kpo';
 
 export async function cli(): Promise<void> {
+  // FIXME
   const pkg = await loadPackage(__dirname, { title: false });
 
   return _cli({

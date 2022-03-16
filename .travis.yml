@@ -1,7 +1,0 @@
-language: node_js
-node_js:
-  - '12'
-install:
-  - npm ci --prefix ./packages
-script:
-  - npm run validate --prefix ./packages
