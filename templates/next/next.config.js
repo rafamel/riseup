@@ -1,5 +1,5 @@
 const withPWA = require('next-pwa');
-const { app, enablePwa } = require('./application.config');
+const app = require('./app.config');
 
 // See: https://nextjs.org/docs/api-reference/next.config.js
 module.exports = withPWA({
@@ -8,7 +8,7 @@ module.exports = withPWA({
   // Clean build directory
   cleanDistDir: true,
   // Public url
-  basePath: app.url === '/' ? '' : app.url,
+  basePath: app.application.url === '/' ? '' : app.application.url,
   // Serve w/ gzip compression. See: https://bit.ly/2SaFIca
   compress: true,
   // Fonts build time inline. See: https://bit.ly/35DbDoS
@@ -22,16 +22,16 @@ module.exports = withPWA({
   // Disable x-powered-by header. See: https://bit.ly/3gOQrBk
   poweredByHeader: false,
   // Enable source maps on production. See: https://bit.ly/3iU0Azm
-  productionBrowserSourceMaps: false,
+  productionBrowserSourceMaps: true,
   pwa: {
     // Automatically register Service Worker
     register: true,
     // Destination folder for Service Worker
     dest: 'public',
     // Service Worker scope
-    scope: app.url,
+    scope: app.application.url,
     // Disable plugin
-    disable: process.env.NODE_ENV === 'development' ? true : !enablePwa
+    disable: process.env.NODE_ENV === 'development' ? true : !app.enablePwa
   },
   images: {
     // Disable image static imports. See: https://bit.ly/3xyLfIO

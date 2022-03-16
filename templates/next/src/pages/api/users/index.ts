@@ -1,15 +1,18 @@
+/* eslint-disable unicorn/prefer-type-error */
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sampleUserData } from '../../../utils/sample-data';
 
-const handler = (_req: NextApiRequest, res: NextApiResponse): void => {
+const handler = (_: NextApiRequest, response: NextApiResponse): void => {
   try {
     if (!Array.isArray(sampleUserData)) {
       throw new Error('Cannot find user data');
     }
 
-    res.status(200).json(sampleUserData);
+    response.status(200).json(sampleUserData);
   } catch (err) {
-    res.status(500).json({ statusCode: 500, message: (err as Error).message });
+    response
+      .status(500)
+      .json({ statusCode: 500, message: (err as Error).message });
   }
 };
 

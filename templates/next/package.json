@@ -10,16 +10,17 @@
   },
   "keywords": [],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "node": "kpo node --",
-    "start": "kpo start --",
+    "next": "kpo next --",
     "dev": "kpo dev --",
+    "start": "kpo start --",
     "watch": "kpo watch --",
     "build": "kpo build --",
     "export": "kpo export --",
-    "public": "kpo public --",
+    "assets": "kpo assets --",
     "explore": "kpo explore --",
     "fix": "kpo fix --",
     "lint": "kpo lint --",
@@ -28,7 +29,6 @@
     "release": "kpo release --",
     "validate": "kpo validate --",
     "prepare": "kpo prepare --",
-    "postinstall": "kpo postinstall --",
     "version": "kpo version --"
   },
   "homepage": "https://github.com/rafamel/next-template",
@@ -41,15 +41,16 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/next": "file:../../packages/next/pkg/tarball.tgz",
-    "@riseup/tooling": "file:../../packages/tooling/pkg/tarball.tgz",
-    "@riseup/universal": "file:../../packages/universal/pkg/tarball.tgz",
-    "@riseup/utils": "file:../../packages/utils/pkg/tarball.tgz",
+    "@next/eslint-plugin-next": "^11.0.0",
+    "@riseup/tooling": "file:../../packages/tooling/tarball.tgz",
+    "@riseup/universal": "file:../../packages/universal/tarball.tgz",
+    "@riseup/utils": "file:../../packages/utils/tarball.tgz",
+    "@riseup/web": "file:../../packages/web/tarball.tgz",
     "@testing-library/dom": "^8.5.0",
     "@testing-library/react": "^12.1.0",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
-    "kpo": "^0.22.0",
+    "kpo": "^0.23.0",
     "postcss-custom-media": "^8.0.0",
     "sass": "^1.40.1",
     "typescript": "^4.2.3"

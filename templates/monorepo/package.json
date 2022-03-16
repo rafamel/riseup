@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "run": "kpo run --",
@@ -34,13 +34,10 @@
     "url": "https://github.com/rafamel/monorepo-template/issues"
   },
   "devDependencies": {
-    "@riseup/monorepo": "file:../../packages/monorepo/pkg/tarball.tgz",
-    "@riseup/universal": "file:../../packages/universal/pkg/tarball.tgz",
-    "@riseup/utils": "file:../../packages/utils/pkg/tarball.tgz",
-    "kpo": "^0.22.0",
+    "@riseup/monorepo": "file:../../packages/monorepo/tarball.tgz",
+    "@riseup/universal": "file:../../packages/universal/tarball.tgz",
+    "@riseup/utils": "file:../../packages/utils/tarball.tgz",
+    "kpo": "^0.23.0",
     "lerna": "^4.0.0"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "kpo validate"
   }
 }

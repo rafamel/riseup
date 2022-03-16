@@ -1,4 +1,4 @@
-const { breakpoints } = require('./application.config');
+const app = require('./app.config');
 
 module.exports = {
   plugins: [
@@ -15,7 +15,7 @@ module.exports = {
       'postcss-custom-media',
       {
         importFrom: [].concat({
-          customMedia: Object.entries(breakpoints).reduce(
+          customMedia: Object.entries(app.breakpoints).reduce(
             (acc, [key, value]) => ({
               ...acc,
               [`--breakpoint-${key}`]: `(min-width: ${value}px)`

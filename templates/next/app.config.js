@@ -2,14 +2,14 @@ const pkg = require('./package.json');
 
 module.exports = {
   // Source image for favicons
-  logo: 'static/react.svg',
+  logo: 'static/favicon.svg',
   // Enable Progressive Web App capabilities
   enablePwa: true,
   // Enable Google Fonts
   fonts: { Rubik: true, Quicksand: true },
   // Application breakpoints
   breakpoints: { xs: 0, sm: 576, md: 768, lg: 992, xl: 1200 },
-  app: {
+  application: {
     // Public url
     url: '/',
     // Application version

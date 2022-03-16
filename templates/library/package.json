@@ -9,10 +9,14 @@
     "access": "restricted"
   },
   "keywords": [],
-  "main": "pkg/dist",
-  "types": "pkg/dist",
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "files": [
+    "build/"
+  ],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "node": "kpo node --",
@@ -26,7 +30,6 @@
     "release": "kpo release --",
     "distribute": "kpo distribute --",
     "validate": "kpo validate --",
-    "prepare": "kpo prepare --",
     "version": "kpo version --"
   },
   "homepage": "https://github.com/rafamel/library-template",
@@ -39,14 +42,11 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.3",
-    "@riseup/library": "file:../../packages/library/pkg/tarball.tgz",
-    "@riseup/tooling": "file:../../packages/tooling/pkg/tarball.tgz",
-    "@riseup/universal": "file:../../packages/universal/pkg/tarball.tgz",
-    "@riseup/utils": "file:../../packages/utils/pkg/tarball.tgz",
-    "kpo": "^0.22.0",
+    "@riseup/library": "file:../../packages/library/tarball.tgz",
+    "@riseup/tooling": "file:../../packages/tooling/tarball.tgz",
+    "@riseup/universal": "file:../../packages/universal/tarball.tgz",
+    "@riseup/utils": "file:../../packages/utils/tarball.tgz",
+    "kpo": "^0.23.0",
     "typescript": "^4.3.4"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "kpo validate"
   }
 }

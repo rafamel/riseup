@@ -6,7 +6,7 @@ class AppDocument extends Document {
     return (
       <Html lang={result.values.manifest.lang.split('-')[0]}>
         <Head>
-          <meta charSet="utf-8" />
+          <meta charSet="utf8" />
           {result.favicons.meta.map((props, i) => (
             <meta key={i} {...props} />
           ))}
