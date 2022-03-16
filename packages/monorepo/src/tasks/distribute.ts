@@ -1,7 +1,6 @@
-import { Empty, Deep } from 'type-core';
-import { shallow } from 'merge-strategies';
+import { TypeGuard } from 'type-core';
 import { Task, exec, series, context } from 'kpo';
-import { constants } from '@riseup/utils';
+
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -14,29 +13,24 @@ export interface DistributeParams {
   registry?: string | null;
 }
 
-export type DistributeOptions = DistributeParams;
-
-export function hydrateDistribute(
-  options: DistributeOptions | Empty
-): Deep.Required<DistributeOptions> {
-  return shallow(
-    {
-      push: defaults.distribute.push,
-      contents: defaults.distribute.contents,
-      registry: defaults.distribute.registry
-    },
-    options || undefined
-  );
-}
-
-export function distribute(options: DistributeOptions | Empty): Task.Async {
-  const opts = hydrateDistribute(options);
+export function distribute(params: DistributeParams | null): Task.Async {
+  const opts = {
+    push: TypeGuard.isBoolean(params?.push)
+      ? params?.push
+      : defaults.distribute.push,
+    contents: TypeGuard.isUndefined(params?.contents)
+      ? defaults.distribute.contents
+      : params?.contents,
+    registry: TypeGuard.isUndefined(params?.registry)
+      ? defaults.distribute.registry
+      : params?.registry
+  };
 
   return series(
     exec(
-      constants.node,
+      process.execPath,
       [
-        paths.bin.lerna,
+        paths.lernaBin,
         ...['publish', 'from-package'],
         ...(opts.contents ? ['--contents', opts.contents] : [])
       ],

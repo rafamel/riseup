@@ -1,212 +1,164 @@
-import { Deep, Empty, Dictionary, Serial } from 'type-core';
-import { configs } from '@typescript-eslint/eslint-plugin';
-import { deep, merge } from 'merge-strategies';
-import path from 'path';
-import { tmpFile } from '@riseup/utils';
-import { hydrateToolingGlobal } from '../global';
+import { TypeGuard, Serial } from 'type-core';
+
 import { defaults } from '../defaults';
-import { paths } from '../paths';
+import { Transpile, Extensions } from '../utils';
 
 export interface ConfigureEslintParams {
-  dir?: string | string[];
+  types?: boolean;
   react?: boolean;
-  env?: Dictionary<boolean>;
   highlight?: string[];
   rules?: Serial.Object;
 }
 
-export interface ConfigureEslintOptions extends ConfigureEslintParams {
+export interface ConfigureEslintOptions {
   prettier?: boolean;
-  alias?: Dictionary<string>;
-  stubs?: {
-    identity?: string[];
-    route?: string[];
-    image?: string[];
-  };
-  extensions?: {
-    js?: string[];
-    ts?: string[];
-  };
-}
-
-export interface ConfigureEslintConfig {
-  babel: Serial.Object;
-  typescript: Serial.Object;
-}
-
-export function hydrateConfigureEslint(
-  options: ConfigureEslintOptions | Empty
-): Deep.Required<ConfigureEslintOptions> {
-  return merge(
-    {
-      ...hydrateToolingGlobal(options),
-      dir: defaults.lint.dir,
-      react: defaults.lint.react,
-      env: defaults.lint.env,
-      highlight: defaults.lint.highlight,
-      rules: defaults.lint.rules
-    },
-    options || undefined
-  );
+  platform?: Transpile.Platform;
+  loaders?: Transpile.Loaders;
 }
 
 export function configureEslint(
-  cwd: string,
-  options: ConfigureEslintOptions | Empty,
-  config: ConfigureEslintConfig
+  params: ConfigureEslintParams | null,
+  options: ConfigureEslintOptions | null
 ): Serial.Object {
-  const opts = hydrateConfigureEslint(options);
-  const dir = Array.isArray(opts.dir) ? opts.dir : [opts.dir];
-  const codeExtensions = [...opts.extensions.js, ...opts.extensions.ts];
-  const tsconfig = tmpFile('json', {
-    ...config.typescript,
-    include: dir.map((x) => path.resolve(cwd, x))
-  });
-
-  // TODO: Remove additional plugins and configs
-  // dependencies once eslint flat config lands.
-  // See: https://github.com/eslint/eslint/issues/13481
-
-  const react = {
-    extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
-    plugins: ['react', 'react-hooks', 'jsx-a11y'],
-    settings: {
-      react: { version: 'detect' }
-    },
-    rules: {
-      'react/react-in-jsx-scope': 0,
-      'react/no-render-return-value': 0
-    }
+  const opts = {
+    types: TypeGuard.isBoolean(params?.types)
+      ? params?.types
+      : defaults.lint.types,
+    react: TypeGuard.isBoolean(params?.react)
+      ? params?.react
+      : defaults.lint.react,
+    highlight: params?.highlight || defaults.lint.highlight,
+    rules: params?.rules || defaults.lint.rules,
+    prettier: TypeGuard.isBoolean(options?.prettier)
+      ? options?.prettier
+      : defaults.global.prettier,
+    platform: options?.platform || defaults.global.platform,
+    loaders: { ...defaults.global.loaders, ...(options?.loaders || {}) }
   };
 
-  const eslint = {
+  const extensions = new Extensions(opts.loaders);
+  const extjs = extensions.filter(['js', 'jsx'], null).extensions();
+  const extts = extensions.filter(['ts', 'tsx'], null).extensions();
+  const extcode = [...extjs, ...extts];
+
+  return {
     extends: [
-      paths.eslint.configStandard,
+      'standard',
+      'plugin:import/recommended',
+      'plugin:unicorn/recommended',
       ...(opts.prettier ? ['plugin:prettier/recommended'] : []),
-      'plugin:import/recommended'
+      ...(opts.types ? ['plugin:@typescript-eslint/recommended'] : []),
+      ...(opts.react ? ['plugin:react/recommended'] : []),
+      ...(opts.react ? ['plugin:react-hooks/recommended'] : []),
+      ...(opts.react ? ['plugin:jsx-a11y/recommended'] : [])
     ],
-    env: opts.env,
+    env:
+      opts.platform === 'node'
+        ? { node: true }
+        : opts.platform === 'browser'
+        ? { browser: true }
+        : { 'shared-node-browser': true },
     parserOptions: {
       impliedStrict: true,
       sourceType: 'module'
     },
-    plugins: [...(opts.prettier ? ['prettier'] : []), 'import'],
+    plugins: [],
+    settings: {
+      'import/extensions': extcode,
+      'import/resolver': { node: { extensions: extcode } },
+      ...(opts.react ? { react: { version: '999.999.999' } } : {})
+    },
     globals: {},
     rules: {
-      /* DISABLED */
+      /* ROOT */
       camelcase: 0,
       'no-redeclare': 0,
-      'import/export': 0,
       'no-return-await': 0,
       'no-use-before-define': 0,
+      'no-console': 1,
+      'no-unused-vars': 1,
+      'no-warning-comments': [1, { terms: opts.highlight, location: 'start' }],
+      'lines-between-class-members': [1, 'never'],
+      /* NODE */
       'node/no-callback-literal': 0,
+      /* IMPORT */
+      'import/export': 0,
+      /* STANDARD */
       'standard/no-callback-literal': 0,
       'standard/array-bracket-even-spacing': 0,
-      /* WARNINGS */
-      'no-warning-comments': [1, { terms: opts.highlight, location: 'start' }],
-      'no-unused-vars': 1,
-      'no-console': 1,
-      /* ERRORS */
-      'lines-between-class-members': [1, 'never'],
-      // Prettier
-      ...(opts.prettier ? { 'prettier/prettier': 0 } : {})
-    },
-    settings: {
-      'import/extensions': codeExtensions.map((x) =>
-        x[0] === '.' ? x : '.' + x
-      ),
-      'import/resolver': {
-        alias: {
-          map: Object.entries(opts.alias || {}),
-          extensions: ['json']
-            .concat(opts.extensions.js)
-            .concat(opts.extensions.ts)
-            .concat(opts.stubs.identity)
-            .concat(opts.stubs.route)
-            .concat(opts.stubs.image)
-            .map((x) => (x[0] === '.' ? x : '.' + x))
-        }
-      }
+      /* UNICORN */
+      'unicorn/no-null': 0,
+      'unicorn/filename-case': 0,
+      'unicorn/throw-new-error': 0,
+      'unicorn/catch-error-name': 0,
+      'unicorn/prefer-export-from': 0,
+      'unicorn/prevent-abbreviations': 0,
+      'unicorn/new-for-builtins': 2,
+      /* PRETTIER */
+      ...(opts.prettier ? { 'prettier/prettier': 0 } : {}),
+      /* REACT */
+      ...(opts.react ? { 'react/react-in-jsx-scope': 0 } : {}),
+      ...(opts.react ? { 'react/no-render-return-value': 0 } : {})
     },
     overrides: [
-      /* JAVASCRIPT */
+      /* TYPESCRIPT FIXES */
       {
-        files: [`*.{${opts.extensions.js.join(',')}}`],
-        parser: paths.eslint.parserBabel,
-        plugins: ['babel'],
-        parserOptions: {
-          requireConfigFile: false,
-          babelOptions: config.babel,
-          ecmaFeatures: { jsx: true }
-        },
+        files: [`*{${extts.join(',')}}`],
         rules: {
-          /* WARNINGS */
-          'babel/no-invalid-this': 1,
-          'babel/semi': 1
-        }
-      },
-      /* TYPESCRIPT */
-      {
-        files: [`*.{${opts.extensions.ts.join(',')}}`],
-        parser: paths.eslint.parserTypescript,
-        parserOptions: {
-          project: tsconfig,
-          tsconfigRootDir: cwd,
-          ecmaFeatures: { jsx: true }
-        },
-        plugins: ['@typescript-eslint'],
-        // Overrides don't allow for extends
-        rules: {
-          ...configs.recommended.rules,
-          /* FIXES */
-          // See: https://github.com/eslint/typescript-eslint-parser/issues/437
+          // See https://github.com/eslint/typescript-eslint-parser/issues/437
           'no-undef': 0,
           // Interprets overloads as duplicates
           'no-dupe-class-members': 0,
+          // Fix for paths and imports, as they will be resolved by typescript
+          'import/named': 0,
+          'import/no-unresolved': 0,
           // Very prone to expose parser bugs and already
           // covered by noUnusedLocals and noUnusedParameters
-          '@typescript-eslint/no-unused-vars': 0,
-          /* DISABLED */
-          '@typescript-eslint/indent': 0,
-          '@typescript-eslint/camelcase': 0,
-          '@typescript-eslint/no-explicit-any': 0,
-          '@typescript-eslint/no-object-literal-type-assertion': 0,
-          '@typescript-eslint/interface-name-prefix': 0,
-          '@typescript-eslint/ban-ts-ignore': 0,
-          '@typescript-eslint/no-empty-function': 0,
-          '@typescript-eslint/no-empty-interface': 0,
-          '@typescript-eslint/explicit-module-boundary-types': 0,
-          /* WARNINGS */
-          '@typescript-eslint/explicit-function-return-type': [
-            1,
-            {
-              allowExpressions: true,
-              allowTypedFunctionExpressions: true
-            }
-          ],
-          /* ERRORS */
-          '@typescript-eslint/no-use-before-define': [2, { functions: false }],
-          '@typescript-eslint/array-type': [
-            2,
-            { default: 'array-simple', readonly: 'array-simple' }
-          ],
-          '@typescript-eslint/no-namespace': [
-            2,
-            { allowDeclarations: true, allowDefinitionFiles: true }
-          ],
-          '@typescript-eslint/no-inferrable-types': [
-            2,
-            { ignoreParameters: true, ignoreProperties: true }
-          ]
+          '@typescript-eslint/no-unused-vars': 0
         }
+      },
+      /* TYPESCRIPT RULES */
+      {
+        files: [`*{${extts.join(',')}}`],
+        rules: opts.types
+          ? {
+              '@typescript-eslint/indent': 0,
+              '@typescript-eslint/camelcase': 0,
+              '@typescript-eslint/no-explicit-any': 0,
+              '@typescript-eslint/no-object-literal-type-assertion': 0,
+              '@typescript-eslint/interface-name-prefix': 0,
+              '@typescript-eslint/ban-ts-ignore': 0,
+              '@typescript-eslint/no-empty-function': 0,
+              '@typescript-eslint/no-empty-interface': 0,
+              '@typescript-eslint/explicit-module-boundary-types': 0,
+              '@typescript-eslint/explicit-function-return-type': [
+                1,
+                { allowExpressions: true, allowTypedFunctionExpressions: true }
+              ],
+              '@typescript-eslint/no-use-before-define': [
+                2,
+                { functions: false }
+              ],
+              '@typescript-eslint/array-type': [
+                2,
+                { default: 'array-simple', readonly: 'array-simple' }
+              ],
+              '@typescript-eslint/no-namespace': [
+                2,
+                { allowDeclarations: true, allowDefinitionFiles: true }
+              ],
+              '@typescript-eslint/no-inferrable-types': [
+                2,
+                { ignoreParameters: true, ignoreProperties: true }
+              ]
+            }
+          : {}
       },
       /* USER RULES */
       {
-        files: [`*.{${codeExtensions.join(',')}}`],
+        files: [`*{${extcode.join(',')}}`],
         rules: opts.rules
       }
     ]
   };
-
-  return opts.react ? deep(eslint, react) : eslint;
 }

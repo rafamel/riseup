@@ -1,28 +1,24 @@
 import { Deep } from 'type-core';
-import { ToolingParams } from './definitions';
 
-export const defaults: Deep.Required<ToolingParams> = {
+import { Tooling } from './Tooling';
+import { Builder, Transpiler } from './utils';
+
+export const defaults: Deep.Required<Tooling.Options> = {
   global: {
     prettier: true,
-    alias: {},
-    stubs: {
-      identity: [],
-      route: [],
-      image: []
-    },
-    extensions: {
-      js: ['js', 'jsx', 'cjs', 'mjs'],
-      ts: ['ts', 'tsx']
-    }
+    ...Builder.options,
+    ...Transpiler.options
   },
-  fix: {
-    dir: ['src/', 'test/']
+  build: {
+    ...Builder.params
+  },
+  node: {
+    ...Transpiler.params
   },
   lint: {
     dir: ['src/', 'test/'],
     types: true,
-    react: false,
-    env: { node: true, browser: false },
+    react: true,
     highlight: ['fixme', 'todo', 'refactor'],
     rules: {}
   },
@@ -32,6 +28,7 @@ export const defaults: Deep.Required<ToolingParams> = {
     require: [],
     coverage: 'auto',
     threshold: null,
-    overrides: {}
+    overrides: {},
+    ...Transpiler.params
   }
 };

@@ -11,7 +11,8 @@ import {
   raises
 } from 'kpo';
 import isGitDirty from 'is-git-dirty';
-import { constants, getPackage } from '@riseup/utils';
+import { getPackageJson } from '@riseup/utils';
+
 import { paths } from '../../../paths';
 import { bumps, CLIReleaseOptions } from './options';
 
@@ -79,8 +80,8 @@ export function singular({
             ...(options.preid ? [`--preid=${options.preid}`] : [])
           ]),
           conventional && conventional.changelog
-            ? exec(constants.node, [
-                paths.bin.changelog,
+            ? exec(process.execPath, [
+                paths.conventionalChangelogBin,
                 '--same-file',
                 ...['--infile', 'CHANGELOG.md'],
                 ...['--release-count', '0'],
@@ -90,7 +91,7 @@ export function singular({
         );
       }),
       create(() => {
-        const pkg = getPackage(ctx.cwd);
+        const pkg = getPackageJson(ctx.cwd, false);
         if (!pkg) {
           throw Error(`Couldn't locate package.json: ${ctx.cwd}`);
         }

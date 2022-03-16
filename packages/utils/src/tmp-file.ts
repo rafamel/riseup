@@ -1,5 +1,6 @@
-import fs from 'fs';
 import { Serial, TypeGuard } from 'type-core';
+import fs from 'node:fs';
+
 import { tmpPath } from './tmp-path';
 
 export function tmpFile(
@@ -7,6 +8,15 @@ export function tmpFile(
   content: Serial.Object | Serial.Array | string
 ): string {
   const file = tmpPath(ext, { content });
+
+  let exists = true;
+  try {
+    fs.accessSync(file, fs.constants.F_OK);
+  } catch (_) {
+    exists = false;
+  }
+
+  if (exists) return file;
 
   fs.writeFileSync(
     file,

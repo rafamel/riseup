@@ -17,10 +17,14 @@
     "monorepo",
     "lerna"
   ],
-  "main": "pkg/dist",
-  "types": "pkg/dist",
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "files": [
+    "build/"
+  ],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "node": "kpo node --",
@@ -44,16 +48,10 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
-    "@riseup/universal": "^0.13.1",
     "@riseup/utils": "^0.13.1",
-    "kpo": "^0.22.0",
+    "kpo": "^0.23.0",
     "lcov-result-merger": "^3.1.0",
     "lerna": "^4.0.0",
-    "merge-strategies": "^0.2.0",
-    "type-core": "^0.12.0",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "@types/uuid": "^8.3.0"
+    "type-core": "^0.12.0"
   }
 }

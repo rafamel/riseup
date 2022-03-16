@@ -14,10 +14,14 @@
     "boilerplate",
     "riseup"
   ],
-  "main": "pkg/dist",
-  "types": "pkg/dist",
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "files": [
+    "build/"
+  ],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "node": "kpo node --",
@@ -49,12 +53,10 @@
     "conventional-changelog-cli": "^2.1.1",
     "conventional-recommended-bump": "^6.1.0",
     "cz-conventional-changelog": "^3.2.0",
-    "ensurism": "^0.6.0",
     "is-git-dirty": "^2.0.1",
-    "kpo": "^0.22.0",
+    "kpo": "^0.23.0",
     "lerna": "^4.0.0",
     "markdownlint-cli": "^0.30.0",
-    "merge-strategies": "^0.2.0",
     "type-core": "^0.12.0"
   },
   "devDependencies": {

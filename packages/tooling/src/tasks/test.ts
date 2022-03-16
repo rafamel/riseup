@@ -1,31 +1,50 @@
-import { Serial } from 'type-core';
+import { Serial, TypeGuard } from 'type-core';
 import { create, exec, Task } from 'kpo';
-import { temporal, constants } from '@riseup/utils';
-import { paths } from '../paths';
+import { tmpTask } from '@riseup/utils';
 
-export interface TestConfig {
+import { paths } from '../paths';
+import { Transpiler } from '../utils';
+import { defaults } from '../defaults';
+
+export type TestParams = Transpiler.Params;
+export type TestOptions = Transpiler.Options;
+
+export interface TestConfigurations {
   jest: Serial.Object;
 }
 
-export function test(config: TestConfig): Task.Async {
+export function test(
+  params: TestParams | null,
+  options: TestOptions | null,
+  configurations: TestConfigurations
+): Task.Async {
+  const opts: Required<TestParams> = {
+    format: params?.format || defaults.test.format,
+    exclude: TypeGuard.isUndefined(params?.exclude)
+      ? defaults.test.exclude
+      : params?.exclude || false
+  };
+
   return create((ctx) => {
-    return temporal(
+    return tmpTask(
       {
         ext: 'json',
-        content: JSON.stringify(config.jest),
-        overrides: [
-          'jest.config.js',
-          'jest.config.ts',
-          'jest.config.cjs',
-          'jest.config.mjs',
-          'jest.config.json'
-        ]
+        content: JSON.stringify(configurations.jest),
+        overrides: { name: 'jest.config', ext: true }
       },
-      async ([file]) => {
+      ([file]) => {
         return exec(
-          constants.node,
-          [paths.bin.jest, ...['--config', file], ...['--rootDir', ctx.cwd]],
-          { env: { NODE_ENV: ctx.env.NODE_ENV || 'test' } }
+          process.execPath,
+          [paths.jestBin, '--config', file, '--rootDir', ctx.cwd],
+          {
+            env: {
+              NODE_ENV: ctx.env.NODE_ENV || 'test',
+              TRANSPILER_SETTINGS: Transpiler.serialize({
+                params: opts,
+                options: options || {}
+              })
+            }
+          }
         );
       }
     );

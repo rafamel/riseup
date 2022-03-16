@@ -1,5 +1,5 @@
 import { Task, exec, create, context, series, log } from 'kpo';
-import { constants } from '@riseup/utils';
+
 import { paths } from '../paths';
 
 export function run(): Task.Async {
@@ -9,7 +9,7 @@ export function run(): Task.Async {
     if (cmd === '-h' || cmd === '--help') {
       return context(
         { args: [] },
-        exec(constants.node, [paths.bin.lerna, 'exec', '--help'])
+        exec(process.execPath, [paths.lernaBin, 'exec', '--help'])
       );
     }
 
@@ -20,11 +20,11 @@ export function run(): Task.Async {
     return context(
       { args: [] },
       series(
-        exec(constants.node, [
-          paths.bin.lerna,
+        exec(process.execPath, [
+          paths.lernaBin,
           'exec',
-          process.platform === 'win32' ? 'node' : constants.node,
-          paths.bin.run,
+          process.platform === 'win32' ? 'node' : process.execPath,
+          paths.runBin,
           cmd,
           ...['--concurrency', '1'],
           ...['--loglevel', 'silent'],

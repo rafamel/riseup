@@ -1,7 +1,8 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import semver from 'semver';
 import { Context } from 'kpo';
+
 import {
   getMonorepoPackages,
   PackageInformation
@@ -9,7 +10,7 @@ import {
 
 export interface ResolvePkgMonorepoDepsOptions {
   contents: string;
-  allowPrivate: boolean;
+  noPrivate: boolean;
 }
 
 export interface PackageDependency {
@@ -35,7 +36,7 @@ export async function resolvePkgMonorepoDeps(
           true,
           context.cwd,
           options.contents,
-          options.allowPrivate,
+          options.noPrivate,
           packages,
           placement as PackageDependencyPlacement,
           []
@@ -50,7 +51,7 @@ async function trunk(
   root: boolean,
   cwd: string,
   contents: string,
-  allowPrivate: boolean,
+  noPrivate: boolean,
   packages: PackageInformation[],
   placement: PackageDependencyPlacement,
   history: string[]
@@ -103,7 +104,7 @@ async function trunk(
       );
     }
 
-    if (!allowPrivate && pkgInfo.private) {
+    if (noPrivate && pkgInfo.private) {
       throw Error(
         `Package requires private package ${pkgInfo.name}: "${pkgPath}"`
       );
@@ -127,7 +128,7 @@ async function trunk(
           false,
           data.path,
           contents,
-          allowPrivate,
+          noPrivate,
           packages,
           placement,
           [...history, data.name]

@@ -1,0 +1,69 @@
+{
+  "name": "@riseup/web",
+  "description": "Riseup tasks and configurations for the web",
+  "version": "0.13.1",
+  "author": "Rafa Mel",
+  "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "presets",
+    "starter",
+    "boilerplate",
+    "config",
+    "riseup",
+    "react",
+    "web"
+  ],
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "files": [
+    "build/",
+    "static/"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "node": "kpo node --",
+    "build": "kpo build --",
+    "docs": "kpo docs --",
+    "fix": "kpo fix --",
+    "lint": "kpo lint --",
+    "test": "kpo test --",
+    "commit": "kpo commit --",
+    "release": "kpo release --",
+    "distribute": "kpo distribute --",
+    "validate": "kpo validate --",
+    "version": "kpo version --"
+  },
+  "homepage": "https://github.com/rafamel/riseup/packages/web",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafamel/riseup"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "dependencies": {
+    "@riseup/utils": "^0.13.1",
+    "@size-limit/file": "^5.0.1",
+    "@types/favicons": "^6.2.1",
+    "favicons": "^6.2.2",
+    "google-fonts-helper": "^2.0.1",
+    "htmlparser2": "^7.1.2",
+    "kpo": "^0.23.0",
+    "size-limit": "^5.0.1",
+    "source-map-explorer": "^2.5.2",
+    "type-core": "^0.12.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  },
+  "peerDependencies": {
+    "typescript": "4.x"
+  }
+}

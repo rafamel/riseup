@@ -53,7 +53,10 @@ module.exports = library(
       // Keywords that should output warnings
       highlight: ['fixme', 'todo', 'refactor'],
       // ESLint rules overwrites
-      rules: {}
+      rules: {
+        'import/no-unresolved': 0,
+        'import/named': 0
+      }
     },
     lintmd: {
       // Glob of markdown files to lint

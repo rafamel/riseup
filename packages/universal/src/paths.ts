@@ -1,22 +1,24 @@
-import path from 'path';
-import { getBin } from '@riseup/utils';
+import path from 'node:path';
+import { URL } from 'node:url';
+import { resolveBin, resolveModule } from '@riseup/utils';
+
+const url = new URL(import.meta.url);
 
 export const paths = {
-  bin: {
-    lerna: getBin('lerna', 'lerna', __dirname),
-    changelog: getBin(
-      'conventional-changelog-cli',
-      'conventional-changelog',
-      __dirname
-    ),
-    commitizen: require.resolve('./tasks/commit/commitizen'),
-    markdownlint: getBin('markdownlint-cli', 'markdownlint', __dirname)
-  },
-  commitizen: {
-    root: path.resolve(require.resolve('commitizen/package.json'), '../'),
-    path: path.resolve(
-      require.resolve('cz-conventional-changelog/package.json'),
-      '../'
-    )
-  }
+  lernaBin: resolveBin('lerna', 'lerna', url),
+  conventionalChangelogBin: resolveBin(
+    'conventional-changelog-cli',
+    'conventional-changelog',
+    url
+  ),
+  conventionalChangelogDir: path.resolve(
+    resolveModule('cz-conventional-changelog/package.json', url),
+    '../'
+  ),
+  commitizenBin: resolveModule('./commitizen-bin.js', url),
+  commitizenDir: path.resolve(
+    resolveModule('commitizen/package.json', url),
+    '../'
+  ),
+  markdownlintBin: resolveBin('markdownlint-cli', 'markdownlint', url)
 };

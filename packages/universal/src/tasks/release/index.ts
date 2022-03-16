@@ -1,6 +1,6 @@
-import { Deep, Empty, TypeGuard } from 'type-core';
-import { merge } from 'merge-strategies';
+import { TypeGuard } from 'type-core';
 import { create, Task } from 'kpo';
+
 import { defaults } from '../../defaults';
 import { cli } from './cli';
 
@@ -9,26 +9,21 @@ export interface ReleaseParams {
   changelog?: boolean;
 }
 
-export type ReleaseOptions = ReleaseParams;
+export function release(params: ReleaseParams | null): Task.Async {
+  const opts = {
+    preset:
+      params?.preset === null
+        ? null
+        : params?.preset || defaults.release.preset,
+    changelog: TypeGuard.isBoolean(params?.changelog)
+      ? params?.changelog
+      : defaults.release.changelog
+  };
 
-export function hydrateRelease(
-  options: ReleaseOptions | Empty
-): Deep.Required<ReleaseOptions> {
-  return merge(
-    {
-      preset: defaults.release.preset,
-      changelog: defaults.release.changelog
-    },
-    options || undefined
-  );
-}
-
-export function release(options: ReleaseOptions | Empty): Task.Async {
-  const opts = hydrateRelease(options);
   return create(() => {
     return cli(
       TypeGuard.isString(opts.preset)
-        ? { preset: opts.preset, changelog: opts.changelog }
+        ? { preset: opts.preset, changelog: opts.changelog || false }
         : null
     );
   });

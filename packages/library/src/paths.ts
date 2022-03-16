@@ -1,17 +1,8 @@
-import { getBin } from '@riseup/utils';
+import { URL } from 'node:url';
+import { resolveBin } from '@riseup/utils';
+
+const url = new URL(import.meta.url);
 
 export const paths = {
-  bin: {
-    pika: require.resolve('@pika/pack/dist-node/index.bin'),
-    typedoc: getBin('typedoc', 'typedoc', __dirname),
-    babelCli: getBin('@babel/cli', 'babel', __dirname),
-    typescript: require.resolve('ttypescript/lib/tsc')
-  },
-  pika: {
-    transpile: require.resolve('./configure/pika/plugin-transpile'),
-    manifest: require.resolve('./configure/pika/plugin-manifest'),
-    assets: require.resolve('@pika/plugin-copy-assets'),
-    standard: require.resolve('@pika/plugin-standard-pkg'),
-    web: require.resolve('@pika/plugin-build-web')
-  }
+  typedocBin: resolveBin('typedoc', 'typedoc', url)
 };

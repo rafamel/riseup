@@ -1,85 +1,70 @@
-import { Deep, Empty, Serial } from 'type-core';
-import { merge } from 'merge-strategies';
-import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
+import { Serial, TypeGuard } from 'type-core';
+import path from 'node:path';
 import up from 'find-up';
-import path from 'path';
-import {
-  getTypeScriptPath,
-  temporal,
-  constants,
-  intercept
-} from '@riseup/utils';
-import { hydrateToolingGlobal } from '../global';
+import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
+import { getTypescriptConfigPath, getOverridePath } from '@riseup/utils';
+
 import { defaults } from '../defaults';
 import { paths } from '../paths';
+import { Extensions, Transpile } from '../utils';
 
 export interface LintParams {
   dir?: string | string[];
   types?: boolean;
 }
 
-export interface LintOptions extends LintParams {
+export interface LintOptions {
   prettier?: boolean;
-  extensions?: {
-    js?: string[];
-    ts?: string[];
-  };
+  loaders?: Transpile.Loaders;
 }
 
-export interface LintConfig {
+export interface LintConfigurations {
   eslint: Serial.Object;
-  typescript: Serial.Object;
-}
-
-export function hydrateLint(
-  options: LintOptions | Empty
-): Deep.Required<LintOptions> {
-  return merge(
-    {
-      ...hydrateToolingGlobal(options),
-      dir: defaults.lint.dir,
-      types: defaults.lint.types
-    },
-    options || undefined
-  );
 }
 
 export function lint(
-  options: LintOptions | Empty,
-  config: LintConfig
+  params: LintParams | null,
+  options: LintOptions | null,
+  configurations: LintConfigurations
 ): Task.Async {
-  const opts = hydrateLint(options);
+  const opts = {
+    dir: params?.dir || defaults.lint.dir,
+    types: TypeGuard.isBoolean(params?.types)
+      ? params?.types
+      : defaults.lint.types,
+    prettier: TypeGuard.isBoolean(options?.prettier)
+      ? options?.prettier
+      : defaults.global.prettier,
+    loaders: { ...defaults.global.loaders, ...(options?.loaders || {}) }
+  };
+
+  const extcode = new Extensions(opts.loaders)
+    .filter(['js', 'jsx', 'ts', 'tsx'], null)
+    .extensions();
 
   return context(
     { args: [] },
     finalize(
-      temporal(
-        {
-          ext: 'json',
-          content: JSON.stringify(config.eslint),
-          overrides: [
-            '.eslintrc.js',
-            '.eslintrc.cjs',
-            '.eslintrc.yaml',
-            '.eslintrc.yml',
-            '.eslintrc.json'
-          ]
-        },
-        async ([file]) => {
-          return exec(constants.node, [
-            paths.bin.eslint,
+      create((ctx) => {
+        const overridePath = getOverridePath(ctx.cwd, [
+          { name: '.eslintrc', ext: false },
+          { name: '.eslintrc', ext: true }
+        ]);
+        return exec(
+          process.execPath,
+          [
+            paths.eslintBin,
             ...(Array.isArray(opts.dir) ? opts.dir : [opts.dir]),
-            ...['--config', file],
-            ...[
-              '--ext',
-              [...opts.extensions.js, ...opts.extensions.ts]
-                .map((x) => '.' + x)
-                .join(',')
-            ],
-            ...['--resolve-plugins-relative-to', paths.riseup.tooling]
-          ]);
-        }
-      ),
+            ...['--config', overridePath || paths.eslintConfig],
+            ...['--ext', extcode.join(',')]
+          ],
+          {
+            env: {
+              ESLINT_CONFIG: JSON.stringify(configurations.eslint)
+            }
+          }
+        );
+      }),
       opts.prettier
         ? create(async (ctx) => {
             const dirs = (Array.isArray(opts.dir) ? opts.dir : [opts.dir]).map(
@@ -97,8 +82,8 @@ export function lint(
               type: 'file'
             });
 
-            return exec(constants.node, [
-              paths.bin.prettier,
+            return exec(process.execPath, [
+              paths.prettierBin,
               ...['--check', '--ignore-unknown'],
               ...(ignore ? ['--ignore-path', ignore] : []),
               ...(isLevelActive('debug', ctx) ? [] : ['--loglevel=warn']),
@@ -107,28 +92,15 @@ export function lint(
           })
         : null,
       create((ctx) => {
-        if (!opts.types || !getTypeScriptPath(ctx.cwd)) {
-          return null;
-        }
+        const tsconfig = opts.types
+          ? getTypescriptConfigPath(null, ctx.cwd, false)
+          : null;
+        if (!tsconfig) return null;
 
-        const dir = Array.isArray(opts.dir) ? opts.dir : [opts.dir];
-        const tsconfig = {
-          ...config.typescript,
-          include: dir.map((x) => path.resolve(ctx.cwd, x))
-        };
-        const project = path.resolve(ctx.cwd, 'tsconfig.lint.json');
-        return intercept(
-          {
-            path: project,
-            content: JSON.stringify(tsconfig),
-            require: 'json'
-          },
-          paths.bin.typescript,
-          [
-            ...['--noEmit', '--emitDeclarationOnly', 'false'],
-            ...['--project', project]
-          ]
-        );
+        return exec(process.execPath, [
+          paths.typescriptBin,
+          ...['--noEmit', '--emitDeclarationOnly', 'false']
+        ]);
       })
     )
   );

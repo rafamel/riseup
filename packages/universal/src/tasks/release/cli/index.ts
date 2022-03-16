@@ -2,7 +2,8 @@ import arg from 'arg';
 import { flags, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
 import { Task, print, raises, series, style, create, context } from 'kpo';
-import { getMonorepoRoot, getLerna } from '@riseup/utils';
+import { getMonorepoRootDir, getLernaConfig } from '@riseup/utils';
+
 import { bumps, CLIReleaseOptions, ConventionalOptions } from './options';
 import { monorepo } from './monorepo';
 import { singular } from './singular';
@@ -54,8 +55,8 @@ export function cli(conventional: ConventionalOptions | null): Task {
       conventional
     };
 
-    const isMonorepoRoot = Boolean(getLerna(ctx.cwd));
-    const isMonorepoChild = Boolean(getMonorepoRoot(ctx.cwd));
+    const isMonorepoRoot = Boolean(getLernaConfig(ctx.cwd));
+    const isMonorepoChild = Boolean(getMonorepoRootDir(ctx.cwd));
 
     /* Preconditions */
     if (isMonorepoChild) {

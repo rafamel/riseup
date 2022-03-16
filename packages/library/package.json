@@ -17,10 +17,14 @@
     "library",
     "module"
   ],
-  "main": "pkg/dist",
-  "types": "pkg/dist",
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "files": [
+    "build/"
+  ],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "node": "kpo node --",
@@ -44,35 +48,16 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "devDependencies": {
-    "@pika/types": "^0.9.2",
     "@types/semver": "^7.3.8",
-    "@types/uuid": "^8.3.0",
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@babel/cli": "^7.13.14",
-    "@babel/core": "^7.13.14",
-    "@babel/node": "^7.13.13",
-    "@pika/pack": "^0.5.0",
-    "@pika/plugin-build-web": "^0.9.2",
-    "@pika/plugin-copy-assets": "^0.9.2",
-    "@pika/plugin-standard-pkg": "^0.9.2",
-    "@riseup/tooling": "^0.13.1",
-    "@riseup/universal": "^0.13.1",
     "@riseup/utils": "^0.13.1",
-    "babel-jest": "^27.0.2",
     "ensurism": "^0.6.0",
-    "errorish": "^1.0.0",
-    "eslint": "^7.25.0",
-    "jest-cli": "^27.0.4",
-    "kpo": "^0.22.0",
-    "merge-strategies": "^0.2.0",
-    "prettier": "^2.2.1",
+    "kpo": "^0.23.0",
     "semver": "^7.3.5",
-    "ttypescript": "^1.5.12",
     "type-core": "^0.12.0",
-    "typedoc": "^0.22.3",
-    "uuid": "^8.3.2"
+    "typedoc": "^0.22.3"
   },
   "peerDependencies": {
     "typescript": "4.x"

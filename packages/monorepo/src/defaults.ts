@@ -1,10 +1,11 @@
 import { Deep } from 'type-core';
-import { MonorepoParams } from './definitions';
 
-export const defaults: Deep.Required<MonorepoParams> = {
+import { Monorepo } from './Monorepo';
+
+export const defaults: Deep.Required<Monorepo.Options> = {
   distribute: {
     push: true,
-    contents: 'pkg/',
+    contents: null,
     registry: null
   },
   coverage: {

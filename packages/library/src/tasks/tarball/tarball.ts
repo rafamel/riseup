@@ -1,7 +1,5 @@
-import { Empty, Deep, TypeGuard } from 'type-core';
-import { merge } from 'merge-strategies';
-import { v4 as uuid } from 'uuid';
-import path from 'path';
+import { TypeGuard } from 'type-core';
+import path from 'node:path';
 import {
   copy,
   create,
@@ -14,65 +12,65 @@ import {
   series,
   Task
 } from 'kpo';
-import { constants } from '@riseup/utils';
+import { tmpPath } from '@riseup/utils';
+
 import { defaults } from '../../defaults';
-import { hydrateLibraryGlobal } from '../../global';
 import { pkgPackTask } from './helpers/pkg-pack-task';
 import { resolvePkgMonorepoDeps } from './helpers/resolve-pkg-monorepo-deps';
 
 export interface TarballParams {
   destination?: null | string;
-  monorepo?: {
-    contents?: null | string;
-    allowPrivate?: boolean;
+  monorepo?: boolean | { contents?: string; noPrivate?: boolean };
+}
+
+export function tarball(params: TarballParams | null): Task.Async {
+  const opts = {
+    destination: TypeGuard.isUndefined(params?.destination)
+      ? defaults.tarball.destination
+      : params?.destination,
+    monorepo: TypeGuard.isUndefined(params?.monorepo)
+      ? defaults.tarball.monorepo
+      : params?.monorepo
   };
-}
 
-export interface TarballOptions extends TarballParams {
-  output?: string;
-}
-
-export function hydrateTarball(
-  options: TarballOptions | Empty
-): Deep.Required<TarballOptions> {
-  const { output } = hydrateLibraryGlobal(options);
-
-  return merge(
-    {
-      output,
-      destination: defaults.tarball.destination,
-      monorepo: defaults.tarball.monorepo
-    },
-    options || undefined
-  );
-}
-
-export function tarball(options: TarballOptions | Empty): Task.Async {
-  const opts = hydrateTarball(options);
+  const destination = opts.destination
+    ? opts.destination.endsWith('.tgz')
+      ? opts.destination
+      : `${opts.destination}.tgz`
+    : null;
+  const monorepo =
+    opts.monorepo === true
+      ? { contents: './', noPrivate: false }
+      : opts.monorepo
+      ? {
+          contents: opts.monorepo.contents || './',
+          noPrivate: opts.monorepo.noPrivate || false
+        }
+      : null;
 
   return progress(
     { message: 'Build tarball' },
-    !opts.monorepo.contents
+    !monorepo
       ? // No monorepo
         pkgPackTask({
           name: null,
-          source: opts.output,
-          destDir: opts.destination ? null : opts.output,
-          destFile: opts.destination
+          source: './',
+          destDir: destination ? null : './',
+          destFile: destination
         })
       : // Monorepo resolution
         create(async (ctx) => {
-          const tmpDir = path.resolve(constants.tmp, 'tarball-' + uuid());
+          const tmpDir = tmpPath(null, null);
           const resArr = await resolvePkgMonorepoDeps(ctx, {
-            contents: String(opts.monorepo.contents),
-            allowPrivate: opts.monorepo.allowPrivate
+            contents: monorepo.contents,
+            noPrivate: monorepo.noPrivate
           });
           const tmpFilesRecord: Record<string, string> = {};
           const depsArr = resArr.map((item) => {
             if (Object.hasOwnProperty.call(tmpFilesRecord, item.name)) {
               return { ...item, tmpFile: tmpFilesRecord[item.name] };
             } else {
-              const tmpFile = 'pkg-' + uuid();
+              const tmpFile = 'pkg-' + Math.random().toString().slice(2);
               tmpFilesRecord[item.name] = tmpFile;
               return { ...item, tmpFile };
             }
@@ -93,17 +91,14 @@ export function tarball(options: TarballOptions | Empty): Task.Async {
                     ctx,
                     pkgPackTask({
                       name: dep.name,
-                      source: path.resolve(
-                        dep.path,
-                        String(opts.monorepo.contents)
-                      ),
+                      source: path.resolve(dep.path, monorepo.contents),
                       destDir: tmpDir,
                       destFile: dep.tmpFile
                     })
                   );
                 }
               }),
-              copy(path.join(opts.output, '*'), tmpDir, {
+              copy(path.join('./', '*'), tmpDir, {
                 glob: true,
                 single: false,
                 strict: true,
@@ -146,8 +141,8 @@ export function tarball(options: TarballOptions | Empty): Task.Async {
               pkgPackTask({
                 name: null,
                 source: tmpDir,
-                destDir: opts.destination ? null : opts.output,
-                destFile: opts.destination
+                destDir: destination ? null : './',
+                destFile: destination
               })
             ),
             remove(tmpDir, { strict: true, recursive: true })

@@ -1,64 +1,44 @@
-import { Deep, Empty, Serial } from 'type-core';
+import { TypeGuard } from 'type-core';
 import { create, exec, Task } from 'kpo';
-import { temporal, constants } from '@riseup/utils';
-import { hydrateToolingGlobal } from '../global';
+import { getPackageJson } from '@riseup/utils';
+
 import { paths } from '../paths';
+import { Transpiler } from '../utils';
+import { defaults } from '../defaults';
 
-export interface NodeOptions {
-  extensions?: {
-    js?: string[];
-    ts?: string[];
-  };
-}
-
-export interface NodeConfig {
-  babel: Serial.Object;
-}
-
-export function hydrateNode(
-  options: NodeOptions | Empty
-): Deep.Required<NodeOptions> {
-  return hydrateToolingGlobal(options);
-}
+export type NodeParams = Transpiler.Params;
+export type NodeOptions = Transpiler.Options;
 
 export function node(
-  options: NodeOptions | Empty,
-  config: NodeConfig
+  params: NodeParams | null,
+  options: NodeOptions | null
 ): Task.Async {
-  const opts = hydrateNode(options);
+  const opts: Required<NodeParams> = {
+    format: params?.format || defaults.node.format,
+    exclude: TypeGuard.isUndefined(params?.exclude)
+      ? defaults.node.exclude
+      : params?.exclude || false
+  };
 
   return create((ctx) => {
-    return temporal(
+    const pkg = getPackageJson(ctx.cwd, false);
+    if (!pkg) throw Error(`package.json not found for: ${ctx.cwd}`);
+
+    return exec(
+      process.execPath,
+      [
+        ...['--require', paths.transpileRegister],
+        // TODO: remove --no-warnings flags once loader api is stable
+        ...['--no-warnings', '--loader', paths.transpileLoader]
+      ],
       {
-        ext: 'json',
-        content: JSON.stringify(config.babel),
-        overrides: [
-          'babel.config.json',
-          'babel.config.js',
-          'babel.config.cjs',
-          'babel.config.mjs',
-          '.babelrc',
-          '.babelrc.json',
-          '.babelrc.js',
-          '.babelrc.cjs',
-          '.babelrc.mjs'
-        ]
-      },
-      ([file]) => {
-        return exec(
-          constants.node,
-          [
-            paths.bin.babelNode,
-            ...['--config-file', file],
-            ...[
-              '--extensions',
-              [...opts.extensions.js, ...opts.extensions.ts]
-                .map((x) => '.' + x)
-                .join(',')
-            ]
-          ],
-          { env: { NODE_ENV: ctx.env.NODE_ENV || 'development' } }
-        );
+        env: {
+          NODE_ENV: ctx.env.NODE_ENV || 'development',
+          TRANSPILER_SETTINGS: Transpiler.serialize({
+            params: opts,
+            options: options || {}
+          })
+        }
       }
     );
   });

@@ -1,7 +1,7 @@
-import { Serial, Empty, Deep } from 'type-core';
-import { shallow } from 'merge-strategies';
+import { Serial } from 'type-core';
 import { Task, exec } from 'kpo';
-import { temporal, constants } from '@riseup/utils';
+import { tmpTask } from '@riseup/utils';
+
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
@@ -12,45 +12,32 @@ export interface LintMdParams {
   exclude?: string;
 }
 
-export type LintMdOptions = LintMdParams;
-
-export interface LintMdConfig {
+export interface LintMdConfigurations {
   /** See: https://github.com/igorshubovych/markdownlint-cli#configuration */
   markdownlint: Serial.Object;
 }
 
-export function hydrateLintmd(
-  options: LintMdOptions | Empty
-): Deep.Required<LintMdOptions> {
-  return shallow(
-    {
-      include: defaults.lintmd.include,
-      exclude: defaults.lintmd.exclude
-    },
-    options || undefined
-  );
-}
-
 export function lintmd(
-  options: LintMdOptions | Empty,
-  config: LintMdConfig
+  params: LintMdParams | null,
+  configurations: LintMdConfigurations
 ): Task.Async {
-  const opts = hydrateLintmd(options);
+  const opts = {
+    include: params?.include || defaults.lintmd.include,
+    exclude: params?.exclude || defaults.lintmd.exclude
+  };
 
-  return temporal(
+  return tmpTask(
     {
       ext: 'json',
-      content: JSON.stringify(config.markdownlint),
+      content: JSON.stringify(configurations.markdownlint),
       overrides: [
-        '.markdownlintrc',
-        '.markdownlint.json',
-        '.markdownlint.yaml',
-        '.markdownlint.yml'
+        { name: '.markdownlintrc', ext: false },
+        { name: '.markdownlint', ext: true }
       ]
     },
     ([file]) => {
-      return exec(constants.node, [
-        paths.bin.markdownlint,
+      return exec(process.execPath, [
+        paths.markdownlintBin,
         ...['--config', file],
         ...(opts.exclude ? ['--ignore', opts.exclude] : []),
         ...[opts.include]

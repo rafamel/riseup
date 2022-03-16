@@ -6,7 +6,8 @@ export async function cli(): Promise<void> {
 
   return _cli({
     bin: 'riseup',
-    file: 'riseup.config.js',
+    files: ['riseup.config.js', 'riseup.config.mjs', 'riseup.config.cjs'],
+    property: 'tasks',
     version: pkg.version || 'Unknown',
     description: pkg.description || '',
     multitask: true,

@@ -1,15 +1,16 @@
 import { Deep } from 'type-core';
-import { UniversalParams } from './definitions';
+
+import { Universal } from './Universal';
 import { paths } from './paths';
 
-export const defaults: Deep.Required<UniversalParams> = {
+export const defaults: Deep.Required<Universal.Options> = {
   lintmd: {
     include: './',
     exclude: './{node_modules,pkg,build,dist}/**',
     overrides: {}
   },
   commit: {
-    path: paths.commitizen.path
+    path: paths.conventionalChangelogDir
   },
   release: {
     preset: 'angular',

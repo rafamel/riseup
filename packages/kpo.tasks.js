@@ -14,13 +14,13 @@ const tasks = {
   execute: riseup.execute,
   build: series(
     exec('lerna', ['link']),
-    exec('kpo', ['build'], { cwd: './utils' }),
-    exec('kpo', ['build'], { cwd: './universal' }),
-    exec('kpo', ['build'], { cwd: './tooling' }),
-    exec('kpo', ['build'], { cwd: './monorepo' }),
-    exec('kpo', ['build'], { cwd: './library' }),
-    exec('kpo', ['build'], { cwd: './next' }),
-    exec('kpo', ['build'], { cwd: './cli' })
+    exec('npm', ['run', 'build'], { cwd: './utils' }),
+    exec('npm', ['run', 'build'], { cwd: './universal' }),
+    exec('npm', ['run', 'build'], { cwd: './tooling' }),
+    exec('npm', ['run', 'build'], { cwd: './monorepo' }),
+    exec('npm', ['run', 'build'], { cwd: './library' }),
+    exec('npm', ['run', 'build'], { cwd: './web' }),
+    exec('npm', ['run', 'build'], { cwd: './cli' })
   ),
   lint: riseup.lintmd,
   coverage: riseup.coverage,
@@ -34,7 +34,6 @@ const tasks = {
   ),
   /* Hooks */
   postinstall: series(
-    catches(null, exec('simple-git-hooks')),
     exec('lerna', ['bootstrap', '--ci']),
     create(() => tasks.build)
   ),

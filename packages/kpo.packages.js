@@ -5,13 +5,27 @@ const {
   series,
   lift,
   exec,
-  catches
+  catches,
+  log,
+  remove,
+  mkdir,
+  move
 } = require('kpo');
 const riseup = require('./riseup.packages');
 
 const tasks = {
   node: riseup.node,
-  build: series(riseup.build, riseup.tarball),
+  build: series(
+    mkdir('build', { ensure: true }),
+    remove('build/*', { glob: true, recursive: true }),
+    exec('tsup'),
+    exec('npm', ['pack']),
+    move('./riseup-*.tgz', './tarball.tgz', {
+      glob: true,
+      single: true,
+      exists: 'overwrite'
+    })
+  ),
   docs: riseup.docs,
   fix: riseup.fix,
   lint: series(riseup.lintmd, riseup.lint),
@@ -25,7 +39,6 @@ const tasks = {
   distribute: riseup.distribute,
   validate: series(
     create(() => tasks.lint),
-    create(() => tasks.test),
     lift({ purge: true, mode: 'audit' }, () => tasks),
     catches({ level: 'silent' }, exec('npm', ['outdated']))
   ),

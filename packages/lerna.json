@@ -6,7 +6,7 @@
     "tooling",
     "monorepo",
     "library",
-    "next",
+    "web",
     "cli"
   ]
 }

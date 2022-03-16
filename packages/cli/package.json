@@ -14,13 +14,17 @@
     "boilerplate",
     "riseup"
   ],
-  "main": "pkg/dist",
-  "types": "pkg/dist",
+  "type": "module",
+  "types": "./build/index.d.ts",
+  "exports": "./build/index.js",
+  "files": [
+    "build/"
+  ],
   "bin": {
-    "riseup": "dist/riseup.js"
+    "riseup": "build/riseup.js"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "scripts": {
     "node": "kpo node --",
@@ -45,6 +49,6 @@
   },
   "dependencies": {
     "cli-belt": "^1.0.3",
-    "kpo": "^0.22.0"
+    "kpo": "^0.23.0"
   }
 }

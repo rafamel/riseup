@@ -1,58 +1,42 @@
 import { create } from 'kpo';
-import { hydrateUniversal, universal } from '@riseup/universal';
-import { extract, Riseup, withReconfigure } from '@riseup/utils';
-import { Empty } from 'type-core';
+import { Preset } from '@riseup/utils';
+
 import {
-  MonorepoConfigure,
-  MonorepoOptions,
-  MonorepoReconfigure,
-  MonorepoTasks
-} from './definitions';
-import { run, execute, coverage, distribute } from './tasks';
+  coverage,
+  CoverageParams,
+  distribute,
+  DistributeParams,
+  execute,
+  run
+} from './tasks';
 
-export function hydrateMonorepo(
-  options: MonorepoOptions | Empty
-): Required<MonorepoOptions> {
-  const universal = hydrateUniversal(options);
-  const monorepo = options
-    ? {
-        distribute: { ...options.distribute },
-        coverage: { ...options.coverage }
-      }
-    : {
-        distribute: {},
-        coverage: {}
-      };
+export declare namespace Monorepo {
+  type Tasks = 'run' | 'execute' | 'coverage' | 'distribute';
 
-  return {
-    ...universal,
-    ...monorepo
-  };
+  interface Options {
+    coverage?: CoverageParams;
+    distribute?: DistributeParams;
+  }
 }
 
-export function monorepo(
-  options: MonorepoOptions | Empty,
-  reconfigure: MonorepoReconfigure | Empty,
-  fetcher: Riseup.Fetcher<MonorepoConfigure> | Empty
-): MonorepoTasks {
-  const opts = hydrateMonorepo(options);
-
-  const deps = {
-    universal: extract(universal, opts, reconfigure)
-  };
-
-  let configure: MonorepoConfigure = {
-    ...deps.universal.configure
-  };
-
-  if (fetcher) fetcher(configure);
-  configure = withReconfigure(configure, reconfigure);
-
-  return {
-    ...deps.universal.tasks,
-    run: create(() => run()),
-    execute: create(() => execute()),
-    coverage: create(() => coverage(opts.coverage)),
-    distribute: create(() => distribute(opts.distribute))
-  };
+export class Monorepo extends Preset<Monorepo.Tasks> {
+  public constructor(options: Monorepo.Options | null) {
+    super(
+      {
+        run: create(() => {
+          return run();
+        }),
+        execute: create(() => {
+          return execute();
+        }),
+        coverage: create(() => {
+          return coverage(options?.coverage || null);
+        }),
+        distribute: create(() => {
+          return distribute(options?.distribute || null);
+        })
+      },
+      {}
+    );
+  }
 }

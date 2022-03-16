@@ -1,6 +1,5 @@
-import { v4 as uuid } from 'uuid';
-import path from 'path';
-import fs from 'fs';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   create,
   exec,
@@ -14,7 +13,7 @@ import {
   Task,
   context
 } from 'kpo';
-import { constants } from '@riseup/utils';
+import { tmpPath } from '@riseup/utils';
 
 export interface PkgPackOptions {
   name: null | string;
@@ -27,12 +26,11 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
   return context(
     { args: [] },
     create((ctx) => {
-      const tmpDir = path.resolve(constants.tmp, uuid());
+      const tmpDir = tmpPath(null, null);
 
       return finalize(
         series(
           log('debug', 'Pack' + (options.name ? `: ${options.name}` : '')),
-          mkdir(constants.tmp, { ensure: true }),
           mkdir(tmpDir, { ensure: false }),
           exec('npm', ['pack', path.resolve(ctx.cwd, options.source)], {
             cwd: tmpDir
@@ -56,7 +54,7 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
               : ctx.cwd;
             const outputFile = path.resolve(
               outputDir,
-              options.destFile ? `${options.destFile}.tgz` : file
+              options.destFile ? options.destFile : file
             );
 
             return move(path.resolve(tmpDir, file), outputFile, {

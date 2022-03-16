@@ -1,22 +1,25 @@
-import fs from 'fs';
-import path from 'path';
-import hash from 'object-hash';
-import { v4 as uuid } from 'uuid';
 import { Serial } from 'type-core';
-import { constants } from './constants';
+import fs from 'node:fs';
+import path from 'node:path';
+import hash from 'object-hash';
+import { nanoid } from 'nanoid';
+
+import { getTmpDir } from './get-tmp-dir';
 
 export function tmpPath(
   ext: string | null,
   seed: Serial.Object | null
 ): string {
+  const tmpDir = getTmpDir();
+
   try {
-    fs.accessSync(constants.tmp, fs.constants.F_OK);
+    fs.accessSync(tmpDir, fs.constants.F_OK);
   } catch (err) {
-    if (err) fs.mkdirSync(constants.tmp);
+    if (err) fs.mkdirSync(tmpDir);
   }
 
   return path.resolve(
-    constants.tmp,
+    tmpDir,
     (seed
       ? hash(seed, {
           excludeValues: false,
@@ -26,6 +29,6 @@ export function tmpPath(
           respectFunctionNames: true,
           respectType: true
         })
-      : uuid()) + (ext ? '.' + ext : '')
+      : nanoid()) + (ext ? '.' + ext : '')
   );
 }

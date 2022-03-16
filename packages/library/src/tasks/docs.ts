@@ -1,44 +1,35 @@
-import { mkdir, remove, series, print, create, Task } from 'kpo';
-import { shallow } from 'merge-strategies';
-import { Serial, Empty, Deep } from 'type-core';
-import path from 'path';
-import { getTypeScriptPath, intercept } from '@riseup/utils';
+import { Serial, TypeGuard } from 'type-core';
+import path from 'node:path';
+import { mkdir, remove, series, print, create, Task, exec } from 'kpo';
+import { tmpTask } from '@riseup/utils';
+
 import { defaults } from '../defaults';
 import { paths } from '../paths';
 
 export interface DocsParams {
   build?: boolean;
+  source?: string;
   destination?: string;
 }
 
-export type DocsOptions = DocsParams;
-
-export interface DocsConfig {
+export interface DocsConfigurations {
   typedoc: Serial.Object;
 }
 
-export function hydrateDocs(
-  options: DocsOptions | Empty
-): Deep.Required<DocsOptions> {
-  return shallow(
-    {
-      build: defaults.docs.build,
-      destination: defaults.docs.destination
-    },
-    options || undefined
-  );
-}
-
 export function docs(
-  options: DocsOptions | Empty,
-  config: DocsConfig
+  params: DocsParams | null,
+  configurations: DocsConfigurations
 ): Task.Async {
-  const opts = hydrateDocs(options);
+  const opts = {
+    build: TypeGuard.isBoolean(params?.build)
+      ? params?.build
+      : defaults.docs.build,
+    source: params?.source || defaults.docs.source,
+    destination: params?.destination || defaults.docs.destination
+  };
 
-  return create((ctx) => {
-    if (!opts.build || !getTypeScriptPath(ctx.cwd)) {
-      return print('Skipped docs build');
-    }
+  return create(() => {
+    if (!opts.build) return print('Skipped docs build');
 
     return series(
       mkdir(opts.destination, { ensure: true }),
@@ -47,14 +38,20 @@ export function docs(
         strict: false,
         recursive: true
       }),
-      intercept(
+      tmpTask(
         {
-          path: 'typedoc.json',
-          content: JSON.stringify(config.typedoc),
-          require: 'json'
+          ext: 'json',
+          content: JSON.stringify(configurations.typedoc),
+          overrides: { name: 'typedoc.json', ext: false }
         },
-        paths.bin.typedoc,
-        ['src', '--out', opts.destination]
+        ([file]) => {
+          return exec(process.execPath, [
+            paths.typedocBin,
+            opts.source,
+            ...['--out', opts.destination],
+            ...['--options', file]
+          ]);
+        }
       )
     );
   });
