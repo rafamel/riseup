@@ -79,8 +79,9 @@ export function configureEslint(
       'no-unused-vars': 1,
       'no-warning-comments': [1, { terms: opts.highlight, location: 'start' }],
       'lines-between-class-members': [1, 'never'],
+      'object-shorthand': 2,
       /* NODE */
-      'node/no-callback-literal': 0,
+      'n/no-callback-literal': 0,
       /* IMPORT */
       'import/export': 0,
       /* STANDARD */
@@ -88,10 +89,17 @@ export function configureEslint(
       'standard/array-bracket-even-spacing': 0,
       /* UNICORN */
       'unicorn/no-null': 0,
+      'unicorn/prefer-spread': 0,
       'unicorn/filename-case': 0,
+      'unicorn/no-array-reduce': 0,
       'unicorn/throw-new-error': 0,
       'unicorn/catch-error-name': 0,
+      'unicorn/no-process-exit': 0,
+      'unicorn/no-useless-spread': 0,
+      'unicorn/no-useless-undefined': 0,
       'unicorn/prefer-export-from': 0,
+      'unicorn/prefer-array-flat-map': 0,
+      'unicorn/explicit-length-check': 0,
       'unicorn/prevent-abbreviations': 0,
       'unicorn/new-for-builtins': 2,
       /* PRETTIER */
@@ -112,8 +120,10 @@ export function configureEslint(
           // Fix for paths and imports, as they will be resolved by typescript
           'import/named': 0,
           'import/no-unresolved': 0,
-          // Very prone to expose parser bugs and already
-          // covered by noUnusedLocals and noUnusedParameters
+          // Conflicts with required catch argument
+          'unicorn/prefer-optional-catch-binding': 0,
+          // Exposes parser bugs, covered by noUnusedLocals/noUnusedParameters
+          'no-unused-vars': 0,
           '@typescript-eslint/no-unused-vars': 0
         }
       },
