@@ -14,7 +14,7 @@ export function run(): Task.Async {
     }
 
     if (cmd.startsWith('-')) {
-      throw Error(`Run first argument must be a script name`);
+      throw new Error(`Run first argument must be a script name`);
     }
 
     return context(

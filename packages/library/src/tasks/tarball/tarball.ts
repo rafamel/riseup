@@ -109,7 +109,7 @@ export function tarball(params: TarballParams | null): Task.Async {
                 (buffer) => {
                   const json = JSON.parse(String(buffer));
                   if (!TypeGuard.isArray(json.files)) {
-                    throw Error(
+                    throw new TypeError(
                       `Compulsory files field in package.json not found`
                     );
                   }

@@ -45,7 +45,7 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
             });
 
             if (files.length !== 1) {
-              throw Error(`Pack failed to produce a tarball`);
+              throw new Error(`Pack failed to produce a tarball`);
             }
 
             const file = files[0];

@@ -31,11 +31,11 @@ export function fix(
     prettier: TypeGuard.isBoolean(options?.prettier)
       ? options?.prettier
       : defaults.global.prettier,
-    loaders: { ...defaults.global.loaders, ...(options?.loaders || {}) }
+    loaders: { ...defaults.global.loaders, ...options?.loaders }
   };
 
   const extcode = new Extensions(opts.loaders)
-    .filter(['js', 'jsx', 'ts', 'tsx'], null)
+    .select(['js', 'jsx', 'ts', 'tsx'], null)
     .extensions();
 
   return context(

@@ -120,7 +120,7 @@ export class Builder implements Builder.Settings {
 
     const loaders = new Extensions({
       ...defaultOptions.loaders,
-      ...(options?.loaders || {})
+      ...options?.loaders
     });
     this.options = Object.freeze({
       platform: options?.platform || defaultOptions.platform,
@@ -135,7 +135,7 @@ export class Builder implements Builder.Settings {
     include: Transpile.Loader[] | null,
     exclude: Transpile.Loader[] | null
   ): string[] {
-    return this.#loaders.filter(include, exclude).extensions();
+    return this.#loaders.select(include, exclude).extensions();
   }
   public async build(): Promise<void> {
     await build(this.#configuration);
@@ -147,14 +147,14 @@ export class Builder implements Builder.Settings {
     const arr = Array.isArray(params.entries)
       ? params.entries
       : Object.keys(params.entries);
-    if (!arr.length) {
-      throw Error(`Missing build entries`);
+    if (arr.length <= 0) {
+      throw new Error(`Missing build entries`);
     }
-    if (!params.formats.length) {
-      throw Error(`Missing build formats`);
+    if (params.formats.length <= 0) {
+      throw new Error(`Missing build formats`);
     }
-    if (!params.targets.length) {
-      throw Error(`Missing build targets`);
+    if (params.targets.length <= 0) {
+      throw new Error(`Missing build targets`);
     }
 
     return {

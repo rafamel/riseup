@@ -22,7 +22,9 @@ export function node(
 
   return create((ctx) => {
     const pkg = getPackageJson(ctx.cwd, false);
-    if (!pkg) throw Error(`package.json not found for: ${ctx.cwd}`);
+    if (!pkg) {
+      throw new Error(`package.json not found for: ${ctx.cwd}`);
+    }
 
     return exec(
       process.execPath,

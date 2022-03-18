@@ -148,8 +148,11 @@ async function runFonts(
       ...options,
       families: { [key]: value }
     });
+
     const url = instance.constructURL();
-    if (!url) throw Error(`Could not download font ${key}`);
+    if (!url) {
+      throw new Error(`Could not download font ${key}`);
+    }
 
     const filename = `font-${key.toLowerCase()}.css`;
     files.push(filename);

@@ -58,17 +58,20 @@ export function singular({
         : null,
       create(() => {
         if (next) return;
-        if (!options.interactive) throw Error(`Version bump required`);
+        if (!options.interactive) {
+          throw new Error(`Version bump required`);
+        }
+
         return select(
           { message: 'Select version bump:' },
-          bumps.reduce((acc, version) => {
-            return {
-              ...acc,
-              [version[0].toUpperCase() + version.slice(1)]: () => {
+          Object.fromEntries(
+            bumps.map((version) => [
+              version[0].toUpperCase() + version.slice(1),
+              () => {
                 next = version;
               }
-            };
-          }, {})
+            ])
+          )
         );
       }),
       create(() => {
@@ -93,7 +96,7 @@ export function singular({
       create(() => {
         const pkg = getPackageJson(ctx.cwd, false);
         if (!pkg) {
-          throw Error(`Couldn't locate package.json: ${ctx.cwd}`);
+          throw new Error(`Couldn't locate package.json: ${ctx.cwd}`);
         }
 
         return series(

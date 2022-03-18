@@ -25,8 +25,8 @@ export function explore(params: ExploreParams | null): Task.Async {
 
     const maps = await getRecursiveFiles(['.map'], null, [dir]);
 
-    if (!maps.length) {
-      throw Error(`No source maps found for exploration: ${opts.dir}`);
+    if (maps.length <= 0) {
+      throw new Error(`No source maps found for exploration: ${opts.dir}`);
     }
 
     return exec(process.execPath, [

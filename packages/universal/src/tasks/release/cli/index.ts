@@ -62,22 +62,22 @@ export function cli(conventional: ConventionalOptions | null): Task {
     if (isMonorepoChild) {
       return series(
         print(help + '\n'),
-        raises(Error(`Release should be run at monorepo root`))
+        raises(new Error(`Release should be run at monorepo root`))
       );
     }
     if (cmd._.length > 1) {
       return series(
         print(help + '\n'),
-        raises(Error(`Unknown subcommand: ${cmd._[1]}`))
+        raises(new Error(`Unknown subcommand: ${cmd._[1]}`))
       );
     }
     if (
       ![...bumps, null].includes(opts.bump) &&
-      !/^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$/.exec(opts.bump || '')
+      !/^\d+\.\d+\.\d+(-.+)?$/.test(opts.bump || '')
     ) {
       return series(
         print(help + '\n'),
-        raises(Error(`Invalid version bump: ${opts.bump}`))
+        raises(new Error(`Invalid version bump: ${opts.bump}`))
       );
     }
 

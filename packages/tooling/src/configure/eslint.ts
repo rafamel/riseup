@@ -33,12 +33,12 @@ export function configureEslint(
       ? options?.prettier
       : defaults.global.prettier,
     platform: options?.platform || defaults.global.platform,
-    loaders: { ...defaults.global.loaders, ...(options?.loaders || {}) }
+    loaders: { ...defaults.global.loaders, ...options?.loaders }
   };
 
   const extensions = new Extensions(opts.loaders);
-  const extjs = extensions.filter(['js', 'jsx'], null).extensions();
-  const extts = extensions.filter(['ts', 'tsx'], null).extensions();
+  const extjs = extensions.select(['js', 'jsx'], null).extensions();
+  const extts = extensions.select(['ts', 'tsx'], null).extensions();
   const extcode = [...extjs, ...extts];
 
   return {

@@ -14,7 +14,7 @@ export function execute(): Task.Async {
     }
 
     if (cmd.startsWith('-')) {
-      throw Error(`Execute first argument must be a command`);
+      throw new Error(`Execute first argument must be a command`);
     }
 
     return context(

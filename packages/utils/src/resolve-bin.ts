@@ -28,17 +28,17 @@ export function resolveBin(lib: string, bin: string, from: URL): string {
   } catch (_) {}
 
   if (!pkgPath) {
-    throw Error(`No module "${lib}" found`);
+    throw new Error(`No module "${lib}" found`);
   }
 
   const pkg = JSON.parse(String(fs.readFileSync(pkgPath)));
 
   if (pkg.name !== lib) {
-    throw Error(`No matching package.json found for "${lib}"`);
+    throw new Error(`No matching package.json found for "${lib}"`);
   }
 
   if (!pkg.bin) {
-    throw Error(`No executable found for ${lib}`);
+    throw new Error(`No executable found for ${lib}`);
   }
 
   const file: string | null = TypeGuard.isString(pkg.bin)
@@ -50,7 +50,7 @@ export function resolveBin(lib: string, bin: string, from: URL): string {
     : null;
 
   if (file === null) {
-    throw Error(`Executable ${bin} not found for ${lib}`);
+    throw new Error(`Executable ${bin} not found for ${lib}`);
   }
 
   return path.join(path.dirname(pkgPath), file);

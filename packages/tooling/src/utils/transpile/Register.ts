@@ -27,14 +27,12 @@ export class Register {
   public register = (): void => {
     this.unregister();
 
-    const teardowns = this.#teardowns;
-    teardowns.push(this.registerResolve());
-    teardowns.push(this.registerTranspile());
+    this.#teardowns.push(this.registerResolve(), this.registerTranspile());
   };
   public unregister = (): void => {
     const teardowns = this.#teardowns;
 
-    while (teardowns.length) {
+    while (teardowns.length > 0) {
       const fn = teardowns.shift();
       if (fn) fn();
     }

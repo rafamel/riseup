@@ -29,10 +29,7 @@ export class Extensions<T> {
     return this.#entries.map(([key]) => key);
   }
   public rules(): Extensions.Rules<T> {
-    return this.#entries.reduce(
-      (acc, [key, value]) => ({ ...acc, [key]: value }),
-      {}
-    );
+    return Object.fromEntries(this.#entries);
   }
   public add<U>(extensions: Extensions<U>): Extensions<T | U> {
     return new Extensions({ ...this.rules(), ...extensions.rules() });
@@ -45,7 +42,7 @@ export class Extensions<T> {
       ])
     );
   }
-  public filter(include: T[] | null, exclude: T[] | null): Extensions<T> {
+  public select(include: T[] | null, exclude: T[] | null): Extensions<T> {
     return new Extensions(
       this.#entries.filter(([_, value]) => {
         if (include && !include.includes(value)) return false;
@@ -54,6 +51,6 @@ export class Extensions<T> {
     );
   }
   public exclude<U extends T>(value: U): Extensions<Exclude<T, U>> {
-    return this.filter(null, [value]) as Extensions<Exclude<T, U>>;
+    return this.select(null, [value]) as Extensions<Exclude<T, U>>;
   }
 }

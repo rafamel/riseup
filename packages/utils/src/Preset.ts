@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable unicorn/prefer-object-from-entries */
 import { Dictionary, Empty, NullaryFn } from 'type-core';
 import { Task } from 'kpo';
 
@@ -25,7 +26,7 @@ export class Preset<
     ...presets: Array<Preset.Type<string, {}>>
   ): Preset.Type<string, Dictionary> {
     return new Preset(
-      presets.reduce((acc, preset) => ({ ...acc, ...preset.tasks }), {}),
+      presets.reduce((acc, preset) => Object.assign(acc, preset.tasks), {}),
       new Proxy(
         {},
         {
@@ -42,8 +43,8 @@ export class Preset<
                   errors.push(err);
                 }
               }
-              if (errors.length) throw errors[0];
-              return values.length ? values[0] : null;
+              if (errors.length > 0) throw errors[0];
+              return values.length > 0 ? values[0] : null;
             };
           }
         }
@@ -85,7 +86,7 @@ export class Preset<
 
     const fn = configure[type];
     if (!fn) {
-      throw Error(`Unexpected configuration type: ${type}`);
+      throw new Error(`Unexpected configuration type: ${type}`);
     }
 
     return fn.bind(configure);

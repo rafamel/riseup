@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 import { SyncTransformer } from '@jest/transform';
 
 import { Transpiler } from '../utils';

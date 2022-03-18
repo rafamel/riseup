@@ -39,7 +39,7 @@ export async function getMonorepoPackages(
 
   const first = output.indexOf('[');
   const last = output.lastIndexOf(']');
-  const str = output.substring(first, last + 1);
+  const str = output.slice(first, last + 1);
   const arr = JSON.parse(str);
 
   ensure(arr, PACKAGE_INFORMATION_SCHEMA, { assert: true });

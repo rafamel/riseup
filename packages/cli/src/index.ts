@@ -1,9 +1,12 @@
-import { loadPackage } from 'cli-belt';
+import { URL, fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { cli as _cli } from 'kpo';
+import { loadPackage } from 'cli-belt';
 
 export async function cli(): Promise<void> {
-  // FIXME
-  const pkg = await loadPackage(__dirname, { title: false });
+  const url = new URL(import.meta.url);
+  const dirname = path.dirname(fileURLToPath(url));
+  const pkg = await loadPackage(dirname, { title: false });
 
   return _cli({
     bin: 'riseup',

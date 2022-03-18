@@ -35,8 +35,8 @@ export function configureJest(
       : params?.threshold,
     overrides: params?.overrides || defaults.test.overrides,
     platform: options?.platform || defaults.global.platform,
-    loaders: { ...defaults.global.loaders, ...(options?.loaders || {}) },
-    stubs: { ...defaults.global.stubs, ...(options?.stubs || {}) }
+    loaders: { ...defaults.global.loaders, ...options?.loaders },
+    stubs: { ...defaults.global.stubs, ...options?.stubs }
   };
 
   const extensions = Extensions.merge(
@@ -45,7 +45,7 @@ export function configureJest(
   );
   const extall = extensions.extensions().map((ext) => ext.slice(1));
   const extcode = extensions
-    .filter(['js', 'jsx', 'ts', 'tsx'], null)
+    .select(['js', 'jsx', 'ts', 'tsx'], null)
     .extensions()
     .map((ext) => ext.slice(1));
 

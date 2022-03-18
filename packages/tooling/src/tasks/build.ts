@@ -12,7 +12,11 @@ export function build(
   params: BuildParams | null,
   options: BuildOptions | null
 ): Task.Async {
-  const arr = Array.isArray(params) ? params : [params || Builder.params];
+  const arr = Array.isArray(params)
+    ? params.length > 0
+      ? params
+      : [Builder.params]
+    : [params || Builder.params];
 
   return context(
     { args: [] },

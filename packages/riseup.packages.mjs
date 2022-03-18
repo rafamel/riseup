@@ -77,7 +77,18 @@ export default (build) => {
         // Keywords that should output warnings
         highlight: ['fixme', 'todo', 'refactor'],
         // ESLint rules overwrites
-        rules: {}
+        rules: {
+          // ts only
+          'no-unused-vars': 0,
+          'unicorn/prefer-optional-catch-binding': 0,
+          // all
+          'object-shorthand': 2,
+          'unicorn/prefer-spread': 0,
+          'unicorn/no-array-reduce': 0,
+          'unicorn/no-useless-spread': 0,
+          'unicorn/prefer-array-flat-map': 0,
+          'unicorn/explicit-length-check': 0
+        }
       },
       test: {
         // Whether to print all passed tests
@@ -87,7 +98,7 @@ export default (build) => {
         // Array of setup files
         require: [],
         // Files to include in coverage (auto, all, or none)
-        coverage: 'all',
+        coverage: 'auto',
         // Fail when coverage is under the threshold
         threshold: null,
         // Jest configuration overrides

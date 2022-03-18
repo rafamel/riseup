@@ -5,7 +5,7 @@ export function ensureProjectBuilt(dir: string): Promise<void> {
     fs.access(dir, fs.constants.F_OK, (err) => {
       return err
         ? reject(
-            Error(
+            new Error(
               `Project must be built before size checks. ` +
                 `Directory doesn't exist: ${dir}`
             )

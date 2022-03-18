@@ -6,7 +6,7 @@ export async function getRecursiveFiles(
   exclude: RegExp | null,
   dirs: string[]
 ): Promise<string[]> {
-  if (!dirs.length) return [];
+  if (dirs.length <= 0) return [];
 
   const files: string[] = [];
   const dir = dirs[0];
@@ -30,7 +30,7 @@ export async function getRecursiveFiles(
       });
     });
 
-    if (!exclude || !exclude.exec(itemPath)) {
+    if (!exclude || !exclude.test(itemPath)) {
       if (stats.isDirectory()) {
         pending.push(itemPath);
       } else {
@@ -42,7 +42,10 @@ export async function getRecursiveFiles(
     }
   }
 
-  return files.concat(
-    await getRecursiveFiles(normalExtensions, exclude, pending)
+  const recursiveFiles = await getRecursiveFiles(
+    normalExtensions,
+    exclude,
+    pending
   );
+  return [...files, ...recursiveFiles];
 }

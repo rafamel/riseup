@@ -99,11 +99,11 @@ export class Transpiler implements Transpiler.Settings {
       platform: options?.platform || defaultOptions.platform,
       loaders: new Extensions({
         ...defaultOptions.loaders,
-        ...(options?.loaders || {})
+        ...options?.loaders
       }).rules(),
       stubs: new Extensions({
         ...defaultOptions.stubs,
-        ...(options?.stubs || {})
+        ...options?.stubs
       }).rules(),
       jsx: options?.jsx || defaultOptions.jsx
     });
@@ -122,7 +122,7 @@ export class Transpiler implements Transpiler.Settings {
 
     this.#stubs = {
       ...this.#extensions
-        .filter(['file'], null)
+        .select(['file'], null)
         .map(() => {
           return format === 'commonjs'
             ? `module.exports = __filename;`
@@ -167,7 +167,7 @@ export class Transpiler implements Transpiler.Settings {
     include: Array<Transpile.Loader | 'stub'> | null,
     exclude: Array<Transpile.Loader | 'stub'> | null
   ): string[] {
-    return this.#extensions.filter(include, exclude).extensions();
+    return this.#extensions.select(include, exclude).extensions();
   }
   public resolve(request: string, parent: string | null): string | null {
     let cwd: string;
@@ -178,7 +178,7 @@ export class Transpiler implements Transpiler.Settings {
       specifier = request;
     } else {
       if (!path.isAbsolute(request)) {
-        throw Error(
+        throw new Error(
           `Request must be an absolute path when no parent is provided`
         );
       }
@@ -203,7 +203,7 @@ export class Transpiler implements Transpiler.Settings {
 
     const relatives = Object.getOwnPropertyNames(result.metafile?.inputs || {});
     if (relatives.length !== 2) {
-      throw Error(`Required input metadata mismatch: ${relatives.length}`);
+      throw new Error(`Required input metadata mismatch: ${relatives.length}`);
     }
 
     return cwd ? path.resolve(cwd, relatives[0]) : relatives[0];
@@ -223,8 +223,8 @@ export class Transpiler implements Transpiler.Settings {
       ...(typeof contents === 'string'
         ? {
             stdin: {
+              contents,
               sourcefile: filename,
-              contents: contents,
               loader:
                 (this.#transpiles.loader || {})[path.extname(filename)] ||
                 undefined
@@ -234,11 +234,13 @@ export class Transpiler implements Transpiler.Settings {
     });
 
     const warn = result.warnings[0];
-    if (warn) throw Error(`${warn.text}\n\t${warn.location}`);
+    if (warn) {
+      throw new Error(`${warn.text}\n\t${warn.location}`);
+    }
 
     if (!result.outputFiles || result.outputFiles.length !== 1) {
       const length = result.outputFiles?.length || 0;
-      throw Error(`Required transpilation mismatch: ${length}`);
+      throw new Error(`Required transpilation mismatch: ${length}`);
     }
 
     return result.outputFiles[0].text;

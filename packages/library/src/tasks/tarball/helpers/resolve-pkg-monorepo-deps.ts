@@ -29,6 +29,7 @@ export async function resolvePkgMonorepoDeps(
   options: ResolvePkgMonorepoDepsOptions
 ): Promise<PackageDependency[]> {
   const packages = await getMonorepoPackages(context);
+
   return ['dependencies', 'devDependencies', 'optionalDependencies'].reduce(
     (acc: Promise<PackageDependency[]>, placement) => {
       return acc.then((arr) => {
@@ -40,7 +41,7 @@ export async function resolvePkgMonorepoDeps(
           packages,
           placement as PackageDependencyPlacement,
           []
-        ).then((res) => arr.concat(res));
+        ).then((res) => [...arr, ...res]);
       });
     },
     Promise.resolve([])
@@ -62,7 +63,7 @@ async function trunk(
   const pkgExists = fs.existsSync(pkgPath);
 
   if (!pkgExists) {
-    throw Error(`No package.json found at "${dir}"`);
+    throw new Error(`No package.json found at "${dir}"`);
   }
 
   const pkgJson = JSON.parse(String(await fs.readFileSync(pkgPath)));
@@ -70,22 +71,18 @@ async function trunk(
   // Parse coincident package dependencies / monorepo packages
   const pkgDependenciesRecord = !root
     ? {
-        ...(pkgJson.dependencies || {}),
-        ...(pkgJson.devDependencies || {}),
-        ...(pkgJson.optionalDependencies || {})
+        ...pkgJson.dependencies,
+        ...pkgJson.devDependencies,
+        ...pkgJson.optionalDependencies
       }
     : { ...pkgJson[placement] };
   const pkgDependenciesNames = Object.keys(pkgDependenciesRecord);
-  const packagesNames = packages.map((item) => item.name);
-  const packagesRecord = packages.reduce(
-    (acc: Record<string, PackageInformation>, item) => ({
-      ...acc,
-      [item.name]: item
-    }),
-    {}
+  const packagesNames = new Set(packages.map((item) => item.name));
+  const packagesRecord = Object.fromEntries(
+    packages.map((item) => [item.name, item])
   );
   const coincidentNames = pkgDependenciesNames.filter((name) => {
-    return packagesNames.includes(name);
+    return packagesNames.has(name);
   });
 
   // Verify versions are satisfied
@@ -98,14 +95,14 @@ async function trunk(
       !pkgInfo ||
       !semver.satisfies(pkgInfo.version, pkgVersionStr)
     ) {
-      throw Error(
+      throw new Error(
         `Package ${pkgInfo.name} version ${pkgVersionStr} ` +
           `is not satisfied by ${pkgInfo.version}: "${pkgPath}"`
       );
     }
 
     if (noPrivate && pkgInfo.private) {
-      throw Error(
+      throw new Error(
         `Package requires private package ${pkgInfo.name}: "${pkgPath}"`
       );
     }
@@ -132,7 +129,7 @@ async function trunk(
           packages,
           placement,
           [...history, data.name]
-        ).then((res) => arr.concat(res));
+        ).then((res) => [...arr, ...res]);
       });
     },
     Promise.resolve(coincidentAndNotInHistoryData)
