@@ -109,7 +109,7 @@ export default Preset.combine(
       // Regex array of files to ignore
       ignore: [],
       // Array of setup files
-      require: [],
+      require: ['./test/prepare'],
       // Files to include in coverage: auto, all, none
       coverage: 'auto',
       // Fail when coverage is under the threshold

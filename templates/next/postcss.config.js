@@ -1,5 +1,6 @@
 const app = require('./app.config');
 
+// See default configuration: https://bit.ly/3qMIB1d
 module.exports = {
   plugins: [
     'next/dist/compiled/postcss-flexbugs-fixes',

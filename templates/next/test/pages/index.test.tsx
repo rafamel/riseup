@@ -1,6 +1,7 @@
 import { test, expect } from '@jest/globals';
-import ReactDOM from 'react-dom';
 import { render } from '@testing-library/react';
+import ReactDOM from 'react-dom';
+
 import Page from '../../src/pages/index';
 
 test('renders without crashing (1)', () => {
