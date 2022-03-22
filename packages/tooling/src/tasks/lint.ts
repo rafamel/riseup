@@ -103,7 +103,11 @@ export function lint(
 
         return exec(process.execPath, [
           paths.typescriptBin,
-          ...['--noEmit', '--emitDeclarationOnly', 'false']
+          ...[
+            '--noEmit',
+            ...['--emitDeclarationOnly', 'false'],
+            ...['--incremental', 'false']
+          ]
         ]);
       })
     )
