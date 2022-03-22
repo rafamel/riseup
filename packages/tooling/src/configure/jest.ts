@@ -2,7 +2,7 @@ import { Serial, TypeGuard } from 'type-core';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
-import { Transpile, Transpiler, Extensions } from '../utils';
+import { Transpile, Transpiler, Extensions } from '../transpile';
 
 export interface ConfigureJestParams {
   verbose?: boolean;

@@ -1,7 +1,7 @@
 import { Deep } from 'type-core';
 
 import { Tooling } from './Tooling';
-import { Builder, Transpiler } from './utils';
+import { Builder, Transpiler } from './transpile';
 
 export const defaults: Deep.Required<Tooling.Options> = {
   global: {

@@ -1,6 +1,6 @@
 import sourceMapSupport from 'source-map-support';
 
-import { Register, Transpiler } from '../utils';
+import { Register, Transpiler } from '../transpile';
 
 sourceMapSupport.install({
   environment: 'node',

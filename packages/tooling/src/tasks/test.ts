@@ -3,7 +3,7 @@ import { create, exec, Task } from 'kpo';
 import { tmpTask } from '@riseup/utils';
 
 import { paths } from '../paths';
-import { Transpiler } from '../utils';
+import { Transpiler } from '../transpile';
 
 export type TestParams = Transpiler.Params;
 export type TestOptions = Transpiler.Options;

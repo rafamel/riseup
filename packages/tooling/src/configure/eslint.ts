@@ -1,7 +1,7 @@
 import { TypeGuard, Serial } from 'type-core';
 
 import { defaults } from '../defaults';
-import { Transpile, Extensions } from '../utils';
+import { Transpile, Extensions } from '../transpile';
 
 export interface ConfigureEslintParams {
   types?: boolean;

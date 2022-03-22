@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { context, series, mkdir, remove, exec, Task } from 'kpo';
 
-import { Builder } from '../utils';
+import { Builder } from '../transpile';
 import { paths } from '../paths';
 
 export type BuildParams = Builder.Params | Builder.Params[];

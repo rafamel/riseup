@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prefer-module */
 import path from 'node:path';
 
-import { Transpiler } from '../utils';
+import { Transpiler } from '../transpile';
 
 const transpiler = Transpiler.deserialize(
   process.env.TRANSPILER_SETTINGS || '{}',

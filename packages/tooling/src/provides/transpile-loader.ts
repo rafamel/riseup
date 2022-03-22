@@ -1,4 +1,4 @@
-import { Loader, Transpiler } from '../utils';
+import { Loader, Transpiler } from '../transpile';
 
 const { load, resolve } = Transpiler.deserialize(
   process.env.TRANSPILER_SETTINGS || '{}',

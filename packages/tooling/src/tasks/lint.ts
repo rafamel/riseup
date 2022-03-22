@@ -6,7 +6,7 @@ import { getTypescriptConfigPath, getOverridePath } from '@riseup/utils';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
-import { Extensions, Transpile } from '../utils';
+import { Extensions, Transpile } from '../transpile';
 
 export interface LintParams {
   dir?: string | string[];

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Builder } from '../utils';
+import { Builder } from '../transpile';
 
 Builder.deserialize(process.env.BUILDER_SETTINGS || '{}', null)
   .build()
