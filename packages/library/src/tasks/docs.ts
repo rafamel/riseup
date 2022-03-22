@@ -1,7 +1,7 @@
 import { Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
 import { mkdir, remove, series, print, create, Task, exec } from 'kpo';
-import { tmpTask } from '@riseup/utils';
+import { safeJsonSerialize, tmpTask } from '@riseup/utils';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -41,7 +41,7 @@ export function docs(
       tmpTask(
         {
           ext: 'json',
-          content: JSON.stringify(configurations.typedoc),
+          content: safeJsonSerialize(configurations.typedoc),
           overrides: { name: 'typedoc.json', ext: false }
         },
         ([file]) => {

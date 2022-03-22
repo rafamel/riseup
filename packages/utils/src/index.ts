@@ -7,6 +7,7 @@ export * from './get-tmp-dir';
 export * from './get-typescript-config-path';
 export * from './resolve-bin';
 export * from './resolve-module';
+export * from './safe-json-serialize';
 export * from './tmp-path';
 export * from './tmp-file';
 export * from './tmp-task';

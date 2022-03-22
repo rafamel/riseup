@@ -1,6 +1,6 @@
 import { Serial } from 'type-core';
 import { create, exec, Task } from 'kpo';
-import { tmpTask } from '@riseup/utils';
+import { safeJsonSerialize, tmpTask } from '@riseup/utils';
 
 import { paths } from '../paths';
 import { Transpiler } from '../transpile';
@@ -21,7 +21,7 @@ export function test(
     return tmpTask(
       {
         ext: 'json',
-        content: JSON.stringify(configurations.jest),
+        content: safeJsonSerialize(configurations.jest),
         overrides: { name: 'jest.config', ext: true }
       },
       ([file]) => {

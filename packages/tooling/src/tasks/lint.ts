@@ -2,7 +2,11 @@ import { Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
 import up from 'find-up';
 import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
-import { getTypescriptConfigPath, getOverridePath } from '@riseup/utils';
+import {
+  getTypescriptConfigPath,
+  getOverridePath,
+  safeJsonSerialize
+} from '@riseup/utils';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -60,7 +64,7 @@ export function lint(
           ],
           {
             env: {
-              ESLINT_CONFIG: JSON.stringify(configurations.eslint)
+              ESLINT_CONFIG: safeJsonSerialize(configurations.eslint)
             }
           }
         );

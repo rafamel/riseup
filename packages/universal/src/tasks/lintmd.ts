@@ -1,6 +1,6 @@
 import { Serial } from 'type-core';
 import { Task, exec } from 'kpo';
-import { tmpTask } from '@riseup/utils';
+import { safeJsonSerialize, tmpTask } from '@riseup/utils';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -29,7 +29,7 @@ export function lintmd(
   return tmpTask(
     {
       ext: 'json',
-      content: JSON.stringify(configurations.markdownlint),
+      content: safeJsonSerialize(configurations.markdownlint),
       overrides: [
         { name: '.markdownlintrc', ext: false },
         { name: '.markdownlint', ext: true }

@@ -1,4 +1,5 @@
 import { create, exec, Task } from 'kpo';
+import { safeJsonSerialize } from '@riseup/utils';
 
 import { defaults } from '../../defaults';
 import { paths } from '../../paths';
@@ -16,7 +17,7 @@ export function commit(params: CommitParams | null): Task {
   return create(async () => {
     return exec(process.execPath, [paths.commitizenBin], {
       env: {
-        COMMITIZEN_CONFIG: JSON.stringify(opts)
+        COMMITIZEN_CONFIG: safeJsonSerialize(opts)
       }
     });
   });

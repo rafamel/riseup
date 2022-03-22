@@ -2,7 +2,7 @@ import { Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
 import up from 'find-up';
 import { context, exec, Task, silence, finalize, create } from 'kpo';
-import { getOverridePath } from '@riseup/utils';
+import { getOverridePath, safeJsonSerialize } from '@riseup/utils';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -54,7 +54,7 @@ export function fix(
             ...['--config', overridePath || paths.eslintConfig],
             ...['--ext', extcode.join(',')]
           ],
-          { env: { ESLINT_CONFIG: JSON.stringify(configurations.eslint) } }
+          { env: { ESLINT_CONFIG: safeJsonSerialize(configurations.eslint) } }
         );
       }),
       opts.prettier
