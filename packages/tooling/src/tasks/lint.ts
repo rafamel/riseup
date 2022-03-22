@@ -1,6 +1,6 @@
 import { Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
-import up from 'find-up';
+import { findUp } from 'find-up';
 import { context, exec, finalize, create, Task, isLevelActive } from 'kpo';
 import {
   getTypescriptConfigPath,
@@ -81,7 +81,7 @@ export function lint(
               }
             );
 
-            const ignore = await up('.prettierignore', {
+            const ignore = await findUp('.prettierignore', {
               cwd: ctx.cwd,
               type: 'file'
             });

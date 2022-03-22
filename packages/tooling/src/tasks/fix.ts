@@ -1,6 +1,6 @@
 import { Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
-import up from 'find-up';
+import { findUp } from 'find-up';
 import { context, exec, Task, silence, finalize, create } from 'kpo';
 import { getOverridePath, safeJsonSerialize } from '@riseup/utils';
 
@@ -69,7 +69,7 @@ export function fix(
               }
             );
 
-            const ignore = await up('.prettierignore', {
+            const ignore = await findUp('.prettierignore', {
               cwd: ctx.cwd,
               type: 'file'
             });

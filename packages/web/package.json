@@ -50,13 +50,13 @@
   },
   "dependencies": {
     "@riseup/utils": "^0.14.0",
-    "@size-limit/file": "^5.0.1",
+    "@size-limit/file": "^7.0.8",
     "@types/favicons": "^6.2.1",
     "favicons": "^6.2.2",
     "google-fonts-helper": "^2.0.1",
     "htmlparser2": "^7.1.2",
     "kpo": "^0.23.0",
-    "size-limit": "^5.0.1",
+    "size-limit": "^7.0.8",
     "source-map-explorer": "^2.5.2",
     "type-core": "^0.12.0"
   }
