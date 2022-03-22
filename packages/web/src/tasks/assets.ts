@@ -44,7 +44,7 @@ export function assets(params: AssetsParams | null): Task.Async {
     copy: params?.copy || defaults.assets.copy,
     fonts: params?.fonts || defaults.assets.fonts,
     favicons: params?.favicons || defaults.assets.favicons,
-    result: defaults.assets.result
+    result: params?.result || defaults.assets.result
   };
 
   return create((ctx) => {
