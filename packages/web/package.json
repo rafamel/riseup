@@ -1,7 +1,7 @@
 {
   "name": "@riseup/web",
   "description": "Riseup tasks and configurations for the web",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "author": "Rafa Mel",
   "license": "MIT",
   "private": false,
@@ -49,7 +49,7 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
-    "@riseup/utils": "^0.14.0",
+    "@riseup/utils": "^0.15.0",
     "@size-limit/file": "^7.0.8",
     "@types/favicons": "^6.2.1",
     "favicons": "^6.2.2",

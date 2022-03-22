@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/rafamel/riseup/compare/v0.14.0...v0.15.0) (2022-03-22)
+
+
+### Bug Fixes
+
+* **packages/tooling:** fix lint task for typescript incremental configuration ([4e0a7e1](https://github.com/rafamel/riseup/commit/4e0a7e151e6f627858cf1c612af71568706b633e))
+* **packages:** update dependencies ([6b49a4c](https://github.com/rafamel/riseup/commit/6b49a4c17d6c70b0a3974102215923f01929c8ed))
+
+
+### Features
+
+* **packages/tooling:** build, node, and test tasks take include/exclude string arrays ([6337e90](https://github.com/rafamel/riseup/commit/6337e9010fec4abbe1ddcbbb65aa49d52ecbf36f))
+* **packages/tooling:** disable too restrictive linter rules ([da4c592](https://github.com/rafamel/riseup/commit/da4c5920a44e1dafac269f447dd0611631d7e7b7))
+* **packages:** throw on non serializable configurations ([f7903bc](https://github.com/rafamel/riseup/commit/f7903bc87e0931e3d9d71f04b185479fd7d07a5d))
+
+
+### BREAKING CHANGES
+
+* **packages/tooling:** build, node, and test tasks no longer take params.exclude as a RegExp/boolean.
+Please see latest documentation.
+
+
+
+
+
 # [0.14.0](https://github.com/rafamel/riseup/compare/v0.13.1...v0.14.0) (2022-03-16)
 
 
