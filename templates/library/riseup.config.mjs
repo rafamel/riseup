@@ -43,7 +43,7 @@ export default Preset.combine(
       // Entrypoints
       entries: ['src/index.ts'],
       // Formats: module, commonjs, iife
-      formats: ['module'],
+      formats: ['module', 'commonjs'],
       // Build targets
       targets: ['node16'],
       // Enable minification
@@ -52,18 +52,22 @@ export default Preset.combine(
       splitting: false,
       // Sourcemap mode: external, inline, none
       sourcemap: 'external',
-      // RegExp of files to exclude from bundle.
-      // Set to true to exclude external modules.
-      exclude: true,
+      // Specifiers to include in bundle
+      // Set to null to skip external modules
+      include: null,
+      // Specifiers to override bundle inclusions
+      exclude: [],
       // Environment variables injection
       env: {}
     },
     node: {
       // Transpilation format for runtime: module, commonjs
       format: 'commonjs',
-      // RegExp of files to exclude from transpilation.
-      // Set to true to exclude external modules.
-      exclude: false
+      // Paths to include in transpilation
+      // Set to null to skip external modules
+      include: ['*'],
+      // Paths to override transpilation inclusions
+      exclude: []
     },
     lint: {
       // Directories to lint
@@ -84,15 +88,17 @@ export default Preset.combine(
       ignore: [],
       // Array of setup files
       require: [],
-      // Files to include in coverage (auto, all, or none)
-      coverage: 'all',
+      // Files to include in coverage: auto, all, none
+      coverage: 'auto',
       // Fail when coverage is under the threshold
       threshold: null,
       // Jest configuration overrides
       overrides: {},
-      // RegExp of files to exclude from transpilation.
-      // Set to true to exclude external modules.
-      exclude: false
+      // Paths to include in transpilation
+      // Set to null to skip external modules
+      include: ['*'],
+      // Paths to override transpilation inclusions
+      exclude: []
     }
   }),
   new Universal({
