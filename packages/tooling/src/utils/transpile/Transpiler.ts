@@ -4,6 +4,7 @@ import { buildSync, BuildOptions } from 'esbuild';
 
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
+import { createIncludeExclude } from './helpers';
 
 export declare namespace Transpiler {
   interface Settings {
@@ -12,7 +13,8 @@ export declare namespace Transpiler {
   }
   interface Params {
     format?: Format;
-    exclude?: RegExp | boolean;
+    include?: string[] | null;
+    exclude?: string[];
   }
   interface Options {
     platform?: Transpile.Platform;
@@ -39,43 +41,27 @@ export class Transpiler implements Transpiler.Settings {
   };
   public static params: Deep.Required<Transpiler.Params> = {
     format: 'commonjs',
-    exclude: false
+    include: ['*'],
+    exclude: []
   };
   public static serialize(instance: Transpiler | Transpiler.Settings): string {
     const { params, options } = instance;
 
-    return JSON.stringify({
-      params: {
-        ...params,
-        exclude:
-          params.exclude instanceof RegExp
-            ? [params.exclude.source, params.exclude.flags]
-            : params.exclude
-      },
-      options
-    });
+    return JSON.stringify({ params, options });
   }
   public static deserialize<T = Transpiler>(
     serialization: string,
     projection: UnaryFn<Transpiler.Settings, T> | null
   ): T {
     const { params, options } = JSON.parse(serialization);
-    const settings = {
-      params: {
-        ...params,
-        exclude: Array.isArray(params.exclude)
-          ? new RegExp(params.exclude[0], params.exclude[1])
-          : params.exclude
-      },
-      options
-    };
+    const settings = { params, options };
     return (
       projection
         ? projection(settings)
         : new Transpiler(settings.params, settings.options)
     ) as T;
   }
-  #exclude: RegExp | null;
+  #exclude: RegExp;
   #extensions: Extensions<Transpile.Loader | 'stub'>;
   #stubs: Dictionary<string>;
   #resolves: BuildOptions;
@@ -91,8 +77,11 @@ export class Transpiler implements Transpiler.Settings {
 
     this.params = Object.freeze({
       format: params.format || defaultParams.format,
-      exclude:
-        params.exclude === undefined ? defaultParams.exclude : params.exclude
+      include:
+        params.include === null
+          ? null
+          : params.include || defaultParams.include,
+      exclude: params.exclude || defaultParams.exclude
     });
 
     this.options = Object.freeze({
@@ -108,11 +97,14 @@ export class Transpiler implements Transpiler.Settings {
       jsx: options?.jsx || defaultOptions.jsx
     });
 
-    this.#exclude = params.exclude
-      ? params.exclude === true
-        ? /\/node_modules\//
-        : params.exclude
-      : null;
+    this.#exclude = (
+      this.params.include
+        ? createIncludeExclude(this.params.include, this.params.exclude)
+        : createIncludeExclude(
+            ['*'],
+            [...this.params.exclude, '*node_modules*']
+          )
+    ).exclude;
 
     const format = this.params.format;
     this.#extensions = Extensions.merge(
@@ -212,8 +204,9 @@ export class Transpiler implements Transpiler.Settings {
     filename: string,
     contents: T
   ): string | T {
-    const exclude = this.#exclude;
-    if (exclude?.exec(filename)) return contents;
+    if (this.#exclude.test(filename)) {
+      return contents;
+    }
 
     const stub = this.stub(filename);
     if (stub !== null) return stub;

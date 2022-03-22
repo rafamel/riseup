@@ -1,10 +1,8 @@
-import { TypeGuard } from 'type-core';
 import { create, exec, Task } from 'kpo';
 import { getPackageJson } from '@riseup/utils';
 
 import { paths } from '../paths';
 import { Transpiler } from '../utils';
-import { defaults } from '../defaults';
 
 export type NodeParams = Transpiler.Params;
 export type NodeOptions = Transpiler.Options;
@@ -13,13 +11,6 @@ export function node(
   params: NodeParams | null,
   options: NodeOptions | null
 ): Task.Async {
-  const opts: Required<NodeParams> = {
-    format: params?.format || defaults.node.format,
-    exclude: TypeGuard.isUndefined(params?.exclude)
-      ? defaults.node.exclude
-      : params?.exclude || false
-  };
-
   return create((ctx) => {
     const pkg = getPackageJson(ctx.cwd, false);
     if (!pkg) {
@@ -37,7 +28,7 @@ export function node(
         env: {
           NODE_ENV: ctx.env.NODE_ENV || 'development',
           TRANSPILER_SETTINGS: Transpiler.serialize({
-            params: opts,
+            params: params || {},
             options: options || {}
           })
         }

@@ -1,10 +1,9 @@
-import { Serial, TypeGuard } from 'type-core';
+import { Serial } from 'type-core';
 import { create, exec, Task } from 'kpo';
 import { tmpTask } from '@riseup/utils';
 
 import { paths } from '../paths';
 import { Transpiler } from '../utils';
-import { defaults } from '../defaults';
 
 export type TestParams = Transpiler.Params;
 export type TestOptions = Transpiler.Options;
@@ -18,13 +17,6 @@ export function test(
   options: TestOptions | null,
   configurations: TestConfigurations
 ): Task.Async {
-  const opts: Required<TestParams> = {
-    format: params?.format || defaults.test.format,
-    exclude: TypeGuard.isUndefined(params?.exclude)
-      ? defaults.test.exclude
-      : params?.exclude || false
-  };
-
   return create((ctx) => {
     return tmpTask(
       {
@@ -40,7 +32,7 @@ export function test(
             env: {
               NODE_ENV: ctx.env.NODE_ENV || 'test',
               TRANSPILER_SETTINGS: Transpiler.serialize({
-                params: opts,
+                params: params || {},
                 options: options || {}
               })
             }

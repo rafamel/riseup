@@ -4,6 +4,7 @@ import { Options, build } from 'tsup';
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
 import { Transpiler } from './Transpiler';
+import { createIncludeExclude } from './helpers';
 
 export declare namespace Builder {
   interface Settings {
@@ -20,7 +21,8 @@ export declare namespace Builder {
     minify?: boolean;
     splitting?: boolean;
     sourcemap?: Sourcemap;
-    exclude?: RegExp | boolean;
+    include?: string[] | null;
+    exclude?: string[];
     env?: Dictionary<string>;
   }
   interface Options {
@@ -48,37 +50,21 @@ export class Builder implements Builder.Settings {
     minify: false,
     splitting: false,
     sourcemap: 'external',
-    exclude: true,
+    include: null,
+    exclude: [],
     env: {}
   };
   public static serialize(instance: Builder | Builder.Settings): string {
     const { params, options } = instance;
 
-    return JSON.stringify({
-      params: {
-        ...params,
-        exclude:
-          params.exclude instanceof RegExp
-            ? [params.exclude.source, params.exclude.flags]
-            : params.exclude
-      },
-      options
-    });
+    return JSON.stringify({ params, options });
   }
   public static deserialize<T = Builder>(
     serialization: string,
     projection: UnaryFn<Builder.Settings, T> | null
   ): T {
     const { params, options } = JSON.parse(serialization);
-    const settings = {
-      params: {
-        ...params,
-        exclude: Array.isArray(params.exclude)
-          ? new RegExp(params.exclude[0], params.exclude[1])
-          : params.exclude
-      },
-      options
-    };
+    const settings = { params, options };
     return (
       projection
         ? projection(settings)
@@ -113,8 +99,11 @@ export class Builder implements Builder.Settings {
           ? params.splitting
           : defaultParams.splitting,
       sourcemap: params.sourcemap || defaultParams.sourcemap,
-      exclude:
-        params.exclude === undefined ? defaultParams.exclude : params.exclude,
+      include:
+        params.include === null
+          ? null
+          : params.include || defaultParams.include,
+      exclude: params.exclude || defaultParams.exclude,
       env: params.env || defaultParams.env
     });
 
@@ -157,6 +146,11 @@ export class Builder implements Builder.Settings {
       throw new Error(`Missing build targets`);
     }
 
+    const { include, exclude } = createIncludeExclude(
+      params.include || ['*'],
+      params.exclude
+    );
+
     return {
       // Defaults
       dts: true,
@@ -187,27 +181,9 @@ export class Builder implements Builder.Settings {
           : params.sourcemap === 'none'
           ? false
           : params.sourcemap,
-      skipNodeModulesBundle: params.exclude === true,
-      external:
-        typeof params.exclude === 'boolean'
-          ? undefined
-          : [
-              new RegExp(
-                '.*(' + params.exclude.source + ').*',
-                params.exclude.flags
-              )
-            ],
-      noExternal:
-        typeof params.exclude === 'boolean'
-          ? params.exclude === true
-            ? undefined
-            : [/.*/]
-          : [
-              new RegExp(
-                '^(?!(.*(' + params.exclude.source + ').*)$)',
-                params.exclude.flags
-              )
-            ],
+      skipNodeModulesBundle: !params.include,
+      external: [exclude],
+      noExternal: [include],
       env: params.env
     };
   }
