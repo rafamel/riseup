@@ -48,7 +48,7 @@ export class Builder implements Builder.Settings {
     targets: ['node16'],
     bundle: true,
     minify: false,
-    splitting: false,
+    splitting: true,
     sourcemap: 'external',
     include: null,
     exclude: [],

@@ -49,7 +49,7 @@ export default Preset.combine(
       // Enable minification
       minify: false,
       // Enable code splitting
-      splitting: false,
+      splitting: true,
       // Sourcemap mode: external, inline, none
       sourcemap: 'external',
       // Specifiers to include in bundle
