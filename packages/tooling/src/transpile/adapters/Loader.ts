@@ -1,6 +1,6 @@
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { Transpiler } from './Transpiler';
+import { Transpiler } from '../Transpiler';
 
 export declare namespace Loader {
   type Resolve<R = Resolve.Response | Promise<Resolve.Response>> = (

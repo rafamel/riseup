@@ -2,7 +2,7 @@ import { NullaryFn } from 'type-core';
 import module from 'node:module';
 import { addHook } from 'pirates';
 
-import { Transpiler } from './Transpiler';
+import { Transpiler } from '../Transpiler';
 
 export declare namespace Register {
   type Params = Omit<Transpiler.Params, 'format'>;

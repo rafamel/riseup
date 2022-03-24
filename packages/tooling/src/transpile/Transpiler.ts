@@ -1,10 +1,10 @@
-import { Deep, Dictionary, Serial, UnaryFn } from 'type-core';
+import { Deep, Serial, UnaryFn } from 'type-core';
 import path from 'node:path';
 import { buildSync, BuildOptions } from 'esbuild';
 
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
-import { createIncludeExclude } from './helpers';
+import { createPositiveRegex, getExternalPatterns } from './helpers/patterns';
 
 export declare namespace Transpiler {
   interface Settings {
@@ -61,11 +61,11 @@ export class Transpiler implements Transpiler.Settings {
         : new Transpiler(settings.params, settings.options)
     ) as T;
   }
-  #exclude: RegExp;
   #extensions: Extensions<Transpile.Loader | 'stub'>;
-  #stubs: Dictionary<string>;
   #resolves: BuildOptions;
   #transpiles: BuildOptions;
+  #exclude: UnaryFn<string, boolean>;
+  #stub: UnaryFn<string, string | null>;
   public params: Required<Transpiler.Params>;
   public options: Required<Transpiler.Options>;
   public constructor(
@@ -77,10 +77,7 @@ export class Transpiler implements Transpiler.Settings {
 
     this.params = Object.freeze({
       format: params.format || defaultParams.format,
-      include:
-        params.include === null
-          ? null
-          : params.include || defaultParams.include,
+      include: params.include || defaultParams.include,
       exclude: params.exclude || defaultParams.exclude
     });
 
@@ -97,41 +94,13 @@ export class Transpiler implements Transpiler.Settings {
       jsx: options?.jsx || defaultOptions.jsx
     });
 
-    this.#exclude = (
-      this.params.include
-        ? createIncludeExclude(this.params.include, this.params.exclude)
-        : createIncludeExclude(
-            ['*'],
-            [...this.params.exclude, '*node_modules*']
-          )
-    ).exclude;
-
-    const format = this.params.format;
+    // Extensions
     this.#extensions = Extensions.merge(
       new Extensions(this.options.loaders),
       new Extensions(this.options.stubs).map(() => 'stub' as const)
     );
 
-    this.#stubs = {
-      ...this.#extensions
-        .select(['file'], null)
-        .map(() => {
-          return format === 'commonjs'
-            ? `module.exports = __filename;`
-            : `export default import.meta.url;`;
-        })
-        .rules(),
-      ...new Extensions(this.options.stubs)
-        .map((_, stub) => {
-          const source = JSON.stringify(stub);
-          const str = `JSON.parse(${JSON.stringify(source)})`;
-          return format === 'commonjs'
-            ? `module.exports = ${str};`
-            : `export default ${str};`;
-        })
-        .rules()
-    };
-
+    // Resolution options
     this.#resolves = {
       ...this.configure(this.params, {
         ...this.options,
@@ -144,6 +113,7 @@ export class Transpiler implements Transpiler.Settings {
       sourcemap: false
     };
 
+    // Transpilation options
     this.#transpiles = {
       ...this.configure(this.params, {
         ...this.options,
@@ -153,6 +123,41 @@ export class Transpiler implements Transpiler.Settings {
       bundle: false,
       metafile: false,
       sourcemap: 'inline'
+    };
+
+    // Excludes
+    const include = this.params.include
+      ? createPositiveRegex(this.params.include, this.params.exclude)
+      : createPositiveRegex(
+          ['*'],
+          [...this.params.exclude, ...getExternalPatterns('*', '*')]
+        );
+    this.#exclude = (filename) => !include.test(filename);
+
+    // Stubs
+    const stubs = {
+      ...this.#extensions
+        .select(['file'], null)
+        .map(() => {
+          return this.params.format === 'commonjs'
+            ? `module.exports = __filename;`
+            : `export default import.meta.url;`;
+        })
+        .rules(),
+      ...new Extensions(this.options.stubs)
+        .map((_, stub) => {
+          const source = JSON.stringify(stub);
+          const str = `JSON.parse(${JSON.stringify(source)})`;
+          return this.params.format === 'commonjs'
+            ? `module.exports = ${str};`
+            : `export default ${str};`;
+        })
+        .rules()
+    };
+    this.#stub = (filename) => {
+      const ext = path.extname(filename);
+      const stub = stubs[ext];
+      return typeof stub === 'string' ? stub : null;
     };
   }
   public extensions(
@@ -204,11 +209,9 @@ export class Transpiler implements Transpiler.Settings {
     filename: string,
     contents: T
   ): string | T {
-    if (this.#exclude.test(filename)) {
-      return contents;
-    }
+    if (this.#exclude(filename)) return contents;
 
-    const stub = this.stub(filename);
+    const stub = this.#stub(filename);
     if (stub !== null) return stub;
 
     const result = buildSync({
@@ -237,13 +240,6 @@ export class Transpiler implements Transpiler.Settings {
     }
 
     return result.outputFiles[0].text;
-  }
-  private stub(filename: string): string | null {
-    const stubs = this.#stubs;
-
-    const ext = path.extname(filename);
-    const stub = stubs[ext];
-    return typeof stub === 'string' ? stub : null;
   }
   private configure(
     params: Required<Transpiler.Params>,

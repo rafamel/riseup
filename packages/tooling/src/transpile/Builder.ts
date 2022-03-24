@@ -4,7 +4,7 @@ import { Options, build } from 'tsup';
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
 import { Transpiler } from './Transpiler';
-import { createIncludeExclude } from './helpers';
+import { createPositiveRegex } from './helpers/patterns';
 
 export declare namespace Builder {
   interface Settings {
@@ -146,11 +146,6 @@ export class Builder implements Builder.Settings {
       throw new Error(`Missing build targets`);
     }
 
-    const { include, exclude } = createIncludeExclude(
-      params.include || ['*'],
-      params.exclude
-    );
-
     return {
       // Defaults
       dts: true,
@@ -181,10 +176,23 @@ export class Builder implements Builder.Settings {
           : params.sourcemap === 'none'
           ? false
           : params.sourcemap,
+      env: params.env,
       skipNodeModulesBundle: !params.include,
-      external: [exclude],
-      noExternal: [include],
-      env: params.env
+      noExternal: params.include ? [/.*/] : [],
+      esbuildPlugins: [
+        {
+          name: 'EsbuildBuilderPlugin',
+          setup(build) {
+            const include = createPositiveRegex(
+              params.include || ['*'],
+              params.exclude
+            );
+            build.onResolve({ filter: /.*/ }, (args) => {
+              return include.test(args.path) ? null : { external: true };
+            });
+          }
+        }
+      ]
     };
   }
 }
