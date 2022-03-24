@@ -50,12 +50,14 @@ export default (build) => {
         // Enable minification
         minify: false,
         // Enable code splitting
-        splitting: false,
+        splitting: true,
         // Sourcemap mode: external, inline, none
         sourcemap: 'external',
-        // RegExp of files to exclude from bundle.
-        // Set to true to exclude external modules.
-        exclude: true,
+        // Specifiers to include in bundle
+        // Set to null to skip external modules
+        include: null,
+        // Specifiers to override bundle inclusions
+        exclude: [],
         // Environment variables injection
         env: {},
         ...opts
@@ -63,9 +65,11 @@ export default (build) => {
       node: {
         // Transpilation format for runtime: module, commonjs
         format: 'commonjs',
-        // RegExp of files to exclude from transpilation.
-        // Set to true to exclude external modules.
-        exclude: false
+        // Paths to include in transpilation
+        // Set to null to skip external modules
+        include: ['*'],
+        // Paths to override transpilation inclusions
+        exclude: []
       },
       lint: {
         // Directories to lint
@@ -77,18 +81,7 @@ export default (build) => {
         // Keywords that should output warnings
         highlight: ['fixme', 'todo', 'refactor'],
         // ESLint rules overwrites
-        rules: {
-          // ts only
-          'no-unused-vars': 0,
-          'unicorn/prefer-optional-catch-binding': 0,
-          // all
-          'object-shorthand': 2,
-          'unicorn/prefer-spread': 0,
-          'unicorn/no-array-reduce': 0,
-          'unicorn/no-useless-spread': 0,
-          'unicorn/prefer-array-flat-map': 0,
-          'unicorn/explicit-length-check': 0
-        }
+        rules: {}
       },
       test: {
         // Whether to print all passed tests
@@ -97,15 +90,17 @@ export default (build) => {
         ignore: [],
         // Array of setup files
         require: [],
-        // Files to include in coverage (auto, all, or none)
+        // Files to include in coverage: auto, all, none
         coverage: 'auto',
         // Fail when coverage is under the threshold
         threshold: null,
         // Jest configuration overrides
         overrides: {},
-        // RegExp of files to exclude from transpilation.
-        // Set to true to exclude external modules.
-        exclude: false
+        // Paths to include in transpilation
+        // Set to null to skip external modules
+        include: ['*'],
+        // Paths to override transpilation inclusions
+        exclude: []
       }
     }),
     new Universal({
