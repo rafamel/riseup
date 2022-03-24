@@ -49,7 +49,7 @@
     "@riseup/tooling": "file:../../packages/tooling/tarball.tgz",
     "@riseup/universal": "file:../../packages/universal/tarball.tgz",
     "@riseup/utils": "file:../../packages/utils/tarball.tgz",
-    "kpo": "^0.23.0",
-    "typescript": "^4.3.4"
+    "kpo": "^0.23.2",
+    "typescript": "^4.6.2"
   }
 }

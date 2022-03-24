@@ -37,7 +37,7 @@
     "@riseup/monorepo": "file:../../packages/monorepo/tarball.tgz",
     "@riseup/universal": "file:../../packages/universal/tarball.tgz",
     "@riseup/utils": "file:../../packages/utils/tarball.tgz",
-    "kpo": "^0.23.0",
+    "kpo": "^0.23.2",
     "lerna": "^4.0.0"
   }
 }
