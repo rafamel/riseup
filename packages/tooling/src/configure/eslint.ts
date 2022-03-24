@@ -99,6 +99,7 @@ export function configureEslint(
       'unicorn/no-useless-undefined': 0,
       'unicorn/prefer-export-from': 0,
       'unicorn/prefer-array-flat-map': 0,
+      'unicorn/no-static-only-class': 0,
       'unicorn/explicit-length-check': 0,
       'unicorn/prevent-abbreviations': 0,
       'unicorn/new-for-builtins': 2,
