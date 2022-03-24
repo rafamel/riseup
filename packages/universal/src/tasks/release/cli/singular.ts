@@ -8,7 +8,8 @@ import {
   style,
   confirm,
   select,
-  raises
+  raises,
+  progress
 } from 'kpo';
 import isGitDirty from 'is-git-dirty';
 import { getPackageJson } from '@riseup/utils';
@@ -112,7 +113,12 @@ export function singular({
             ]
           ]),
           exec('git', ['tag', 'v' + pkg.version]),
-          options.push ? exec('git', ['push', '--follow-tags']) : null
+          options.push
+            ? progress(
+                { message: 'Push to remote' },
+                series(exec('git', ['push']), exec('git', ['push', '--tags']))
+              )
+            : null
         );
       })
     );

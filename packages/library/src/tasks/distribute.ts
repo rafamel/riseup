@@ -23,7 +23,10 @@ export function distribute(params: DistributeParams | null): Task.Async {
         opts.push
           ? progress(
               { message: 'Push to remote' },
-              context({ args: [] }, exec('git', ['push', '--follow-tags']))
+              context(
+                { args: [] },
+                series(exec('git', ['push']), exec('git', ['push', '--tags']))
+              )
             )
           : null
       )

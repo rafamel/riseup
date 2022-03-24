@@ -1,4 +1,4 @@
-import { Task, create, series, exec } from 'kpo';
+import { Task, create, series, exec, progress } from 'kpo';
 
 import { paths } from '../../../paths';
 import { CLIReleaseOptions } from './options';
@@ -21,7 +21,12 @@ export function monorepo({
         ...(conventional ? ['--changelog-preset', conventional.preset] : []),
         ...(conventional && conventional.changelog ? [] : ['--no-changelog'])
       ]),
-      options.push ? exec('git', ['push', '--follow-tags']) : null
+      options.push
+        ? progress(
+            { message: 'Push to remote' },
+            series(exec('git', ['push']), exec('git', ['push', '--tags']))
+          )
+        : null
     );
   });
 }

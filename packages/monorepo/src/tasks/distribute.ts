@@ -1,5 +1,5 @@
 import { TypeGuard } from 'type-core';
-import { Task, exec, series, context } from 'kpo';
+import { Task, exec, series, progress } from 'kpo';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
@@ -37,7 +37,10 @@ export function distribute(params: DistributeParams | null): Task.Async {
       opts.registry ? { env: { npm_config_registry: opts.registry } } : {}
     ),
     opts.push
-      ? context({ args: [] }, exec('git', ['push', '--follow-tags']))
+      ? progress(
+          { message: 'Push to remote' },
+          series(exec('git', ['push']), exec('git', ['push', '--tags']))
+        )
       : null
   );
 }
