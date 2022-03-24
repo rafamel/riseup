@@ -1,0 +1,10 @@
+diff --git a/node_modules/@babel/runtime/helpers/esm/interopRequireDefault.js b/node_modules/@babel/runtime/helpers/esm/interopRequireDefault.js
+index c2df7b6..8a3b0fe 100644
+--- a/node_modules/@babel/runtime/helpers/esm/interopRequireDefault.js
++++ b/node_modules/@babel/runtime/helpers/esm/interopRequireDefault.js
+@@ -3,3 +3,5 @@ export default function _interopRequireDefault(obj) {
+     "default": obj
+   };
+ }
++
++module.exports = _interopRequireDefault;

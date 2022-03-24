@@ -41,6 +41,7 @@ export default recreate({ announce: true }, () => {
     ),
     /* Hooks */
     prepare: riseup.tasks.assets,
+    postinstall: exec('patch-package'),
     version: create(() => tasks.validate)
   };
   return tasks;
