@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/rafamel/riseup/compare/v0.15.0...v0.16.0) (2022-03-24)
+
+
+### Bug Fixes
+
+* **packages/tooling:** fix build include/exclude patterns ([bf3d7a1](https://github.com/rafamel/riseup/commit/bf3d7a137e1ac0bff0b764f6adf26d5510e56ed9))
+
+
+### Features
+
+* **packages/tooling, templates/library:** enable code splitting by default on build ([e330369](https://github.com/rafamel/riseup/commit/e33036973386a1dd1c8f6da40766746ebacd87ab))
+* **packages/tooling:** disable no static only class linter rule on default configuration ([1047d3f](https://github.com/rafamel/riseup/commit/1047d3f9014d9f66e2e81974552c748e237ba8c5))
+
+
+
+
+
 # [0.15.0](https://github.com/rafamel/riseup/compare/v0.14.0...v0.15.0) (2022-03-22)
 
 

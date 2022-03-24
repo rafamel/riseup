@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/rafamel/riseup/compare/v0.15.0...v0.16.0) (2022-03-24)
+
+
+### Bug Fixes
+
+* **packages:** fix tags push on release/distribute ([9ca851d](https://github.com/rafamel/riseup/commit/9ca851dd33496031e72bd2c97e349fed6c5cf487))
+
+
+
+
+
 # [0.15.0](https://github.com/rafamel/riseup/compare/v0.14.0...v0.15.0) (2022-03-22)
 
 
