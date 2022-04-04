@@ -1,7 +1,7 @@
 {
   "name": "@riseup/utils",
   "description": "A set of Riseup shared utilities",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "author": "Rafa Mel",
   "license": "MIT",
   "private": false,

@@ -1,7 +1,7 @@
 {
   "name": "@riseup/library",
   "description": "Riseup tasks and configurations for libraries",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "author": "Rafa Mel",
   "license": "MIT",
   "private": false,
@@ -51,7 +51,7 @@
     "@types/semver": "^7.3.8"
   },
   "dependencies": {
-    "@riseup/utils": "^0.16.0",
+    "@riseup/utils": "^0.17.0",
     "ensurism": "^0.6.0",
     "kpo": "^0.23.2",
     "semver": "^7.3.5",
