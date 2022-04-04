@@ -1,8 +1,9 @@
 import { Dictionary, Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
-import { GoogleFontsHelper, GoogleFonts } from 'google-fonts-helper';
+import fs from 'node:fs';
 import faviconsFn, { FaviconOptions, FaviconResponse } from 'favicons';
 import { parseDocument } from 'htmlparser2';
+import { nanoid } from 'nanoid';
 import {
   create,
   print,
@@ -18,21 +19,30 @@ import {
 } from 'kpo';
 
 import { defaults } from '../defaults';
+import { CssFontType, fetchCss, fetchFontCss } from './helpers/fetch-css';
 
 export interface AssetsParams {
   clean?: boolean;
   destination?: string | null;
   copy?: string[] | null;
-  fonts?: null | GoogleFonts;
-  favicons?: null | {
-    logo?: string | string[];
-    options?: FaviconOptions | null;
-  };
-  result?: null | {
-    url?: string | null;
-    path?: string | null;
-    values?: Serial.Type | null;
-  };
+  fonts?: null | AssetsParamsFont;
+  favicons?: null | AssetsParamsFavicons;
+  result?: null | AssetsParamsResult;
+}
+
+export type AssetsParamsFont =
+  | Array<string | CssFontType>
+  | Dictionary<string | CssFontType>;
+
+export interface AssetsParamsFavicons {
+  logo?: string | string[];
+  options?: FaviconOptions | null;
+}
+
+export interface AssetsParamsResult {
+  url?: string | null;
+  path?: string | null;
+  values?: Serial.Type | null;
 }
 
 export function assets(params: AssetsParams | null): Task.Async {
@@ -138,38 +148,30 @@ async function runFonts(
   ctx: Context,
   destination: string,
   publicUrl: string | null,
-  options: Exclude<AssetsParams['fonts'], null | undefined>
+  options: AssetsParamsFont
 ): Promise<Dictionary<Dictionary[]>> {
   const files: string[] = [];
-  const families = Object.entries(options.families || {});
+  const assets = Array.isArray(options)
+    ? options.map((value): [string, string | CssFontType] => [nanoid(), value])
+    : Object.entries(options);
 
-  for (const [key, value] of families) {
-    const instance = new GoogleFontsHelper({
-      ...options,
-      families: { [key]: value }
-    });
+  for (const [key, value] of assets) {
+    const css = TypeGuard.isString(value)
+      ? await fetchCss(value, null)
+      : await fetchFontCss(value);
+    const filename = `font-${key.replace(/ /g, '-').toLowerCase()}.css`;
 
-    const url = instance.constructURL();
-    if (!url) {
-      throw new Error(`Could not download font ${key}`);
-    }
-
-    const filename = `font-${key.toLowerCase()}.css`;
     files.push(filename);
-    await GoogleFontsHelper.download(url, {
-      base64: false,
-      overwriting: true,
-      outputDir: ctx.cwd,
-      stylePath: path.join(destination, filename),
-      fontsDir: path.join(destination, 'fonts'),
-      fontsPath: 'fonts'
-    });
+    await fs.promises.writeFile(
+      path.resolve(ctx.cwd, path.join(destination, filename)),
+      css
+    );
   }
 
   return {
     link: files.map((file) => ({
       rel: 'stylesheet',
-      href: publicUrl ? `${publicUrl.replace(/\/$/, '')}/${file}` : 'fonts.css'
+      href: publicUrl ? `${publicUrl.replace(/\/$/, '')}/${file}` : file
     }))
   };
 }
@@ -178,7 +180,7 @@ async function runFavicons(
   ctx: Context,
   destination: string,
   publicUrl: string | null,
-  options: Exclude<AssetsParams['favicons'], null | undefined>
+  options: AssetsParamsFavicons
 ): Promise<Dictionary<Dictionary[]>> {
   const urlPath = 'favicons-' + String(Math.random()).replace('.', '');
   const urlPathRegex = new RegExp(urlPath, 'g');

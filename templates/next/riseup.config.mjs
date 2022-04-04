@@ -15,14 +15,7 @@ export default Preset.combine(
       // Array of globs for files to copy to assets folder
       copy: ['static/*'],
       // Google fonts to download -see: https://bit.ly/2TREByt
-      fonts: {
-        // Fonts display
-        display: 'swap',
-        // Fonts subsets
-        subsets: ['latin-ext'],
-        // Font families object
-        families: app.fonts
-      },
+      fonts: app.fonts,
       // Build favicons and manifest
       favicons: {
         // Path of source image
