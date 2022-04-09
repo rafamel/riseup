@@ -5,7 +5,8 @@ import { Library } from './Library';
 export const defaults: Deep.Required<Library.Options> = {
   tarball: {
     destination: null,
-    monorepo: false
+    monorepo: false,
+    package: null
   },
   docs: {
     name: null,
