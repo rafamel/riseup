@@ -9,11 +9,16 @@ export const defaults: Deep.Required<Tooling.Options> = {
     ...Builder.options,
     ...Transpiler.options
   },
+  node: {
+    ...Transpiler.params
+  },
   build: {
     ...Builder.params
   },
-  node: {
-    ...Transpiler.params
+  tarball: {
+    destination: null,
+    monorepo: false,
+    package: null
   },
   lint: {
     dir: ['src/', 'test/'],

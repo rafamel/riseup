@@ -7,18 +7,15 @@ import {
   DistributeParams,
   docs,
   DocsConfigurations,
-  DocsParams,
-  tarball,
-  TarballParams
+  DocsParams
 } from './tasks';
 import { TypeGuard } from 'type-core';
 
 export declare namespace Library {
-  type Tasks = 'tarball' | 'distribute' | 'docs';
+  type Tasks = 'distribute' | 'docs';
   type Configurations = DocsConfigurations;
 
   interface Options {
-    tarball?: TarballParams;
     distribute?: DistributeParams;
     docs?: ConfigureTypedocParams & DocsParams;
   }
@@ -28,9 +25,6 @@ export class Library extends Preset<Library.Tasks, Library.Configurations> {
   public constructor(options: Library.Options | null) {
     super(
       {
-        tarball: create(() => {
-          return tarball(options?.tarball || null);
-        }),
         distribute: create(() => {
           return distribute(options?.distribute || null);
         }),

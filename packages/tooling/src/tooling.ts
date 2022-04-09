@@ -23,13 +23,15 @@ import {
   node,
   NodeOptions,
   NodeParams,
+  tarball,
+  TarballParams,
   test,
   TestConfigurations,
   TestParams
 } from './tasks';
 
 export declare namespace Tooling {
-  type Tasks = 'build' | 'node' | 'fix' | 'lint' | 'test';
+  type Tasks = 'node' | 'build' | 'tarball' | 'fix' | 'lint' | 'test';
   type Configurations = FixConfigurations &
     LintConfigurations &
     TestConfigurations;
@@ -40,8 +42,9 @@ export declare namespace Tooling {
       FixOptions &
       LintOptions &
       NodeOptions;
-    build?: BuildParams;
     node?: NodeParams;
+    build?: BuildParams;
+    tarball?: TarballParams;
     lint?: ConfigureEslintParams & FixParams & LintParams;
     test?: ConfigureJestParams & TestParams;
   }
@@ -51,11 +54,14 @@ export class Tooling extends Preset<Tooling.Tasks, Tooling.Configurations> {
   public constructor(options: Tooling.Options | null) {
     super(
       {
+        node: create(() => {
+          return node(options?.node || null, options?.global || null);
+        }),
         build: create(() => {
           return build(options?.build || null, options?.global || null);
         }),
-        node: create(() => {
-          return node(options?.node || null, options?.global || null);
+        tarball: create(() => {
+          return tarball(options?.tarball || null);
         }),
         fix: create(() => {
           return fix(options?.lint || null, options?.global || null, {
