@@ -98,7 +98,7 @@ export function tarball(params: TarballParams | null): Task.Async {
                   );
                 }
               }),
-              copy(path.join('./', '*'), tmpDir, {
+              copy('./!(node_modules)', tmpDir, {
                 glob: true,
                 single: false,
                 strict: true,
