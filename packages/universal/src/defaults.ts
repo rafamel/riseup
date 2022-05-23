@@ -6,7 +6,7 @@ import { paths } from './paths';
 export const defaults: Deep.Required<Universal.Options> = {
   lintmd: {
     include: './',
-    exclude: './{node_modules,pkg,build,dist}/**',
+    exclude: '{CHANGELOG.md,node_modules/**/*,pkg/**/*,build/**/*,dist/**/*}',
     overrides: {}
   },
   commit: {
