@@ -102,7 +102,12 @@ export function configureEslint(
       'unicorn/no-static-only-class': 0,
       'unicorn/explicit-length-check': 0,
       'unicorn/prevent-abbreviations': 0,
+      'unicorn/prefer-native-coercion-functions': 0,
       'unicorn/new-for-builtins': 2,
+      'unicorn/numeric-separators-style': [
+        2,
+        { onlyIfContainsSeparator: true }
+      ],
       /* PRETTIER */
       ...(opts.prettier ? { 'prettier/prettier': 0 } : {}),
       /* REACT */
