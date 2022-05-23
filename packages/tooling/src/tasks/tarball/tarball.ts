@@ -1,5 +1,6 @@
 import { Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
+import fs from 'node:fs';
 import {
   copy,
   create,
@@ -65,13 +66,33 @@ export function tarball(params: TarballParams | null): Task.Async {
           return finalize(
             series(
               mkdir(tmpDir, { ensure: true }),
+              // Copy project on temp directory
               copy('./!(node_modules)', tmpDir, {
                 glob: true,
                 single: false,
                 strict: true,
                 exists: 'error'
               }),
-              // Package overrides
+              // Link node_modules
+              create(async (ctx) => {
+                const nodeModulesPath = path.resolve(ctx.cwd, 'node_modules');
+                const nodeModulesDest = path.resolve(tmpDir, 'node_modules');
+                const nodeModulesExist = await fs.promises
+                  .access(nodeModulesPath, fs.constants.F_OK)
+                  .then(
+                    () => true,
+                    () => false
+                  );
+
+                if (nodeModulesExist) {
+                  await fs.promises.symlink(
+                    nodeModulesPath,
+                    nodeModulesDest,
+                    'dir'
+                  );
+                }
+              }),
+              // Package deep merges
               opts.package
                 ? edit(
                     path.join(tmpDir, 'package.json'),
