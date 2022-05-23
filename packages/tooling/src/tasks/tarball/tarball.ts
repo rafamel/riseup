@@ -1,4 +1,4 @@
-import { Serial, TypeGuard } from 'type-core';
+import { Serial, UnaryFn, TypeGuard } from 'type-core';
 import path from 'node:path';
 import fs from 'node:fs';
 import {
@@ -22,7 +22,7 @@ import { resolvePkgMonorepoDeps } from './helpers/resolve-pkg-monorepo-deps';
 export interface TarballParams {
   destination?: null | string;
   monorepo?: boolean | { contents?: string; noPrivate?: boolean };
-  package?: Serial.Object | null;
+  package?: Serial.Object | UnaryFn<Serial.Object, Serial.Object> | null;
 }
 
 export function tarball(params: TarballParams | null): Task.Async {
@@ -96,10 +96,12 @@ export function tarball(params: TarballParams | null): Task.Async {
               opts.package
                 ? edit(
                     path.join(tmpDir, 'package.json'),
-                    (buffer) => ({
-                      ...JSON.parse(String(buffer)),
-                      ...opts.package
-                    }),
+                    (buffer) => {
+                      const contents = JSON.parse(String(buffer));
+                      return TypeGuard.isFunction(opts.package)
+                        ? opts.package(contents)
+                        : { ...contents, ...opts.package };
+                    },
                     { glob: false, strict: true }
                   )
                 : null,
