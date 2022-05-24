@@ -16,7 +16,9 @@ export default Preset.combine(
   new Universal({
     lintmd: {
       // Glob of markdown files to lint
-      include: '../README.md',
+      include: './*.md',
+      // Glob of markdown files to exclude
+      exclude: '{CHANGELOG.md,node_modules/**/*,pkg/**/*,build/**/*,dist/**/*}',
       // Markdownlint configuration overrides
       overrides: {}
     },
