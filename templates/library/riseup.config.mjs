@@ -5,12 +5,6 @@ import { Universal } from '@riseup/universal';
 
 export default Preset.combine(
   new Library({
-    tarball: {
-      // Package tarball file name
-      destination: null,
-      // Enable monorepo dependencies inclusion in tarball
-      monorepo: false
-    },
     docs: {
       // Build typedoc documentation
       build: false,
@@ -34,6 +28,15 @@ export default Preset.combine(
       loaders: {},
       // Runtime stubs
       stubs: {}
+    },
+    node: {
+      // Transpilation format for runtime: module, commonjs
+      format: 'commonjs',
+      // Paths to include in transpilation
+      // Set to null to skip external modules
+      include: ['*'],
+      // Paths to override transpilation inclusions
+      exclude: []
     },
     build: {
       // Clean directory upon build
@@ -60,14 +63,13 @@ export default Preset.combine(
       // Environment variables injection
       env: {}
     },
-    node: {
-      // Transpilation format for runtime: module, commonjs
-      format: 'commonjs',
-      // Paths to include in transpilation
-      // Set to null to skip external modules
-      include: ['*'],
-      // Paths to override transpilation inclusions
-      exclude: []
+    tarball: {
+      // Package tarball file name
+      destination: null,
+      // Enable monorepo dependencies inclusion in tarball
+      monorepo: false,
+      // Override package.json properties
+      package: null
     },
     lint: {
       // Directories to lint
@@ -104,7 +106,9 @@ export default Preset.combine(
   new Universal({
     lintmd: {
       // Glob of markdown files to lint
-      include: './README.md',
+      include: './**/*.md',
+      // Glob of markdown files to exclude
+      exclude: '{CHANGELOG.md,node_modules/**/*,pkg/**/*,build/**/*,dist/**/*}',
       // Markdownlint configuration overrides
       overrides: {}
     },

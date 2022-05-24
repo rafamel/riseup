@@ -84,6 +84,14 @@ export default Preset.combine(
       // Paths to override transpilation inclusions
       exclude: []
     },
+    tarball: {
+      // Package tarball file name
+      destination: null,
+      // Enable monorepo dependencies inclusion in tarball
+      monorepo: false,
+      // Override package.json properties
+      package: null
+    },
     lint: {
       // Directories to lint
       dir: ['src/', 'test/'],
@@ -122,7 +130,9 @@ export default Preset.combine(
   new Universal({
     lintmd: {
       // Glob of markdown files to lint
-      include: './README.md',
+      include: './**/*.md',
+      // Glob of markdown files to exclude
+      exclude: '{CHANGELOG.md,node_modules/**/*,pkg/**/*,build/**/*,dist/**/*}',
       // Markdownlint configuration overrides
       overrides: {}
     },
