@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/rafamel/riseup/compare/v0.17.0...v0.18.0) (2022-05-24)
+
+
+### Bug Fixes
+
+* **packages/library:** exclude node_modules from tarball task working directory copy ([43bbc12](https://github.com/rafamel/riseup/commit/43bbc126ee16969371765f1f845f8514c4cbfa79))
+* **packages:** update dependencies ([7f8d067](https://github.com/rafamel/riseup/commit/7f8d067e4842828800231cc8eff390ef6f2922f5))
+
+
+### Code Refactoring
+
+* **packages:** move tarball task from library to tooling package ([1dbe8ce](https://github.com/rafamel/riseup/commit/1dbe8ce021b9b2b64c8c66ddfe915a4b87ccbc89))
+
+
+### Features
+
+* **packages/library:** add package.json overrides option to tarball task params ([6dba8cf](https://github.com/rafamel/riseup/commit/6dba8cf6edc700fdc33abdb48fe1cef040d5540a))
+
+
+### BREAKING CHANGES
+
+* **packages:** the library package no longer provides the tarball task; it is now included in the
+tooling package
+
+
+
+
+
 # [0.17.0](https://github.com/rafamel/riseup/compare/v0.16.0...v0.17.0) (2022-04-04)
 
 

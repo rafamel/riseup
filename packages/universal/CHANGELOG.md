@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/rafamel/riseup/compare/v0.17.0...v0.18.0) (2022-05-24)
+
+
+### Bug Fixes
+
+* **packages:** update dependencies ([7f8d067](https://github.com/rafamel/riseup/commit/7f8d067e4842828800231cc8eff390ef6f2922f5))
+
+
+### Features
+
+* **packages/universal:** exclude CHANGELOG, node_modules, and other directories from markdown linting ([d77ae1f](https://github.com/rafamel/riseup/commit/d77ae1f67000ac860a5f3f4ddebd43614f7f0756))
+
+
+
+
+
 # [0.17.0](https://github.com/rafamel/riseup/compare/v0.16.0...v0.17.0) (2022-04-04)
 
 
