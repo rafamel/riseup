@@ -26,6 +26,7 @@ export default recreate({ announce: true }, () => {
     ),
     export: create(() => context({ args: ['export'] }, tasks.watch)),
     assets: riseup.tasks.assets,
+    tarball: riseup.tasks.tarball,
     explore: riseup.tasks.explore,
     size: riseup.tasks.size,
     fix: riseup.tasks.fix,
@@ -40,8 +41,10 @@ export default recreate({ announce: true }, () => {
       catches({ level: 'silent' }, exec('npm', ['outdated']))
     ),
     /* Hooks */
-    prepare: riseup.tasks.assets,
-    postinstall: exec('patch-package'),
+    postinstall: series(
+      exec('patch-package'),
+      create(() => tasks.assets)
+    ),
     version: create(() => tasks.validate)
   };
   return tasks;
