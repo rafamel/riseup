@@ -5,5 +5,7 @@ import { moduleResolve } from 'import-meta-resolve';
  * Resolves the path for a module.
  */
 export function resolveModule(specifier: string, from: URL): string {
-  return fileURLToPath(moduleResolve(specifier, from));
+  return fileURLToPath(
+    moduleResolve(specifier, from, new Set(['node', 'import']), false)
+  );
 }

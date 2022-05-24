@@ -12,6 +12,7 @@ export const paths = {
   jestBin: resolveBin('jest-cli', 'jest', url),
   jestResolver: resolveModule('./jest-resolver.cjs', url),
   jestTransform: resolveModule('./jest-transform.cjs', url),
+  jestEnvironmentJsdom: resolveModule('jest-environment-jsdom', url),
   eslintBin: resolveBin('eslint', 'eslint', url),
   eslintConfig: resolveModule('../static/eslintrc.cjs', url),
   prettierBin: resolveBin('prettier', 'prettier', url),

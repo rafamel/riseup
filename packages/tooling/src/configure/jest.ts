@@ -51,7 +51,8 @@ export function configureJest(
 
   return {
     injectGlobals: false,
-    testEnvironment: opts.platform === 'browser' ? 'jsdom' : 'node',
+    testEnvironment:
+      opts.platform === 'browser' ? paths.jestEnvironmentJsdom : 'node',
     moduleFileExtensions: extcode,
     modulePathIgnorePatterns: [
       '.*\\.d\\.ts$',

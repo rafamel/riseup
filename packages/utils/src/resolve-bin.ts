@@ -1,9 +1,10 @@
 import { TypeGuard } from 'type-core';
 import fs from 'node:fs';
 import path from 'node:path';
-import { URL, fileURLToPath } from 'node:url';
+import { URL } from 'node:url';
 import { findUpSync } from 'find-up';
-import { moduleResolve } from 'import-meta-resolve';
+
+import { resolveModule } from './resolve-module';
 
 /**
  * Resolves the path for a module bin file.
@@ -13,18 +14,18 @@ export function resolveBin(lib: string, bin: string, from: URL): string {
 
   // ES Modules
   try {
-    const entryUrl = moduleResolve(lib, from);
+    const entryPath = resolveModule(lib, from);
     pkgPath =
       findUpSync('package.json', {
         type: 'file',
-        cwd: path.dirname(fileURLToPath(entryUrl))
+        cwd: path.dirname(entryPath)
       }) || null;
   } catch (_) {}
 
   // Modules wo/ an entry point
   try {
     const relativePath = path.join(lib, 'package.json');
-    pkgPath = fileURLToPath(moduleResolve(relativePath, from));
+    pkgPath = resolveModule(relativePath, from);
   } catch (_) {}
 
   if (!pkgPath) {
