@@ -32,7 +32,10 @@ export function test(
             env: {
               NODE_ENV: ctx.env.NODE_ENV || 'test',
               TRANSPILER_SETTINGS: Transpiler.serialize({
-                params: params || {},
+                params: {
+                  ...(params || {}),
+                  exclude: ['**/*.json', ...((params || {}).exclude || [])]
+                },
                 options: options || {}
               })
             }
