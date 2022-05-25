@@ -1,6 +1,6 @@
 import { test, expect } from '@jest/globals';
 import { render } from '@testing-library/react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import Page from '../../src/pages/index';
 
@@ -10,6 +10,8 @@ test('renders without crashing (1)', () => {
 
 test('renders without crashing (2)', () => {
   const div = document.createElement('div');
-  expect(() => ReactDOM.render(<Page />, div)).not.toThrow();
-  ReactDOM.unmountComponentAtNode(div);
+  const root = createRoot(div);
+
+  expect(() => root.render(<Page />)).not.toThrow();
+  root.unmount();
 });
