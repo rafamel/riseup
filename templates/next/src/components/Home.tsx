@@ -1,9 +1,9 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../styles/Home.module.scss';
 
-const Home: NextPage = (): JSX.Element => {
+import styles from './Home.module.scss';
+
+export function Home(): JSX.Element {
   return (
     <div className={styles.container}>
       <Head>
@@ -67,6 +67,4 @@ const Home: NextPage = (): JSX.Element => {
       </footer>
     </div>
   );
-};
-
-export default Home;
+}

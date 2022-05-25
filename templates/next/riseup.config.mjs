@@ -94,7 +94,7 @@ export default Preset.combine(
     },
     lint: {
       // Directories to lint
-      dir: ['src/', 'test/'],
+      dir: ['pages/', 'src/', 'test/'],
       // Run type checks
       types: true,
       // Enable react presets
