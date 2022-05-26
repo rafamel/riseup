@@ -48,7 +48,7 @@ export default Preset.combine(
       // Formats: module, commonjs, iife
       formats: ['module', 'commonjs'],
       // Build targets
-      targets: ['node16'],
+      targets: ['node18'],
       // Enable minification
       minify: false,
       // Enable code splitting

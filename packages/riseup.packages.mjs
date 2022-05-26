@@ -49,7 +49,7 @@ export default (build) => {
         // Formats: module, commonjs, iife
         formats: ['module'],
         // Build targets
-        targets: ['node16'],
+        targets: ['node18'],
         // Enable minification
         minify: false,
         // Enable code splitting

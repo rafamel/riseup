@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "run": "kpo run --",
