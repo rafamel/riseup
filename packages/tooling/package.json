@@ -23,7 +23,10 @@
   ],
   "type": "module",
   "types": "./build/index.d.ts",
-  "exports": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./loader": "./build/transpile-loader.js"
+  },
   "files": [
     "build/",
     "static/"

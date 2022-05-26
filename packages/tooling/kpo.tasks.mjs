@@ -11,7 +11,6 @@ export default tasks([
   {
     formats: ['commonjs'],
     entries: {
-      'transpile-register': 'src/provides/transpile-register.ts',
       'jest-transform': 'src/provides/jest-transform.ts',
       'jest-resolver': 'src/provides/jest-resolver.ts'
     }

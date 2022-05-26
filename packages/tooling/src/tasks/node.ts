@@ -20,7 +20,6 @@ export function node(
     return exec(
       process.execPath,
       [
-        ...['--require', paths.transpileRegister],
         // TODO: remove --no-warnings flags once loader api is stable
         ...['--no-warnings', '--loader', paths.transpileLoader]
       ],

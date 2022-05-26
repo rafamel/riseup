@@ -8,7 +8,6 @@ export const paths = {
   rootDir: path.resolve(fileURLToPath(url), '../'),
   buildBin: resolveModule('./build-bin.js', url),
   transpileLoader: resolveModule('./transpile-loader.js', url),
-  transpileRegister: resolveModule('./transpile-register.cjs', url),
   jestBin: resolveBin('jest-cli', 'jest', url),
   jestResolver: resolveModule('./jest-resolver.cjs', url),
   jestTransform: resolveModule('./jest-transform.cjs', url),
