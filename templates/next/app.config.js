@@ -6,6 +6,12 @@ module.exports = {
   // Enable Progressive Web App capabilities
   enablePwa: true,
   // Enable Google Fonts
+  /*
+    Examples:
+      'Montserrat', 'Quicksand', 'Raleway',
+      'Questrial', 'Comfortaa', 'Work Sans', 'Maven Pro', 
+      'Montserrat Alternates', 'Julius Sans One'
+  */
   fonts: [
     {
       family: 'Montserrat',

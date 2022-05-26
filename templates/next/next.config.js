@@ -35,7 +35,9 @@ module.exports = withPWA({
   },
   images: {
     // Disable image static imports. See: https://bit.ly/3xyLfIO
-    disableStaticImages: false
+    disableStaticImages: false,
+    // See: https://bit.ly/3qBZ5Jm
+    domains: []
   },
   webpack: (config, _options) => ({ ...config })
 });
