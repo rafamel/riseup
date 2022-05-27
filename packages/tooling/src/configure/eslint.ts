@@ -110,6 +110,10 @@ export function configureEslint(
         2,
         { onlyIfContainsSeparator: true }
       ],
+      'unicorn/consistent-function-scoping': [
+        2,
+        { checkArrowFunctions: false }
+      ],
       /* PRETTIER */
       ...(opts.prettier ? { 'prettier/prettier': 0 } : {}),
       /* REACT */
