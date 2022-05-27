@@ -86,7 +86,7 @@ export class Preset<
 
     const fn = configure[type];
     if (!fn) {
-      throw new Error(`Unexpected configuration type: ${type}`);
+      throw new Error(`Unexpected configuration type: ${String(type)}`);
     }
 
     return fn.bind(configure);
