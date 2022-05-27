@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.19.0](https://github.com/rafamel/riseup/compare/v0.18.0...v0.19.0) (2022-05-27)
+
+
+### Bug Fixes
+
+* bump engine to node 18 ([6056bf7](https://github.com/rafamel/riseup/commit/6056bf7513de2f0627222480ea0efaa30dd83528))
+* **packages/tooling:** fix json imports on jest ([ed62249](https://github.com/rafamel/riseup/commit/ed62249eefe854f0d86ee2381db2720437c71e14))
+* update dependencies ([675ade5](https://github.com/rafamel/riseup/commit/675ade5cc60898765cb1fefdcc56afecb141e31f))
+
+
+### Features
+
+* **package/tooling:** disable eslint rule unicorn/consistent-function-scoping for arrow function ([5c9c30f](https://github.com/rafamel/riseup/commit/5c9c30f34d67c5cf1c8e97d1006f1e7e9f5dcf63))
+* **package/tooling:** improve default eslint rules ([1741a67](https://github.com/rafamel/riseup/commit/1741a677d4a8ac93cc5ca4da947b39377194068f))
+* **packages/tooling:** add package entrypoint for transpile loader ([eaf22b5](https://github.com/rafamel/riseup/commit/eaf22b5126543337a4f65d0e65f5a0eabc9c649d))
+
+
+### BREAKING CHANGES
+
+* engine bumped to node 18
+
+
+
+
+
 # [0.18.0](https://github.com/rafamel/riseup/compare/v0.17.0...v0.18.0) (2022-05-24)
 
 
