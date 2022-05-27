@@ -51,7 +51,7 @@
     "@riseup/utils": "^0.18.0",
     "kpo": "^0.23.2",
     "lcov-result-merger": "^3.1.0",
-    "lerna": "^4.0.0",
+    "lerna": "^5.0.0",
     "type-core": "^0.12.0"
   }
 }
