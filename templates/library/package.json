@@ -11,10 +11,7 @@
   "keywords": [],
   "type": "module",
   "types": "./build/index.d.ts",
-  "exports": {
-    "default": "./build/index.js",
-    "require": "./build/index.cjs"
-  },
+  "exports": "./build/index.js",
   "files": [
     "build/"
   ],

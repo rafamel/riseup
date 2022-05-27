@@ -46,7 +46,7 @@ export default Preset.combine(
       // Entrypoints
       entries: ['src/index.ts'],
       // Formats: module, commonjs, iife
-      formats: ['module', 'commonjs'],
+      formats: ['module'],
       // Build targets
       targets: ['node18'],
       // Enable minification
