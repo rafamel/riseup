@@ -34,7 +34,7 @@ export default Preset.combine(
       format: 'module',
       // Paths to include in transpilation
       // Set to null to skip external modules
-      include: ['*'],
+      include: null,
       // Paths to override transpilation inclusions
       exclude: []
     },
