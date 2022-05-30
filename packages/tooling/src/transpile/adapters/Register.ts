@@ -60,8 +60,14 @@ export class Register {
     const transpiler = this.#transpiler;
     const extensions = this.#extensions;
 
+    const results: Record<string, string | null> = {};
+
     const revertHook = addHook(
-      (code, filename) => transpiler.transpile(filename, code),
+      (code, filename) => {
+        return results[filename] === code
+          ? code
+          : transpiler.transpile(filename, code);
+      },
       { exts: extensions, ignoreNodeModules: false }
     );
 
@@ -78,7 +84,9 @@ export class Register {
       } catch (err: any) {
         if (err.code !== 'ERR_REQUIRE_ESM') throw err;
 
-        module._compile(transpiler.transpile(filename, null), filename);
+        const result = transpiler.transpile(filename, null);
+        results[filename] = result;
+        module._compile(result, filename);
       }
     };
 
