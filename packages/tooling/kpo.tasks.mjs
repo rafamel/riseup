@@ -11,7 +11,6 @@ export default tasks([
   {
     formats: ['commonjs'],
     entries: {
-      'babel-inline': 'src/provides/babel-inline.ts',
       'jest-transform': 'src/provides/jest-transform.ts',
       'jest-resolver': 'src/provides/jest-resolver.ts'
     }

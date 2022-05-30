@@ -33,6 +33,7 @@ export declare namespace Builder {
   type Format = 'module' | 'commonjs' | 'iife';
   type Sourcemap = 'inline' | 'external' | 'none';
 }
+
 export class Builder implements Builder.Settings {
   public static options: Deep.Required<Builder.Options> = {
     platform: Transpiler.options.platform,
