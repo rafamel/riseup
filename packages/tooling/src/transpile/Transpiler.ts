@@ -145,7 +145,10 @@ export class Transpiler implements Transpiler.Settings {
         .map(() => {
           return this.params.format === 'commonjs'
             ? `module.exports = __filename;`
-            : `export default import.meta.url;`;
+            : `
+                import { fileURLToPath } from 'node:url';
+                export default fileURLToPath(import.meta.url);
+              `;
         })
         .rules(),
       ...new Extensions(this.options.stubs)
