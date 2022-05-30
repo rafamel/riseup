@@ -5,6 +5,7 @@ import { buildSync, BuildOptions } from 'esbuild';
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
 import { createPositiveRegex, getExternalPatterns } from './helpers/patterns';
+import { SHIMS_CJS_PATH, SHIMS_ESM_PATH } from './constants';
 
 export declare namespace Transpiler {
   interface Settings {
@@ -229,7 +230,15 @@ export class Transpiler implements Transpiler.Settings {
                 undefined
             }
           }
-        : { entryPoints: [filename] })
+        : { entryPoints: [filename] }),
+      ...(this.params.format === 'commonjs'
+        ? {
+            define: { 'import.meta.url': 'importMetaUrl' },
+            inject: [SHIMS_CJS_PATH]
+          }
+        : {
+            inject: [SHIMS_ESM_PATH]
+          })
     });
 
     const warn = result.warnings[0];
