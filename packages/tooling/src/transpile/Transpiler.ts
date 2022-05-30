@@ -32,7 +32,7 @@ export class Transpiler implements Transpiler.Settings {
     loaders: {
       '.js,.cjs,.mjs': 'js',
       '.jsx': 'jsx',
-      '.ts': 'ts',
+      '.ts,.cts,.mts': 'ts',
       '.tsx': 'tsx',
       '.json': 'json'
     },

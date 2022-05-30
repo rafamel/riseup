@@ -16,7 +16,7 @@ export function getOverridePath(
     const extensions = Array.isArray(override.ext)
       ? override.ext.map((ext) => (ext.startsWith('.') ? ext : `.${ext}`))
       : override.ext
-      ? ['.ts', '.js', '.cjs', '.mjs', '.yaml', '.yml', '.json']
+      ? ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts', '.yaml', '.yml', '.json']
       : [''];
 
     const arr = extensions.map((ext) => override.name + ext);
