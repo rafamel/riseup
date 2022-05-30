@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/rafamel/riseup/compare/v0.19.0...v0.20.0) (2022-05-30)
+
+
+### Bug Fixes
+
+* **packages/tooling:** enable typescript isolatedModules -required do isolated transpiles ([7206607](https://github.com/rafamel/riseup/commit/7206607af8d840c51a8ac31ee78c1d8517a9fd54))
+* **packages/tooling:** fix duplicate transpiles on Register ([50265aa](https://github.com/rafamel/riseup/commit/50265aa1d53e8132387096d4d6005bb6d9d7ac96))
+* **packages/tooling:** fix Transpile file loader ([56d348b](https://github.com/rafamel/riseup/commit/56d348b2e92c45816b23199ef8021fbca9dc41a2))
+* **packages/tooling:** fix Transpiler ESM to ESM import chains when transpiling to commonjs ([1f9f6d2](https://github.com/rafamel/riseup/commit/1f9f6d243026a6a8cab942d8513657a5fca38d9c))
+* **packages/tooling:** fix Transpiler include option and consider it on resolve ([7dff14d](https://github.com/rafamel/riseup/commit/7dff14d0b658affba9dd6de2d32e71ab96013e71))
+* **packages/tooling:** inject import.meta.url and __filename/__dirname shims on Transpiler ([4aa578e](https://github.com/rafamel/riseup/commit/4aa578e5f1d1a3ea51320f0683dcac7a9b32804d))
+* **packages/tooling:** prefer default resolvers on transpile Loader, Register, and jest resolver ([85cdf2c](https://github.com/rafamel/riseup/commit/85cdf2c0bb8f0dd44d68964562c28f6b45c0d475))
+* **packages/tooling:** use brute force approach on Transpile for cjs shims to prevent coverage reports ([b138b2b](https://github.com/rafamel/riseup/commit/b138b2bfa65ff92dd89599efcaade697fe5e23c5))
+* **packages:** enable .cts and .mts extensions as defaults ([37dc2ba](https://github.com/rafamel/riseup/commit/37dc2baa96ce77f5f8c6679546c40bddf83e9437))
+
+
+### Features
+
+* **packages/tooling:** disable linter rule unicorn/no-useless-promise-resolve-reject ([8facc4b](https://github.com/rafamel/riseup/commit/8facc4b2c5e54184385984979e583e1e674c6acc))
+
+
+
+
+
 # [0.19.0](https://github.com/rafamel/riseup/compare/v0.18.0...v0.19.0) (2022-05-27)
 
 
