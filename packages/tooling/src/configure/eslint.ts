@@ -94,6 +94,7 @@ export function configureEslint(
       'unicorn/catch-error-name': 0,
       'unicorn/explicit-length-check': 0,
       'unicorn/prevent-abbreviations': 0,
+      'unicorn/no-useless-promise-resolve-reject': 0,
       'unicorn/no-null': 0,
       'unicorn/no-array-reduce': 0,
       'unicorn/no-process-exit': 0,
