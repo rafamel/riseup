@@ -1,6 +1,10 @@
 import { Deep, Serial, UnaryFn } from 'type-core';
+import process from 'node:process';
 import path from 'node:path';
+import fs from 'node:fs';
+import babel, { TransformOptions } from '@babel/core';
 import { buildSync, BuildOptions } from 'esbuild';
+import filedirname from 'filedirname';
 
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
@@ -20,11 +24,14 @@ export declare namespace Transpiler {
     platform?: Transpile.Platform;
     loaders?: Transpile.Loaders;
     stubs?: Stubs;
-    jsx?: Transpile.JSX | null;
+    jsx?: Transpile.JSX;
   }
   type Format = 'module' | 'commonjs';
   type Stubs = { [extensions: string]: Serial.Type };
 }
+
+const [_, selfDir] = filedirname();
+const inlinePlugin = path.resolve(selfDir, 'babel-inline.cjs');
 
 export class Transpiler implements Transpiler.Settings {
   public static options: Deep.Required<Transpiler.Options> = {
@@ -34,10 +41,13 @@ export class Transpiler implements Transpiler.Settings {
       '.jsx': 'jsx',
       '.ts': 'ts',
       '.tsx': 'tsx',
-      '.json,.json5': 'json'
+      '.json': 'json'
     },
     stubs: {},
-    jsx: null
+    jsx: {
+      factory: 'React.createElement',
+      fragment: 'React.Fragment'
+    }
   };
   public static params: Deep.Required<Transpiler.Params> = {
     format: 'commonjs',
@@ -63,8 +73,8 @@ export class Transpiler implements Transpiler.Settings {
   }
   #extensions: Extensions<Transpile.Loader | 'stub'>;
   #resolves: BuildOptions;
-  #transpiles: BuildOptions;
-  #exclude: UnaryFn<string, boolean>;
+  #transpiles: TransformOptions;
+  #exclude: UnaryFn<string | undefined, boolean>;
   #stub: UnaryFn<string, string | null>;
   public params: Required<Transpiler.Params>;
   public options: Required<Transpiler.Options>;
@@ -100,9 +110,34 @@ export class Transpiler implements Transpiler.Settings {
       new Extensions(this.options.stubs).map(() => 'stub' as const)
     );
 
+    // Excludes
+    const include = this.params.include
+      ? createPositiveRegex(this.params.include, this.params.exclude)
+      : createPositiveRegex(
+          ['*'],
+          [...this.params.exclude, ...getExternalPatterns('*', '*')]
+        );
+    this.#exclude = (filename) => (filename ? !include.test(filename) : true);
+
+    // Stubs
+    const stubs = new Extensions(this.options.stubs)
+      .map((_, stub) => {
+        const source = JSON.stringify(stub);
+        const str = `JSON.parse(${JSON.stringify(source)})`;
+        return this.params.format === 'commonjs'
+          ? `module.exports = ${str};`
+          : `export default ${str};`;
+      })
+      .rules();
+    this.#stub = (filename) => {
+      const ext = path.extname(filename);
+      const stub = stubs[ext];
+      return typeof stub === 'string' ? stub : null;
+    };
+
     // Resolution options
     this.#resolves = {
-      ...this.configure(this.params, {
+      ...this.configureEsbuild(this.params, {
         ...this.options,
         platform: 'neutral',
         stubs: {},
@@ -114,51 +149,11 @@ export class Transpiler implements Transpiler.Settings {
     };
 
     // Transpilation options
-    this.#transpiles = {
-      ...this.configure(this.params, {
-        ...this.options,
-        stubs: {},
-        loaders: this.#extensions.exclude('stub').exclude('file').rules()
-      }),
-      bundle: false,
-      metafile: false,
-      sourcemap: 'inline'
-    };
-
-    // Excludes
-    const include = this.params.include
-      ? createPositiveRegex(this.params.include, this.params.exclude)
-      : createPositiveRegex(
-          ['*'],
-          [...this.params.exclude, ...getExternalPatterns('*', '*')]
-        );
-    this.#exclude = (filename) => !include.test(filename);
-
-    // Stubs
-    const stubs = {
-      ...this.#extensions
-        .select(['file'], null)
-        .map(() => {
-          return this.params.format === 'commonjs'
-            ? `module.exports = __filename;`
-            : `export default import.meta.url;`;
-        })
-        .rules(),
-      ...new Extensions(this.options.stubs)
-        .map((_, stub) => {
-          const source = JSON.stringify(stub);
-          const str = `JSON.parse(${JSON.stringify(source)})`;
-          return this.params.format === 'commonjs'
-            ? `module.exports = ${str};`
-            : `export default ${str};`;
-        })
-        .rules()
-    };
-    this.#stub = (filename) => {
-      const ext = path.extname(filename);
-      const stub = stubs[ext];
-      return typeof stub === 'string' ? stub : null;
-    };
+    this.#transpiles = this.configureBabel(this.params, {
+      ...this.options,
+      stubs: {},
+      loaders: this.#extensions.exclude('stub').rules()
+    });
   }
   public extensions(
     include: Array<Transpile.Loader | 'stub'> | null,
@@ -214,34 +209,22 @@ export class Transpiler implements Transpiler.Settings {
     const stub = this.#stub(filename);
     if (stub !== null) return stub;
 
-    const result = buildSync({
-      ...this.#transpiles,
-      ...(typeof contents === 'string'
-        ? {
-            stdin: {
-              contents,
-              sourcefile: filename,
-              loader:
-                (this.#transpiles.loader || {})[path.extname(filename)] ||
-                undefined
-            }
-          }
-        : { entryPoints: [filename] })
-    });
+    const result = babel.transform(
+      typeof contents === 'string'
+        ? contents
+        : fs.readFileSync(filename).toString(),
+      {
+        filename,
+        ignore: [this.#exclude, path.join(selfDir, '**/*')],
+        ...this.#transpiles
+      }
+    );
 
-    const warn = result.warnings[0];
-    if (warn) {
-      throw new Error(`${warn.text}\n\t${warn.location}`);
-    }
-
-    if (!result.outputFiles || result.outputFiles.length !== 1) {
-      const length = result.outputFiles?.length || 0;
-      throw new Error(`Required transpilation mismatch: ${length}`);
-    }
-
-    return result.outputFiles[0].text;
+    return result && typeof result.code === 'string'
+      ? result.code
+      : contents || fs.readFileSync(filename).toString();
   }
-  private configure(
+  private configureEsbuild(
     params: Required<Transpiler.Params>,
     options: Required<Transpiler.Options>
   ): BuildOptions {
@@ -269,6 +252,92 @@ export class Transpiler implements Transpiler.Settings {
       loader: options.loaders,
       ...(options.jsx?.factory ? { jsxFactory: options.jsx.factory } : {}),
       ...(options.jsx?.fragment ? { jsxFragment: options.jsx.fragment } : {})
+    };
+  }
+  private configureBabel(
+    params: Required<Transpiler.Params>,
+    options: Required<Transpiler.Options>
+  ): TransformOptions {
+    const presetEnv = [
+      '@babel/preset-env',
+      {
+        targets: { node: process.versions.node },
+        modules: params.format === 'commonjs' ? 'commonjs' : false,
+        ignoreBrowserslistConfig: true
+      }
+    ];
+    const presetReact = [
+      '@babel/preset-react',
+      {
+        runtime: 'classic',
+        development: process.env.NODE_ENV !== 'production',
+        pragma: options.jsx.factory,
+        pragmaFrag: options.jsx.fragment
+      }
+    ];
+    const presetTypescript = [
+      '@babel/preset-typescript',
+      {
+        allowDeclareFields: true,
+        jsxPragma: options.jsx.factory,
+        jsxPragmaFrag: options.jsx.fragment
+      }
+    ];
+
+    const extensions = new Extensions(options.loaders);
+    return {
+      code: true,
+      babelrc: false,
+      configFile: false,
+      sourceMaps: false,
+      overrides: [
+        // Loader: js
+        ...extensions
+          .select(['js'], null)
+          .extensions()
+          .map((ext) => ({
+            include: '**/*' + ext,
+            presets: [presetEnv]
+          })),
+        // Loader: jsx
+        ...extensions
+          .select(['jsx'], null)
+          .extensions()
+          .map((ext) => ({
+            include: '**/*' + ext,
+            presets: [presetEnv, presetReact]
+          })),
+        // Loader: ts
+        ...extensions
+          .select(['ts'], null)
+          .extensions()
+          .map((ext) => ({
+            include: '**/*' + ext,
+            presets: [presetEnv, presetTypescript]
+          })),
+        // Loader: tsx
+        ...extensions
+          .select(['tsx'], null)
+          .extensions()
+          .map((ext) => ({
+            include: '**/*' + ext,
+            presets: [presetEnv, presetReact, presetTypescript]
+          }))
+      ],
+      plugins: [
+        [
+          inlinePlugin,
+          {
+            loaders: {
+              json: extensions.select(['json'], null).extensions(),
+              text: extensions.select(['text'], null).extensions(),
+              file: extensions.select(['file'], null).extensions(),
+              base64: extensions.select(['base64'], null).extensions(),
+              binary: extensions.select(['binary'], null).extensions()
+            }
+          }
+        ]
+      ]
     };
   }
 }

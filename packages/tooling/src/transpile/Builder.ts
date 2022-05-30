@@ -28,12 +28,11 @@ export declare namespace Builder {
   interface Options {
     platform?: Transpile.Platform;
     loaders?: Transpile.Loaders;
-    jsx?: Transpile.JSX | null;
+    jsx?: Transpile.JSX;
   }
   type Format = 'module' | 'commonjs' | 'iife';
   type Sourcemap = 'inline' | 'external' | 'none';
 }
-
 export class Builder implements Builder.Settings {
   public static options: Deep.Required<Builder.Options> = {
     platform: Transpiler.options.platform,
