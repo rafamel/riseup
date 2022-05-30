@@ -43,15 +43,27 @@ export class Loader {
     specifier: string,
     context: Loader.Resolve.Context,
     resolve: Loader.Resolve<R>
-  ): Loader.Resolve.Response | R => {
+  ): Promise<Loader.Resolve.Response | R> => {
     const transpiler = this.#transpiler;
-    const response = context.parentURL
-      ? transpiler.resolve(specifier, fileURLToPath(context.parentURL))
-      : transpiler.resolve(fileURLToPath(specifier), null);
-    if (!response) return resolve(specifier, context, resolve);
+    const { format } = transpiler.params;
 
-    const url = pathToFileURL(response).href;
-    return { url, format: transpiler.params.format };
+    const fn = async (): Promise<any> => resolve(specifier, context, resolve);
+    return fn().then(
+      (res) => {
+        if (res && !res.url.startsWith('file://')) return res;
+
+        const filename = transpiler.resolve(fileURLToPath(res.url), null);
+        return filename ? { url: pathToFileURL(filename).href, format } : res;
+      },
+      (err) => {
+        const filename = context.parentURL
+          ? transpiler.resolve(specifier, fileURLToPath(context.parentURL))
+          : transpiler.resolve(fileURLToPath(specifier), null);
+        if (!filename) throw err;
+
+        return { url: pathToFileURL(filename).href, format };
+      }
+    );
   };
   public load = <R = Loader.Load.Response>(
     url: string,

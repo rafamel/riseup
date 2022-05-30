@@ -48,8 +48,14 @@ export class Register {
       parent?: { filename?: string; path?: string },
       ...args: any[]
     ): string {
-      const filename = resolve(request, (parent && parent.filename) || null);
-      return filename || resolveFilename.call(this, request, parent, ...args);
+      try {
+        return resolveFilename.call(this, request, parent, ...args);
+      } catch (err) {
+        const filename = resolve(request, (parent && parent.filename) || null);
+        if (!filename) throw err;
+
+        return filename;
+      }
     };
 
     return () => {
@@ -66,7 +72,7 @@ export class Register {
       (code, filename) => {
         return results[filename] === code
           ? code
-          : transpiler.transpile(filename, code);
+          : transpiler.transpile(filename, code) || code;
       },
       { exts: extensions, ignoreNodeModules: false }
     );
@@ -85,6 +91,8 @@ export class Register {
         if (err.code !== 'ERR_REQUIRE_ESM') throw err;
 
         const result = transpiler.transpile(filename, null);
+        if (!result) throw err;
+
         results[filename] = result;
         module._compile(result, filename);
       }

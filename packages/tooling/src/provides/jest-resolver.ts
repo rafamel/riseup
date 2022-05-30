@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/prefer-module */
 import path from 'node:path';
+import resolve from 'resolve-from';
 
 import { Transpiler } from '../transpile';
 
@@ -17,11 +18,17 @@ interface Options {
 }
 
 function resolver(request: string, options: Options): string {
-  const response = transpiler.resolve(
-    request,
-    options.basedir ? path.join(options.basedir, 'parent') : null
-  );
-  return response || options.defaultResolver(request, options);
+  try {
+    return options.basedir
+      ? resolve(options.basedir, request)
+      : require.resolve(request);
+  } catch (_) {
+    const response = transpiler.resolve(
+      request,
+      options.basedir ? path.join(options.basedir, 'parent') : null
+    );
+    return response || options.defaultResolver(request, options);
+  }
 }
 
 const _module: any = module;
