@@ -5,7 +5,7 @@ import { buildSync, BuildOptions } from 'esbuild';
 import { Transpile } from './@definitions';
 import { Extensions } from './Extensions';
 import { createPositiveRegex, getExternalPatterns } from './helpers/patterns';
-import { SHIMS_CJS_PATH, SHIMS_ESM_PATH } from './constants';
+import { SHIMS_ESM_PATH } from './constants';
 
 export declare namespace Transpiler {
   interface Settings {
@@ -235,13 +235,8 @@ export class Transpiler implements Transpiler.Settings {
           }
         : { entryPoints: [filename] }),
       ...(this.params.format === 'commonjs'
-        ? {
-            define: { 'import.meta.url': 'importMetaUrl' },
-            inject: [SHIMS_CJS_PATH]
-          }
-        : {
-            inject: [SHIMS_ESM_PATH]
-          })
+        ? { define: { 'import.meta.url': '__IMPORT_META_URL__' } }
+        : { inject: [SHIMS_ESM_PATH] })
     });
 
     const warn = result.warnings[0];
@@ -254,7 +249,26 @@ export class Transpiler implements Transpiler.Settings {
       throw new Error(`Required transpilation mismatch: ${length}`);
     }
 
-    return result.outputFiles[0].text;
+    return this.shims(result.outputFiles[0].text);
+  }
+  private shims(contents: string): string {
+    switch (this.params.format) {
+      case 'commonjs': {
+        return contents
+          .replace(
+            /__IMPORT_META_URL__/g,
+            `require('node:url').pathToFileURL(__filename).href`
+          )
+          .replace(
+            /^ *var __toESM *=/m,
+            `var __toESM = (mod, ...args) => typeof mod === 'object' &&
+              mod.__esModule ? mod : __rToESM(mod,...args); var __rToESM =`
+          );
+      }
+      default: {
+        return contents;
+      }
+    }
   }
   private configure(
     params: Required<Transpiler.Params>,
