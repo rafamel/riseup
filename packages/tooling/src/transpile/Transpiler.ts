@@ -81,7 +81,10 @@ export class Transpiler implements Transpiler.Settings {
 
     this.params = Object.freeze({
       format: params.format || defaultParams.format,
-      include: params.include || defaultParams.include,
+      include:
+        params.include === null
+          ? null
+          : params.include || defaultParams.include,
       exclude: params.exclude || defaultParams.exclude
     });
 
@@ -210,7 +213,8 @@ export class Transpiler implements Transpiler.Settings {
       throw new Error(`Required input metadata mismatch: ${relatives.length}`);
     }
 
-    return cwd ? path.resolve(cwd, relatives[0]) : relatives[0];
+    const filename = cwd ? path.resolve(cwd, relatives[0]) : relatives[0];
+    return this.#exclude(filename) ? null : filename;
   }
   public transpile<T extends string | null>(
     filename: string,
