@@ -31,7 +31,7 @@ export default Preset.combine(
     },
     node: {
       // Transpilation format for runtime: module, commonjs
-      format: 'commonjs',
+      format: 'module',
       // Paths to include in transpilation
       // Set to null to skip external modules
       include: ['*'],
