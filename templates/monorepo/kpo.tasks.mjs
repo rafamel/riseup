@@ -29,7 +29,8 @@ export default recreate({ announce: true }, () => {
       create(() => tasks.lint),
       create(() => tasks.coverage),
       lift({ purge: true, mode: 'audit' }, () => tasks),
-      catches({ level: 'silent' }, exec('npm', ['outdated']))
+      catches({ level: 'silent' }, exec('npm', ['outdated'])),
+      exec('git', ['add', '.'])
     )
   };
   return tasks;
