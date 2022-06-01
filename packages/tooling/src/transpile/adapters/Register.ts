@@ -51,10 +51,13 @@ export class Register {
       try {
         return resolveFilename.call(this, request, parent, ...args);
       } catch (err) {
-        const filename = resolve(request, (parent && parent.filename) || null);
-        if (!filename) throw err;
+        const resolution = resolve(
+          request,
+          (parent && parent.filename) || null
+        );
+        if (!resolution) throw err;
 
-        return filename;
+        return resolution.path;
       }
     };
 

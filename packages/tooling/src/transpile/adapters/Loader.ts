@@ -52,16 +52,20 @@ export class Loader {
       (res) => {
         if (res && !res.url.startsWith('file://')) return res;
 
-        const filename = transpiler.resolve(fileURLToPath(res.url), null);
-        return filename ? { url: pathToFileURL(filename).href, format } : res;
+        const resolution = transpiler.resolve(fileURLToPath(res.url), null);
+        return resolution && !resolution.external
+          ? { url: pathToFileURL(resolution.path).href, format }
+          : res;
       },
       (err) => {
-        const filename = context.parentURL
+        const resolution = context.parentURL
           ? transpiler.resolve(specifier, fileURLToPath(context.parentURL))
           : transpiler.resolve(fileURLToPath(specifier), null);
-        if (!filename) throw err;
+        if (!resolution) throw err;
 
-        return { url: pathToFileURL(filename).href, format };
+        return resolution.external
+          ? resolve(resolution.path, context, resolve)
+          : { url: pathToFileURL(resolution.path).href, format };
       }
     );
   };

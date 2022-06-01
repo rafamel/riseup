@@ -23,11 +23,13 @@ function resolver(request: string, options: Options): string {
       ? resolve(options.basedir, request)
       : require.resolve(request);
   } catch (_) {
-    const response = transpiler.resolve(
+    const resolution = transpiler.resolve(
       request,
       options.basedir ? path.join(options.basedir, 'parent') : null
     );
-    return response || options.defaultResolver(request, options);
+    return resolution
+      ? resolution.path
+      : options.defaultResolver(request, options);
   }
 }
 

@@ -10,7 +10,7 @@ import { SHIMS_ESM_PATH } from './constants';
 export declare namespace Transpiler {
   interface Type extends Settings {
     extensions(): string[];
-    resolve(request: string, parent: string | null): string | null;
+    resolve(request: string, parent: string | null): Resolution | null;
     transpile(filename: string, contents: string | null): string | null;
   }
   interface Settings {
@@ -30,6 +30,7 @@ export declare namespace Transpiler {
   }
   type Format = 'module' | 'commonjs';
   type Stubs = { [extensions: string]: Serial.Type };
+  type Resolution = { path: string; external: boolean };
 }
 
 export class Transpiler implements Transpiler.Type {
@@ -178,7 +179,10 @@ export class Transpiler implements Transpiler.Type {
   public extensions(): string[] {
     return this.#extensions.extensions();
   }
-  public resolve(request: string, parent: string | null): string | null {
+  public resolve(
+    request: string,
+    parent: string | null
+  ): Transpiler.Resolution | null {
     let cwd: string;
     let specifier: string;
 
@@ -216,7 +220,8 @@ export class Transpiler implements Transpiler.Type {
     }
 
     const filename = cwd ? path.resolve(cwd, relatives[0]) : relatives[0];
-    return this.#exclude(filename) ? null : filename;
+
+    return { path: filename, external: this.#exclude(filename) };
   }
   public transpile<T extends string | null>(
     filename: string,
