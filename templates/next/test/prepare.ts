@@ -1,3 +1,4 @@
+import { TextEncoder, TextDecoder } from 'node:util';
 import React from 'react';
 
-Object.assign(global, { React });
+Object.assign(window, { React, TextEncoder, TextDecoder });
