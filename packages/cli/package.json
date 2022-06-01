@@ -48,7 +48,7 @@
     "url": "https://github.com/rafamel/riseup/issues"
   },
   "dependencies": {
-    "cli-belt": "^1.0.3",
+    "cli-belt": "^2.0.0",
     "kpo": "^0.23.2"
   }
 }

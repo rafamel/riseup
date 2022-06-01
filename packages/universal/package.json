@@ -47,7 +47,7 @@
   "dependencies": {
     "@riseup/utils": "^0.20.0",
     "arg": "^5.0.0",
-    "cli-belt": "^1.0.3",
+    "cli-belt": "^2.0.0",
     "commitizen": "^4.2.3",
     "common-tags": "^1.8.0",
     "conventional-changelog-cli": "^2.1.1",
@@ -57,7 +57,7 @@
     "kpo": "^0.23.2",
     "lerna": "^5.0.0",
     "markdownlint-cli": "^0.31.1",
-    "type-core": "^0.12.0"
+    "type-core": "^0.13.0"
   },
   "devDependencies": {
     "@types/common-tags": "^1.8.0"
