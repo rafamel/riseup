@@ -8,6 +8,11 @@ import { createPositiveRegex, getExternalPatterns } from './helpers/patterns';
 import { SHIMS_ESM_PATH } from './constants';
 
 export declare namespace Transpiler {
+  interface Type extends Settings {
+    extensions(): string[];
+    resolve(request: string, parent: string | null): string | null;
+    transpile(filename: string, contents: string | null): string | null;
+  }
   interface Settings {
     params: Params;
     options: Options;
@@ -27,7 +32,7 @@ export declare namespace Transpiler {
   type Stubs = { [extensions: string]: Serial.Type };
 }
 
-export class Transpiler implements Transpiler.Settings {
+export class Transpiler implements Transpiler.Type {
   public static options: Deep.Required<Transpiler.Options> = {
     platform: 'neutral',
     loaders: {
@@ -170,11 +175,8 @@ export class Transpiler implements Transpiler.Settings {
       return typeof stub === 'string' ? stub : null;
     };
   }
-  public extensions(
-    include: Array<Transpile.Loader | 'stub'> | null,
-    exclude: Array<Transpile.Loader | 'stub'> | null
-  ): string[] {
-    return this.#extensions.select(include, exclude).extensions();
+  public extensions(): string[] {
+    return this.#extensions.extensions();
   }
   public resolve(request: string, parent: string | null): string | null {
     let cwd: string;

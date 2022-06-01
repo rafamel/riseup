@@ -22,7 +22,7 @@ export class Register {
       options
     );
     this.#teardowns = [];
-    this.#extensions = this.#transpiler.extensions(null, null);
+    this.#extensions = this.#transpiler.extensions();
   }
   public register = (): void => {
     this.unregister();

@@ -7,6 +7,10 @@ import { Transpiler } from './Transpiler';
 import { createPositiveRegex } from './helpers/patterns';
 
 export declare namespace Builder {
+  interface Type extends Settings {
+    extensions(): string[];
+    build(): Promise<void>;
+  }
   interface Settings {
     params: Params;
     options: Options;
@@ -34,7 +38,7 @@ export declare namespace Builder {
   type Sourcemap = 'inline' | 'external' | 'none';
 }
 
-export class Builder implements Builder.Settings {
+export class Builder implements Builder.Type {
   public static options: Deep.Required<Builder.Options> = {
     platform: Transpiler.options.platform,
     loaders: Transpiler.options.loaders,
@@ -120,11 +124,8 @@ export class Builder implements Builder.Settings {
     this.#loaders = loaders;
     this.#configuration = this.configure(this.params, this.options);
   }
-  public extensions(
-    include: Transpile.Loader[] | null,
-    exclude: Transpile.Loader[] | null
-  ): string[] {
-    return this.#loaders.select(include, exclude).extensions();
+  public extensions(): string[] {
+    return this.#loaders.extensions();
   }
   public async build(): Promise<void> {
     await build(this.#configuration);
