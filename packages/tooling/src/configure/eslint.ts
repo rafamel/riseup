@@ -88,6 +88,9 @@ export function configureEslint(
       /* STANDARD */
       'standard/no-callback-literal': 0,
       'standard/array-bracket-even-spacing': 0,
+      /* JSX */
+      'jsx-a11y/click-events-have-key-events': 1,
+      'jsx-a11y/no-noninteractive-element-to-interactive-role': 1,
       /* UNICORN */
       'unicorn/filename-case': 0,
       'unicorn/throw-new-error': 0,
