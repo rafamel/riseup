@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/rafamel/riseup/compare/v0.20.0...v0.21.0) (2022-06-01)
+
+
+### Bug Fixes
+
+* **packages/tooling:** Transpiler.resolve resolves externals; returns an object instead of a string ([bdc7bc3](https://github.com/rafamel/riseup/commit/bdc7bc396e0594a448e4fd28e08c62a0bf5bdfee))
+* **packages:** update dependencies ([d95b5a1](https://github.com/rafamel/riseup/commit/d95b5a108b659deb5d362f43d84b05fa889b4082))
+
+
+### Features
+
+* **package/tooling:** soften jsx linter rules ([8dfd658](https://github.com/rafamel/riseup/commit/8dfd65856174c9e3d3bff98a088d1772fb17464a))
+* **packages/tooling:** simplify Transpiler.extensions and Builder.extensions api ([ab2ab8c](https://github.com/rafamel/riseup/commit/ab2ab8c4968dbf323d2a4fc249cf5aad8e9e0a8f))
+
+
+### BREAKING CHANGES
+
+* **packages/tooling:** Transpiler.resolve returns an object instead of a string
+* **packages/tooling:** Transpiler.extensions and Builder.extensions methods non longer take any arguments
+
+
+
+
+
 # [0.20.0](https://github.com/rafamel/riseup/compare/v0.19.0...v0.20.0) (2022-05-30)
 
 
