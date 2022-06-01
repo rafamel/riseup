@@ -11,12 +11,8 @@
   "keywords": [],
   "files": [
     "app.config.js",
-    "kpo.tasks.mjs",
     "next.config.js",
-    "postcss.config.js",
-    "riseup.config.mjs",
-    "patches/",
-    "static/",
+    "public/",
     "build/"
   ],
   "engines": {
@@ -64,15 +60,15 @@
     "kpo": "^0.23.2",
     "patch-package": "^6.4.7",
     "postcss-custom-media": "^8.0.0",
+    "react": "^18.0.5",
+    "react-dom": "^18.0.5",
     "sass": "^1.49.9",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.2",
+    "web-vitals": "^2.0.1"
   },
   "dependencies": {
     "next": "^12.1.6",
-    "next-pwa": "^5.5.2",
-    "react": "^18.0.5",
-    "react-dom": "^18.0.5",
-    "web-vitals": "^2.0.1"
+    "next-pwa": "^5.5.2"
   },
   "browserslist": {
     "production": [
