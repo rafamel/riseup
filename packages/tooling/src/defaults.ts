@@ -1,39 +1,28 @@
 import { Deep } from 'type-core';
 
 import { Tooling } from './Tooling';
-import { Builder, Transpiler } from './transpile';
+import { paths } from './paths';
 
 export const defaults: Deep.Required<Tooling.Options> = {
-  global: {
-    prettier: true,
-    ...Builder.options,
-    ...Transpiler.options
+  commit: {
+    path: paths.conventionalChangelogDir
   },
-  node: {
-    ...Transpiler.params
+  coverages: {
+    infile: './coverage/*.info',
+    outfile: './coverage/lcov.info'
   },
-  build: {
-    ...Builder.params
+  distribute: {
+    push: true,
+    contents: null,
+    registry: null
+  },
+  release: {
+    preset: 'angular',
+    changelog: true
   },
   tarball: {
     destination: null,
     monorepo: false,
     package: null
-  },
-  lint: {
-    dir: ['src/', 'test/'],
-    types: true,
-    react: true,
-    highlight: ['fixme', 'todo', 'refactor'],
-    rules: {}
-  },
-  test: {
-    verbose: false,
-    ignore: [],
-    require: [],
-    coverage: 'auto',
-    threshold: null,
-    overrides: {},
-    ...Transpiler.params
   }
 };

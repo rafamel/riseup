@@ -9,10 +9,7 @@ export default recreate({ announce: true }, () => {
     build: series(
       exec('lerna', ['link']),
       exec('kpo', ['build'], { cwd: './utils' }),
-      exec('kpo', ['build'], { cwd: './universal' }),
       exec('kpo', ['build'], { cwd: './tooling' }),
-      exec('kpo', ['build'], { cwd: './monorepo' }),
-      exec('kpo', ['build'], { cwd: './library' }),
       exec('kpo', ['build'], { cwd: './web' }),
       exec('kpo', ['build'], { cwd: './cli' })
     ),
@@ -28,7 +25,7 @@ export default recreate({ announce: true }, () => {
     ),
     /* Hooks */
     postinstall: series(
-      exec('lerna', ['bootstrap', '--ci']),
+      exec('lerna', ['bootstrap']),
       create(() => tasks.build)
     ),
     version: series(

@@ -8,28 +8,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": [
-    "presets",
-    "starter",
-    "boilerplate",
-    "config",
-    "riseup",
-    "tooling",
-    "eslint",
-    "prettier",
-    "esbuild",
-    "jest",
-    "typescript"
-  ],
+  "keywords": [],
   "type": "module",
   "types": "./build/index.d.ts",
-  "exports": {
-    ".": "./build/index.js",
-    "./loader": "./build/transpile-loader.js"
-  },
+  "exports": "./build/index.js",
   "files": [
-    "build/",
-    "static/"
+    "build/"
   ],
   "engines": {
     "node": ">=16"
@@ -57,38 +41,24 @@
   },
   "dependencies": {
     "@riseup/utils": "^0.21.0",
-    "@typescript-eslint/eslint-plugin": "^5.14.0",
-    "@typescript-eslint/parser": "^5.14.0",
+    "arg": "^5.0.0",
+    "cli-belt": "^2.0.0",
+    "commitizen": "^4.2.3",
+    "common-tags": "^1.8.0",
+    "conventional-changelog-cli": "^2.1.1",
+    "conventional-recommended-bump": "^6.1.0",
+    "cz-conventional-changelog": "^3.2.0",
     "ensurism": "^0.6.0",
-    "esbuild": "^0.14.40",
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard": "^17.0.0-1",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-unicorn": "^42.0.0",
-    "filedirname": "^2.7.0",
-    "find-up": "^6.3.0",
-    "jest-cli": "^28.1.0",
-    "jest-environment-jsdom": "^28.1.0",
+    "is-git-dirty": "^2.0.1",
     "kpo": "^0.23.2",
-    "pirates": "^4.0.5",
-    "prettier": "^2.2.1",
-    "resolve-from": "^5.0.0",
+    "lcov-result-merger": "^3.1.0",
+    "lerna": "^5.0.0",
     "semver": "^7.3.5",
-    "source-map-support": "^0.5.21",
-    "tsup": "^6.0.1",
     "type-core": "^0.13.0"
   },
   "devDependencies": {
+    "@types/common-tags": "^1.8.0",
     "@types/semver": "^7.3.5",
-    "@types/source-map-support": "^0.5.4",
     "typescript": "^4.7.2"
-  },
-  "peerDependencies": {
-    "typescript": "4.x"
   }
 }
