@@ -32,7 +32,7 @@
     "validate": "kpo validate --",
     "version": "kpo version --"
   },
-  "homepage": "https://github.com/rafamel/riseup/packages/web",
+  "homepage": "https://github.com/rafamel/riseup/tree/master/packages/web",
   "repository": {
     "type": "git",
     "url": "https://github.com/rafamel/riseup"

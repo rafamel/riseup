@@ -39,7 +39,7 @@
     "validate": "kpo validate --",
     "version": "kpo version --"
   },
-  "homepage": "https://github.com/rafamel/riseup/packages/cli",
+  "homepage": "https://github.com/rafamel/riseup/tree/master/packages/cli",
   "repository": {
     "type": "git",
     "url": "https://github.com/rafamel/riseup"
