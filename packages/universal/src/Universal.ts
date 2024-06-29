@@ -14,7 +14,7 @@ import {
   TarballParams
 } from './tasks';
 
-export declare namespace Tooling {
+export declare namespace Universal {
   type Tasks = 'commit' | 'coverages' | 'distribute' | 'release' | 'tarball';
 
   interface Options {
@@ -26,8 +26,8 @@ export declare namespace Tooling {
   }
 }
 
-export class Tooling extends Preset<Tooling.Tasks> {
-  public constructor(options: Tooling.Options | null) {
+export class Universal extends Preset<Universal.Tasks> {
+  public constructor(options: Universal.Options | null) {
     super(
       {
         commit: create(() => commit(options?.commit || null)),

@@ -1,9 +1,9 @@
 import { Deep } from 'type-core';
 
-import { Tooling } from './Tooling';
+import { Universal } from './Universal';
 import { paths } from './paths';
 
-export const defaults: Deep.Required<Tooling.Options> = {
+export const defaults: Deep.Required<Universal.Options> = {
   commit: {
     path: paths.conventionalChangelogDir
   },

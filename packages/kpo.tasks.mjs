@@ -8,10 +8,10 @@ export default recreate({ announce: true }, () => {
     execute: riseup.tasks.execute,
     build: series(
       exec('lerna', ['link']),
-      exec('kpo', ['build'], { cwd: './utils' }),
-      exec('kpo', ['build'], { cwd: './tooling' }),
-      exec('kpo', ['build'], { cwd: './web' }),
-      exec('kpo', ['build'], { cwd: './cli' })
+      exec('kpo', ['build'], { cwd: './cli' }),
+      exec('kpo', ['build'], { cwd: './core' }),
+      exec('kpo', ['build'], { cwd: './universal' }),
+      exec('kpo', ['build'], { cwd: './web' })
     ),
     lint: riseup.tasks.lintmd,
     coverage: riseup.tasks.coverage,
