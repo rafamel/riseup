@@ -1,5 +1,5 @@
 export * from './commit';
-export * from './coverages';
+export * from './coverage';
 export * from './distribute';
 export * from './release';
 export * from './tarball';

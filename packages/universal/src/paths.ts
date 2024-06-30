@@ -25,6 +25,5 @@ export const paths = {
     'lcov-result-merger',
     'lcov-result-merger',
     url
-  ),
-  coverageBin: resolveModule('./coverage-bin.js', url)
+  )
 };

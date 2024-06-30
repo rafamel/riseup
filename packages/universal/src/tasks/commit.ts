@@ -1,8 +1,8 @@
 import { create, exec, Task } from 'kpo';
 import { safeJsonSerialize } from '@riseup/utils';
 
-import { defaults } from '../../defaults';
-import { paths } from '../../paths';
+import { defaults } from '../defaults';
+import { paths } from '../paths';
 
 export interface CommitParams {
   /** See: https://github.com/commitizen/cz-cli */

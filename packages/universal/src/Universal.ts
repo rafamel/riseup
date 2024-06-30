@@ -4,8 +4,8 @@ import { Preset } from '@riseup/utils';
 import {
   commit,
   CommitParams,
-  coverages,
-  CoveragesParams,
+  coverage,
+  CoverageParams,
   distribute,
   DistributeParams,
   release,
@@ -15,11 +15,11 @@ import {
 } from './tasks';
 
 export declare namespace Universal {
-  type Tasks = 'commit' | 'coverages' | 'distribute' | 'release' | 'tarball';
+  type Tasks = 'commit' | 'coverage' | 'distribute' | 'release' | 'tarball';
 
   interface Options {
     commit?: CommitParams;
-    coverages?: CoveragesParams;
+    coverage?: CoverageParams;
     distribute?: DistributeParams;
     release?: ReleaseParams;
     tarball?: TarballParams;
@@ -31,7 +31,7 @@ export class Universal extends Preset<Universal.Tasks> {
     super(
       {
         commit: create(() => commit(options?.commit || null)),
-        coverages: create(() => coverages(options?.coverages || null)),
+        coverage: create(() => coverage(options?.coverage || null)),
         distribute: create(() => distribute(options?.distribute || null)),
         release: create(() => release(options?.release || null)),
         tarball: create(() => tarball(options?.tarball || null))

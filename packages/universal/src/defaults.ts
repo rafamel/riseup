@@ -7,9 +7,10 @@ export const defaults: Deep.Required<Universal.Options> = {
   commit: {
     path: paths.conventionalChangelogDir
   },
-  coverages: {
-    infile: './coverage/*.info',
-    outfile: './coverage/lcov.info'
+  coverage: {
+    infiles: [],
+    outfile: './coverage/lcov.info',
+    passWithoutFiles: false
   },
   distribute: {
     push: true,

@@ -1,0 +1,88 @@
+import path from 'node:path';
+import { TypeGuard } from 'type-core';
+import { globSync } from 'glob';
+import { nanoid } from 'nanoid';
+import {
+  Task,
+  copy,
+  remove,
+  progress,
+  context,
+  mkdir,
+  series,
+  create,
+  finalize,
+  exec
+} from 'kpo';
+import { tmpPath } from '@riseup/utils';
+
+import { paths } from '../paths';
+import { defaults } from '../defaults';
+
+export interface CoverageParams {
+  /** Paths for coverage info files to merge -can be glob patterns. */
+  infiles?: string | string[];
+  /** Path for the merged output file. */
+  outfile?: string;
+  /** Don't error when no input files exist. */
+  passWithoutFiles?: boolean;
+}
+
+export function coverage(params: CoverageParams | null): Task.Async {
+  const opts = {
+    infiles: params?.infiles || defaults.coverage.infiles,
+    outfile: params?.outfile || defaults.coverage.outfile,
+    passWithoutFiles: TypeGuard.isBoolean(params?.passWithoutFiles)
+      ? params?.passWithoutFiles
+      : defaults.coverage.passWithoutFiles
+  };
+
+  return create((ctx) => {
+    const arr = Array.isArray(opts.infiles) ? opts.infiles : [opts.infiles];
+    const infiles = globSync(
+      arr.map((x) => path.resolve(ctx.cwd, x)),
+      { nodir: true }
+    );
+    if (!infiles && !opts.passWithoutFiles) {
+      throw new Error('No coverage files found to merge');
+    }
+
+    const nonInfo = infiles.find(
+      (x) => path.extname(x).toLowerCase() !== '.info'
+    );
+    if (nonInfo) {
+      throw new Error(`Non .info file passed for coverage merge: ${nonInfo}`);
+    }
+
+    const outfile = path.resolve(ctx.cwd, opts.outfile);
+    const outdir = path.dirname(outfile);
+    const tempdir = tmpPath(null, null);
+
+    const task = finalize(
+      series(
+        mkdir(tempdir, { ensure: true }),
+        mkdir(outdir, { ensure: true }),
+        remove(outfile, { glob: false, strict: false, recursive: false }),
+        ...infiles.map((file) => {
+          return copy(file, path.join(tempdir, nanoid() + '.info'), {
+            glob: false,
+            single: true,
+            strict: true,
+            exists: 'error'
+          });
+        }),
+        exec(process.execPath, [
+          paths.lcovResultMergerBin,
+          path.join(tempdir, '*.info'),
+          outfile
+        ])
+      ),
+      remove(tempdir, { glob: false, strict: false, recursive: true })
+    );
+
+    return progress(
+      { message: 'Compile coverage' },
+      context({ args: [] }, task)
+    );
+  });
+}
