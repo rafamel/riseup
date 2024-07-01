@@ -14,7 +14,7 @@ import {
   finalize,
   exec
 } from 'kpo';
-import { tmpPath } from '@riseup/utils';
+import { getTmpDir } from '@riseup/utils';
 
 import { paths } from '../paths';
 import { defaults } from '../defaults';
@@ -54,17 +54,18 @@ export function coverage(params: CoverageParams | null): Task.Async {
       throw new Error(`Non .info file passed for coverage merge: ${nonInfo}`);
     }
 
-    const outfile = path.resolve(ctx.cwd, opts.outfile);
-    const outdir = path.dirname(outfile);
-    const tempdir = tmpPath(null, null);
+    const outFile = path.resolve(ctx.cwd, opts.outfile);
+    const outDir = path.dirname(outFile);
+    const tmpDirAll = getTmpDir();
+    const tempDir = path.join(tmpDirAll, nanoid());
 
     const task = finalize(
       series(
-        mkdir(tempdir, { ensure: true }),
-        mkdir(outdir, { ensure: true }),
-        remove(outfile, { glob: false, strict: false, recursive: false }),
+        mkdir(tempDir, { ensure: true }),
+        mkdir(outDir, { ensure: true }),
+        remove(outFile, { glob: false, strict: false, recursive: false }),
         ...infiles.map((file) => {
-          return copy(file, path.join(tempdir, nanoid() + '.info'), {
+          return copy(file, path.join(tempDir, nanoid() + '.info'), {
             glob: false,
             single: true,
             strict: true,
@@ -73,11 +74,11 @@ export function coverage(params: CoverageParams | null): Task.Async {
         }),
         exec(process.execPath, [
           paths.lcovResultMergerBin,
-          path.join(tempdir, '*.info'),
-          outfile
+          path.join(tempDir, '*.info'),
+          outFile
         ])
       ),
-      remove(tempdir, { glob: false, strict: false, recursive: true })
+      remove(tempDir, { glob: false, strict: false, recursive: true })
     );
 
     return progress(

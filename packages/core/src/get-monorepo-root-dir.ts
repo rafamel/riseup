@@ -1,26 +1,34 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import minimatch from 'minimatch';
-import { findUpSync } from 'find-up';
+
+import { getPackageRootDir } from './get-package-root-dir';
+import { readPackage } from './read-package';
 
 export function getMonorepoRootDir(cwd: string): string | null {
-  const lerna = findUpSync('lerna.json', { cwd, type: 'file' });
-  if (!lerna) return null;
+  const recursive = (dir: string): string | null => {
+    if (!childRoot) return null;
 
-  const pkg = findUpSync('package.json', { cwd, type: 'file' });
-  if (!pkg) return null;
+    const pkgRoot = getPackageRootDir(dir);
+    if (!pkgRoot) return null;
 
-  const rootDir = path.dirname(lerna);
-  const childDir = path.dirname(pkg);
-  if (rootDir.length >= childDir.length) return null;
+    const pkg: any = readPackage(pkgRoot);
+    if (!pkg) return null;
+    if (
+      !pkg.workspaces ||
+      !Array.isArray(pkg.workspaces) ||
+      !pkg.workspaces.length
+    ) {
+      return recursive(path.join(dir, '../'));
+    }
 
-  const lernaConfig = JSON.parse(String(fs.readFileSync(lerna)));
-  if (!lernaConfig.packages) return null;
-  if (!Array.isArray(lernaConfig.packages)) return null;
+    if (pkgRoot === childRoot) return pkgRoot;
 
-  for (const glob of lernaConfig.packages) {
-    if (minimatch(childDir, path.resolve(cwd, glob))) return rootDir;
-  }
+    for (const glob of pkg.workspaces) {
+      if (minimatch(childRoot, path.resolve(pkgRoot, glob))) return pkgRoot;
+    }
+    return recursive(path.join(dir, '../'));
+  };
 
-  return null;
+  const childRoot = getPackageRootDir(cwd);
+  return recursive(cwd);
 }

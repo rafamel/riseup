@@ -83,7 +83,9 @@ export default (build) => {
         // Keywords that should output warnings
         highlight: ['fixme', 'todo', 'refactor'],
         // ESLint rules overwrites
-        rules: {}
+        rules: {
+          '@typescript-eslint/no-use-before-define': 0
+        }
       },
       test: {
         // Whether to print all passed tests
