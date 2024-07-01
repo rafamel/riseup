@@ -1,7 +1,7 @@
 import { Task, create, series, exec, progress } from 'kpo';
 
 import { paths } from '../../../paths';
-import { CLIReleaseOptions } from './options';
+import { CLIReleaseOptions } from './definitions';
 
 export function multiple({
   conventional,

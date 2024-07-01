@@ -15,7 +15,7 @@ import isGitDirty from 'is-git-dirty';
 import { getPackageJson } from '@riseup/utils';
 
 import { paths } from '../../../paths';
-import { bumps, CLIReleaseOptions } from './options';
+import { bumps, CLIReleaseOptions } from './definitions';
 
 export function single({ conventional, ...options }: CLIReleaseOptions): Task {
   return create(async (ctx) => {

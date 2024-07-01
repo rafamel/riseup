@@ -4,7 +4,7 @@ import { stripIndent as indent } from 'common-tags';
 import { Task, print, raises, series, style, create, context } from 'kpo';
 import { getMonorepoRootDir, getLernaConfig } from '@riseup/utils';
 
-import { bumps, CLIReleaseOptions, ConventionalOptions } from './options';
+import { bumps, CLIReleaseOptions, ConventionalOptions } from './definitions';
 import { multiple } from './multiple';
 import { single } from './single';
 
