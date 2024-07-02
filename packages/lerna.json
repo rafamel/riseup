@@ -1,4 +1,4 @@
 {
   "version": "0.21.0",
-  "packages": ["cli", "core", "universal", "web"]
+  "packages": ["cli", "universal", "utils", "web"]
 }
