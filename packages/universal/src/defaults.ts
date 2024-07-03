@@ -8,8 +8,8 @@ export const defaults: Deep.Required<Universal.Options> = {
     path: paths.conventionalChangelogDir
   },
   coverage: {
-    infiles: [],
-    outfile: './coverage/lcov.info',
+    files: [],
+    destination: './coverage/lcov.info',
     passWithoutFiles: false
   },
   distribute: {

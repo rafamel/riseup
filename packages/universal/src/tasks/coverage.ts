@@ -20,24 +20,24 @@ import { defaults } from '../defaults';
 
 export interface CoverageParams {
   /** Paths for coverage info files to merge -can be glob patterns. */
-  infiles?: string | string[];
+  files?: string | string[];
   /** Path for the merged output file. */
-  outfile?: string;
+  destination?: string;
   /** Don't error when no input files exist. */
   passWithoutFiles?: boolean;
 }
 
 export function coverage(params: CoverageParams | null): Task.Async {
   const opts = {
-    infiles: params?.infiles || defaults.coverage.infiles,
-    outfile: params?.outfile || defaults.coverage.outfile,
+    files: params?.files || defaults.coverage.files,
+    destination: params?.destination || defaults.coverage.destination,
     passWithoutFiles: TypeGuard.isBoolean(params?.passWithoutFiles)
       ? params?.passWithoutFiles
       : defaults.coverage.passWithoutFiles
   };
 
   return create((ctx) => {
-    const arr = Array.isArray(opts.infiles) ? opts.infiles : [opts.infiles];
+    const arr = Array.isArray(opts.files) ? opts.files : [opts.files];
     const infiles = globSync(
       arr.map((x) => path.resolve(ctx.cwd, x)),
       { nodir: true }
@@ -53,7 +53,7 @@ export function coverage(params: CoverageParams | null): Task.Async {
       throw new Error(`Non .info file passed for coverage merge: ${nonInfo}`);
     }
 
-    const outFile = path.resolve(ctx.cwd, opts.outfile);
+    const outFile = path.resolve(ctx.cwd, opts.destination);
     const outDir = path.dirname(outFile);
     const tempDir = getTmpDir();
 
