@@ -1,3 +1,4 @@
+export * from './fetch-monorepo-packages';
 export * from './get-monorepo-root-dir';
 export * from './get-package-root-dir';
 export * from './get-scope-name';

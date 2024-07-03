@@ -1,8 +1,8 @@
 import { create, exec, Task } from 'kpo';
-import { safeJsonSerialize } from '@riseup/utils';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
+import { TypeGuard } from 'type-core';
 
 export interface CommitParams {
   /** See: https://github.com/commitizen/cz-cli */
@@ -11,13 +11,13 @@ export interface CommitParams {
 
 export function commit(params: CommitParams | null): Task {
   const opts = {
-    path: params?.path || defaults.commit.path
+    path: TypeGuard.isString(params?.path) ? params?.path : defaults.commit.path
   };
 
   return create(async () => {
     return exec(process.execPath, [paths.commitizenBin], {
       env: {
-        COMMITIZEN_CONFIG: safeJsonSerialize(opts)
+        COMMITIZEN_CONFIG: JSON.stringify(opts)
       }
     });
   });

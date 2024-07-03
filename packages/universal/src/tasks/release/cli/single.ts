@@ -1,4 +1,3 @@
-import bump, { Recommendation } from 'conventional-recommended-bump';
 import {
   Task,
   exec,
@@ -12,7 +11,8 @@ import {
   progress
 } from 'kpo';
 import isGitDirty from 'is-git-dirty';
-import { getPackageJson } from '@riseup/utils';
+import { Bumper } from 'conventional-recommended-bump';
+import { readPackage } from '@riseup/utils';
 
 import { paths } from '../../../paths';
 import { bumps, CLIReleaseOptions } from './definitions';
@@ -25,13 +25,8 @@ export function single({ conventional, ...options }: CLIReleaseOptions): Task {
       next ? log('info', 'Version bump:', style(next, { bold: true })) : null,
       conventional
         ? create(async () => {
-            const recommendation = await new Promise<Recommendation>(
-              (resolve, reject) => {
-                return bump({ preset: conventional.preset }, (err, value) => {
-                  return err ? reject(err) : resolve(value);
-                });
-              }
-            );
+            const bumper = new Bumper(ctx.cwd).loadPreset('angular');
+            const recommendation = await bumper.bump();
 
             next = next || recommendation.releaseType;
             return series(
@@ -92,10 +87,8 @@ export function single({ conventional, ...options }: CLIReleaseOptions): Task {
         );
       }),
       create(() => {
-        const pkg = getPackageJson(ctx.cwd, false);
-        if (!pkg) {
-          throw new Error(`Couldn't locate package.json: ${ctx.cwd}`);
-        }
+        const pkg = readPackage(ctx.cwd);
+        if (!pkg) throw new Error(`Couldn't locate package.json: ${ctx.cwd}`);
 
         return series(
           exec('git', ['add', '.']),
@@ -113,7 +106,7 @@ export function single({ conventional, ...options }: CLIReleaseOptions): Task {
           options.push
             ? progress(
                 { message: 'Push to remote' },
-                series(exec('git', ['push']), exec('git', ['push', '--tags']))
+                exec('git', ['push', '--follow-tags'])
               )
             : null
         );

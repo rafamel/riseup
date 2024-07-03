@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { TypeGuard } from 'type-core';
 import { globSync } from 'glob';
-import { nanoid } from 'nanoid';
 import {
   Task,
   copy,
@@ -56,16 +55,15 @@ export function coverage(params: CoverageParams | null): Task.Async {
 
     const outFile = path.resolve(ctx.cwd, opts.outfile);
     const outDir = path.dirname(outFile);
-    const tmpDirAll = getTmpDir();
-    const tempDir = path.join(tmpDirAll, nanoid());
+    const tempDir = getTmpDir();
 
     const task = finalize(
       series(
         mkdir(tempDir, { ensure: true }),
         mkdir(outDir, { ensure: true }),
         remove(outFile, { glob: false, strict: false, recursive: false }),
-        ...infiles.map((file) => {
-          return copy(file, path.join(tempDir, nanoid() + '.info'), {
+        ...infiles.map((file, i) => {
+          return copy(file, path.join(tempDir, `coverage-${i}.info`), {
             glob: false,
             single: true,
             strict: true,

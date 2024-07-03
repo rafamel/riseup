@@ -13,7 +13,7 @@ import {
   Task,
   context
 } from 'kpo';
-import { tmpPath } from '@riseup/utils';
+import { getTmpDir } from '@riseup/utils';
 
 export interface PkgPackOptions {
   name: null | string;
@@ -26,7 +26,8 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
   return context(
     { args: [] },
     create((ctx) => {
-      const tmpDir = tmpPath(null, null);
+      // TODO: remove on cancellation
+      const tmpDir = getTmpDir();
 
       return finalize(
         series(

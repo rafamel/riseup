@@ -2,10 +2,9 @@ import arg from 'arg';
 import { flags, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
 import { Task, print, raises, series, style, create, context } from 'kpo';
-import { getMonorepoRootDir, getLernaConfig } from '@riseup/utils';
+import { getMonorepoRootDir } from '@riseup/utils';
 
 import { bumps, CLIReleaseOptions, ConventionalOptions } from './definitions';
-import { multiple } from './multiple';
 import { single } from './single';
 
 export function cli(conventional: ConventionalOptions | null): Task {
@@ -55,16 +54,13 @@ export function cli(conventional: ConventionalOptions | null): Task {
       conventional
     };
 
-    const isMonorepoRoot = Boolean(getLernaConfig(ctx.cwd));
-    const isMonorepoChild = Boolean(getMonorepoRootDir(ctx.cwd));
+    const monorepoRoot = getMonorepoRootDir(ctx.cwd);
 
     /* Preconditions */
-    if (isMonorepoChild) {
-      return series(
-        print(help + '\n'),
-        raises(new Error(`Release should be run at monorepo root`))
-      );
+    if (monorepoRoot) {
+      return raises(new Error(`Release cannot be used in monorepos`));
     }
+
     if (cmd._.length > 1) {
       return series(
         print(help + '\n'),
@@ -81,9 +77,6 @@ export function cli(conventional: ConventionalOptions | null): Task {
       );
     }
 
-    return context(
-      { args: [] },
-      isMonorepoRoot ? multiple(opts) : single(opts)
-    );
+    return context({ args: [] }, single(opts));
   });
 }

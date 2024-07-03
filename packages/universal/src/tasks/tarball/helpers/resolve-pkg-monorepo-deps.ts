@@ -3,10 +3,7 @@ import path from 'node:path';
 import semver from 'semver';
 import { Context } from 'kpo';
 
-import {
-  getMonorepoPackages,
-  PackageInformation
-} from './get-monorepo-packages';
+import { fetchMonorepoPackages, PackageInformation } from '@riseup/utils';
 
 export interface ResolvePkgMonorepoDepsOptions {
   contents: string;
@@ -28,7 +25,7 @@ export async function resolvePkgMonorepoDeps(
   context: Context,
   options: ResolvePkgMonorepoDepsOptions
 ): Promise<PackageDependency[]> {
-  const packages = await getMonorepoPackages(context);
+  const packages = await fetchMonorepoPackages(context.cwd);
 
   return ['dependencies', 'devDependencies', 'optionalDependencies'].reduce(
     (acc: Promise<PackageDependency[]>, placement) => {

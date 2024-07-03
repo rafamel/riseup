@@ -1,7 +1,6 @@
 import { Serial, UnaryFn, TypeGuard } from 'type-core';
 import path from 'node:path';
 import fs from 'node:fs';
-import { nanoid } from 'nanoid';
 import {
   copy,
   create,
@@ -62,9 +61,8 @@ export function tarball(params: TarballParams | null): Task.Async {
           destFile: destination
         })
       : create(async (ctx) => {
-          const tmpDirAll = getTmpDir();
           // TODO: remove on cancellation
-          const tmpDir = path.join(tmpDirAll, nanoid());
+          const tmpDir = getTmpDir();
 
           return finalize(
             series(

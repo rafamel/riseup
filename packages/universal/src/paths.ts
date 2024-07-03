@@ -6,7 +6,6 @@ import { resolveBin, resolveModule } from '@riseup/utils';
 const url = new URL(import.meta.url);
 
 export const paths = {
-  lernaBin: resolveBin('lerna', 'lerna', url),
   conventionalChangelogBin: resolveBin(
     'conventional-changelog-cli',
     'conventional-changelog',
