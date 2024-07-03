@@ -84,6 +84,7 @@ export default (build) => {
         highlight: ['fixme', 'todo', 'refactor'],
         // ESLint rules overwrites
         rules: {
+          'no-extra-boolean-cast': 0,
           '@typescript-eslint/no-use-before-define': 0
         }
       },

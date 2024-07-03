@@ -17,8 +17,10 @@ export const defaults: Deep.Required<Universal.Options> = {
     registry: null
   },
   release: {
-    preset: 'angular',
-    changelog: true
+    push: false,
+    changelog: true,
+    requireCleanWorkingDir: true,
+    scripts: null
   },
   tarball: {
     destination: null,

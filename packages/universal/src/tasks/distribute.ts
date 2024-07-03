@@ -5,9 +5,9 @@ import { getMonorepoRootDir, getPackageRootDir } from '@riseup/utils';
 import { defaults } from '../defaults';
 
 export interface DistributeParams {
-  /** Whether to push repository after publish */
+  /** Push to remote */
   push?: boolean;
-  /** Package registry for publication */
+  /** Package registry */
   registry?: string | null;
 }
 

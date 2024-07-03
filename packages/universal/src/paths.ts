@@ -24,5 +24,14 @@ export const paths = {
     'lcov-result-merger',
     'lcov-result-merger',
     url
+  ),
+  releaseItBin: resolveBin('release-it', 'release-it', url),
+  releaseItPluginChangelog: resolveModule(
+    '@release-it/conventional-changelog',
+    url
+  ),
+  releaseItPluginWorkspaces: resolveModule(
+    '@release-it-plugins/workspaces',
+    url
   )
 };
