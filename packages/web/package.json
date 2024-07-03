@@ -20,17 +20,17 @@
     "node": ">=18"
   },
   "scripts": {
-    "node": "kpo node --",
-    "build": "kpo build --",
-    "docs": "kpo docs --",
-    "fix": "kpo fix --",
-    "lint": "kpo lint --",
-    "test": "kpo test --",
-    "commit": "kpo commit --",
-    "release": "kpo release --",
-    "distribute": "kpo distribute --",
-    "validate": "kpo validate --",
-    "version": "kpo version --"
+    "node": "../node_modules/.bin/kpo node --",
+    "build": "../node_modules/.bin/kpo build --",
+    "docs": "../node_modules/.bin/kpo docs --",
+    "fix": "../node_modules/.bin/kpo fix --",
+    "lint": "../node_modules/.bin/kpo lint --",
+    "test": "../node_modules/.bin/kpo test --",
+    "commit": "../node_modules/.bin/kpo commit --",
+    "release": "../node_modules/.bin/kpo release --",
+    "distribute": "../node_modules/.bin/kpo distribute --",
+    "validate": "../node_modules/.bin/kpo validate --",
+    "version": "../node_modules/.bin/kpo version --"
   },
   "homepage": "https://github.com/rafamel/riseup/tree/master/packages/web",
   "repository": {
@@ -46,7 +46,7 @@
     "@types/favicons": "^6.2.1",
     "favicons": "^6.2.2",
     "htmlparser2": "^8.0.1",
-    "kpo": "^0.23.2",
+    "kpo": "^0.24.0",
     "nanoid": "^3.3.1",
     "node-fetch": "^3.2.3",
     "size-limit": "^7.0.8",
