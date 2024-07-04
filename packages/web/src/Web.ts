@@ -22,19 +22,10 @@ export declare namespace Web {
 
 export class Web extends Preset<Web.Tasks> {
   public constructor(options: Web.Options | null) {
-    super(
-      {
-        assets: create(() => {
-          return assets(options?.assets || null);
-        }),
-        explore: create(() => {
-          return explore(options?.explore || null);
-        }),
-        size: create(() => {
-          return size(options?.size || null);
-        })
-      },
-      {}
-    );
+    super({
+      assets: create(() => assets(options?.assets || null)),
+      explore: create(() => explore(options?.explore || null)),
+      size: create(() => size(options?.size || null))
+    });
   }
 }
