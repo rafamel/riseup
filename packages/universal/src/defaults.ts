@@ -18,7 +18,6 @@ export const defaults: Deep.Required<Universal.Options> = {
   },
   release: {
     push: false,
-    changelog: true,
     requireCleanWorkingDir: true,
     scripts: null
   },

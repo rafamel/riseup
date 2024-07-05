@@ -6,11 +6,6 @@ import { resolveBin, resolveModule } from '@riseup/utils';
 const url = new URL(import.meta.url);
 
 export const paths = {
-  conventionalChangelogBin: resolveBin(
-    'conventional-changelog-cli',
-    'conventional-changelog',
-    url
-  ),
   conventionalChangelogDir: path.resolve(
     resolveModule('cz-conventional-changelog/package.json', url),
     '../'
