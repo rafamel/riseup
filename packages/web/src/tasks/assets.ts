@@ -186,17 +186,10 @@ async function runFavicons(
   const urlPathRegex = new RegExp(urlPath, 'g');
   const urlPathSlashRegex = new RegExp(urlPath + '\\/?', 'g');
 
-  const response = await new Promise<FaviconResponse>((resolve, reject) => {
-    faviconsFn(
-      options.logo || Buffer.from(''),
-      {
-        logging: false,
-        ...options.options,
-        path: urlPath
-      },
-      (err, res) => (err ? reject(err) : resolve(res))
-    );
-  });
+  const response: FaviconResponse = await faviconsFn(
+    options.logo || Buffer.from(''),
+    { ...options.options, path: urlPath }
+  );
 
   await run(
     ctx,

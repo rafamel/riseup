@@ -51,14 +51,13 @@
     "glob": "^10.4.2",
     "is-git-dirty": "^2.0.1",
     "kpo": "^0.24.0",
-    "lcov-result-merger": "^3.1.0",
+    "lcov-result-merger": "^5.0.1",
     "release-it": "^17.4.1",
     "semver": "^7.3.5",
     "type-core": "^0.13.0"
   },
   "devDependencies": {
     "@types/common-tags": "^1.8.0",
-    "@types/semver": "^7.3.5",
-    "typescript": "^4.7.2"
+    "@types/semver": "^7.3.5"
   }
 }

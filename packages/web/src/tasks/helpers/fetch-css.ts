@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 const USER_AGENTS = {
   default: 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116',
   eot: 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)',
