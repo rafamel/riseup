@@ -24,7 +24,7 @@
     "riseup": "build/riseup.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
     "node": "../node_modules/.bin/kpo node --",

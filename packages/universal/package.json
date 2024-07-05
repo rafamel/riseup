@@ -16,7 +16,7 @@
     "build/"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   },
   "scripts": {
     "node": "../node_modules/.bin/kpo node --",
