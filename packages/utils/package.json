@@ -45,7 +45,6 @@
     "import-meta-resolve": "^4.1.0",
     "kpo": "^0.26.0",
     "minimatch": "^9.0.5",
-    "nanoid": "^5.0.7",
     "type-core": "^0.13.0"
   }
 }

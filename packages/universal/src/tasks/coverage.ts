@@ -10,10 +10,9 @@ import {
   mkdir,
   series,
   create,
-  finalize,
-  exec
+  exec,
+  tmp
 } from 'kpo';
-import { getTmpDir } from '@riseup/utils';
 
 import { paths } from '../paths';
 import { defaults } from '../defaults';
@@ -55,15 +54,12 @@ export function coverage(params: CoverageParams | null): Task.Async {
 
     const outFile = path.resolve(ctx.cwd, opts.destination);
     const outDir = path.dirname(outFile);
-    const tempDir = getTmpDir();
-
-    const task = finalize(
-      series(
-        mkdir(tempDir, { ensure: true }),
+    const task = tmp(null, ({ directory }) => {
+      return series(
         mkdir(outDir, { ensure: true }),
         remove(outFile, { glob: false, strict: false, recursive: false }),
         ...infiles.map((file, i) => {
-          return copy(file, path.join(tempDir, `coverage-${i}.info`), {
+          return copy(file, path.join(directory, `coverage-${i}.info`), {
             glob: false,
             single: true,
             strict: true,
@@ -72,12 +68,11 @@ export function coverage(params: CoverageParams | null): Task.Async {
         }),
         exec(process.execPath, [
           paths.lcovResultMergerBin,
-          path.join(tempDir, '*.info'),
+          path.join(directory, '*.info'),
           outFile
         ])
-      ),
-      remove(tempDir, { glob: false, strict: false, recursive: true })
-    );
+      );
+    });
 
     return progress(
       { message: 'Compile coverage' },

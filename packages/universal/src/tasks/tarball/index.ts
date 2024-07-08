@@ -2,18 +2,16 @@ import { Serial, UnaryFn, TypeGuard } from 'type-core';
 import path from 'node:path';
 import fs from 'node:fs';
 import {
+  Task,
   copy,
   create,
   edit,
-  finalize,
   mkdir,
   progress,
-  remove,
   run,
   series,
-  Task
+  tmp
 } from 'kpo';
-import { getTmpDir } from '@riseup/utils';
 
 import { defaults } from '../../defaults';
 import { pkgPackTask } from './helpers/pkg-pack-task';
@@ -60,140 +58,131 @@ export function tarball(params: TarballParams | null): Task.Async {
           destDir: destination ? null : './',
           destFile: destination
         })
-      : create(async (ctx) => {
-          // TODO: remove on cancellation
-          const tmpDir = getTmpDir();
+      : tmp(null, ({ directory }) => {
+          return series(
+            mkdir(directory, { ensure: true }),
+            // Copy project on temp directory
+            copy('./!(node_modules)', directory, {
+              glob: true,
+              single: false,
+              strict: true,
+              exists: 'error'
+            }),
+            // Link node_modules
+            create(async (ctx) => {
+              const nodeModulesPath = path.resolve(ctx.cwd, 'node_modules');
+              const nodeModulesDest = path.resolve(directory, 'node_modules');
+              const nodeModulesExist = await fs.promises
+                .access(nodeModulesPath, fs.constants.F_OK)
+                .then(
+                  () => true,
+                  () => false
+                );
 
-          return finalize(
-            series(
-              mkdir(tmpDir, { ensure: true }),
-              // Copy project on temp directory
-              copy('./!(node_modules)', tmpDir, {
-                glob: true,
-                single: false,
-                strict: true,
-                exists: 'error'
-              }),
-              // Link node_modules
-              create(async (ctx) => {
-                const nodeModulesPath = path.resolve(ctx.cwd, 'node_modules');
-                const nodeModulesDest = path.resolve(tmpDir, 'node_modules');
-                const nodeModulesExist = await fs.promises
-                  .access(nodeModulesPath, fs.constants.F_OK)
-                  .then(
-                    () => true,
-                    () => false
-                  );
+              if (nodeModulesExist) {
+                await fs.promises.symlink(
+                  nodeModulesPath,
+                  nodeModulesDest,
+                  'dir'
+                );
+              }
+            }),
+            // Package deep merges
+            opts.package
+              ? edit(
+                  path.join(directory, 'package.json'),
+                  (buffer) => {
+                    const contents = JSON.parse(String(buffer));
+                    return TypeGuard.isFunction(opts.package)
+                      ? opts.package(contents)
+                      : { ...contents, ...opts.package };
+                  },
+                  { glob: false, strict: true }
+                )
+              : null,
+            // Monorepo resolution
+            monorepo
+              ? create(async (ctx) => {
+                  const resArr = await resolvePkgMonorepoDeps(ctx, {
+                    contents: monorepo.contents,
+                    noPrivate: monorepo.noPrivate
+                  });
 
-                if (nodeModulesExist) {
-                  await fs.promises.symlink(
-                    nodeModulesPath,
-                    nodeModulesDest,
-                    'dir'
-                  );
-                }
-              }),
-              // Package deep merges
-              opts.package
-                ? edit(
-                    path.join(tmpDir, 'package.json'),
-                    (buffer) => {
-                      const contents = JSON.parse(String(buffer));
-                      return TypeGuard.isFunction(opts.package)
-                        ? opts.package(contents)
-                        : { ...contents, ...opts.package };
-                    },
-                    { glob: false, strict: true }
-                  )
-                : null,
-              // Monorepo resolution
-              monorepo
-                ? create(async () => {
-                    const resArr = await resolvePkgMonorepoDeps(ctx, {
-                      contents: monorepo.contents,
-                      noPrivate: monorepo.noPrivate
-                    });
+                  const tmpFilesRecord: Record<string, string> = {};
+                  const depsArr = resArr.map((item) => {
+                    if (Object.hasOwnProperty.call(tmpFilesRecord, item.name)) {
+                      return { ...item, tmpFile: tmpFilesRecord[item.name] };
+                    } else {
+                      const tmpFile =
+                        'pkg-' + String(Math.random()).slice(2) + '.tgz';
+                      tmpFilesRecord[item.name] = tmpFile;
+                      return { ...item, tmpFile };
+                    }
+                  });
 
-                    const tmpFilesRecord: Record<string, string> = {};
-                    const depsArr = resArr.map((item) => {
-                      if (
-                        Object.hasOwnProperty.call(tmpFilesRecord, item.name)
-                      ) {
-                        return { ...item, tmpFile: tmpFilesRecord[item.name] };
-                      } else {
-                        const tmpFile =
-                          'pkg-' + String(Math.random()).slice(2) + '.tgz';
-                        tmpFilesRecord[item.name] = tmpFile;
-                        return { ...item, tmpFile };
+                  return series(
+                    create(async (ctx) => {
+                      const builtArr: string[] = [];
+
+                      // Build dependencies
+                      for (const dep of depsArr) {
+                        if (builtArr.includes(dep.name)) continue;
+
+                        builtArr.push(dep.name);
+                        await run(
+                          ctx,
+                          pkgPackTask({
+                            name: dep.name,
+                            source: path.resolve(dep.path, monorepo.contents),
+                            destDir: directory,
+                            destFile: dep.tmpFile
+                          })
+                        );
                       }
-                    });
-
-                    return series(
-                      create(async (ctx) => {
-                        const builtArr: string[] = [];
-
-                        // Build dependencies
-                        for (const dep of depsArr) {
-                          if (builtArr.includes(dep.name)) continue;
-
-                          builtArr.push(dep.name);
-                          await run(
-                            ctx,
-                            pkgPackTask({
-                              name: dep.name,
-                              source: path.resolve(dep.path, monorepo.contents),
-                              destDir: tmpDir,
-                              destFile: dep.tmpFile
-                            })
+                    }),
+                    edit(
+                      path.join(directory, 'package.json'),
+                      (buffer) => {
+                        const json = JSON.parse(String(buffer));
+                        if (!TypeGuard.isArray(json.files)) {
+                          throw new TypeError(
+                            `Compulsory files field in package.json not found`
                           );
                         }
-                      }),
-                      edit(
-                        path.join(tmpDir, 'package.json'),
-                        (buffer) => {
-                          const json = JSON.parse(String(buffer));
-                          if (!TypeGuard.isArray(json.files)) {
-                            throw new TypeError(
-                              `Compulsory files field in package.json not found`
-                            );
-                          }
 
-                          const response = {
-                            ...json,
-                            files: [
-                              ...json.files,
-                              ...depsArr
-                                .map((item) => item.tmpFile)
-                                .filter((x, i, arr) => arr.indexOf(x) === i)
-                            ],
-                            dependencies: json.dependencies || {},
-                            devDependencies: json.devDependencies || {},
-                            optionalDependencies:
-                              json.optionalDependencies || {}
+                        const response = {
+                          ...json,
+                          files: [
+                            ...json.files,
+                            ...depsArr
+                              .map((item) => item.tmpFile)
+                              .filter((x, i, arr) => arr.indexOf(x) === i)
+                          ],
+                          dependencies: json.dependencies || {},
+                          devDependencies: json.devDependencies || {},
+                          optionalDependencies: json.optionalDependencies || {}
+                        };
+
+                        for (const dep of depsArr) {
+                          response[dep.placement] = {
+                            ...response[dep.placement],
+                            [dep.name]: 'file:./' + dep.tmpFile
                           };
+                        }
 
-                          for (const dep of depsArr) {
-                            response[dep.placement] = {
-                              ...response[dep.placement],
-                              [dep.name]: 'file:./' + dep.tmpFile
-                            };
-                          }
-
-                          return response;
-                        },
-                        { glob: false, strict: true }
-                      )
-                    );
-                  })
-                : null,
-              pkgPackTask({
-                name: null,
-                source: tmpDir,
-                destDir: destination ? null : './',
-                destFile: destination
-              })
-            ),
-            remove(tmpDir, { strict: true, recursive: true })
+                        return response;
+                      },
+                      { glob: false, strict: true }
+                    )
+                  );
+                })
+              : null,
+            pkgPackTask({
+              name: null,
+              source: directory,
+              destDir: destination ? null : './',
+              destFile: destination
+            })
           );
         })
   );
