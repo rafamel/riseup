@@ -1,5 +1,14 @@
 import { TypeGuard } from 'type-core';
-import { Task, create, confirm, context, exec, log, series } from 'kpo';
+import {
+  Task,
+  create,
+  confirm,
+  context,
+  exec,
+  log,
+  series,
+  atValue
+} from 'kpo';
 import { getMonorepoRootDir, getPackageRootDir } from '@riseup/utils';
 
 import { defaults } from '../defaults';
@@ -39,16 +48,18 @@ export function distribute(params: DistributeParams | null): Task.Async {
         exec('npm', [...args, '--dry-run', ...ctx.args], { env }),
         confirm(
           { message: 'Continue?', default: true },
-          series(
-            log('info', 'Run publish'),
-            exec('npm', [...args, ...ctx.args], { env }),
-            opts.push
-              ? series(
-                  log('info', 'Push to remote'),
-                  exec('git', ['push', '--follow-tags'])
-                )
-              : null
-          )
+          atValue({
+            true: series(
+              log('info', 'Run publish'),
+              exec('npm', [...args, ...ctx.args], { env }),
+              opts.push
+                ? series(
+                    log('info', 'Push to remote'),
+                    exec('git', ['push', '--follow-tags'])
+                  )
+                : null
+            )
+          })
         )
       )
     );

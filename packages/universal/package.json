@@ -50,7 +50,7 @@
     "cz-conventional-changelog": "^3.2.0",
     "glob": "^10.4.2",
     "is-git-dirty": "^2.0.1",
-    "kpo": "^0.24.0",
+    "kpo": "^0.26.0",
     "lcov-result-merger": "^5.0.1",
     "release-it": "^17.4.1",
     "semver": "^7.3.5",

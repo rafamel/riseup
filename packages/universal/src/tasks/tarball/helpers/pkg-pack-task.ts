@@ -37,7 +37,7 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
             cwd: tmpDir
           }),
           create(async (ctx) => {
-            if (await isCancelled(ctx)) return;
+            if (isCancelled(ctx)) return;
 
             const files = await new Promise<string[]>((resolve, reject) => {
               return fs.readdir(tmpDir, null, (err, data) => {

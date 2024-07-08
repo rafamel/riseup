@@ -10,7 +10,8 @@ import {
   series,
   raises,
   tmp,
-  log
+  log,
+  atValue
 } from 'kpo';
 import { getMonorepoRootDir, getPackageRootDir } from '@riseup/utils';
 
@@ -64,62 +65,60 @@ export function release(params: ReleaseParams | null): Task.Async {
               series(
                 log('info', 'Recommended version:'),
                 tmp(
-                  () => {
-                    return configure({
+                  () => ({
+                    name: 'release-it.json',
+                    content: configure({
                       push: false,
                       isMonorepoRoot: Boolean(isMonorepoRoot),
                       runBefore: null,
                       runAfter: null
-                    });
-                  },
-                  (file) => {
+                    })
+                  }),
+                  ({ files }) => {
                     return exec('release-it', [
-                      ...['-c', file],
+                      ...['-c', files[0]],
                       '--release-version'
                     ]);
-                  },
-                  { ext: 'json' }
+                  }
                 ),
                 confirm(
                   {
                     message: `Release with recommended version?`,
                     default: true
                   },
-                  null,
-                  select(
-                    { message: 'Select version bump:' },
-                    Object.fromEntries(
-                      bumps.map((version) => [
-                        version[0].toUpperCase() + version.slice(1),
-                        () => {
-                          bump = version;
-                        }
-                      ])
+                  atValue({
+                    false: select(
+                      { message: 'Select version bump:' },
+                      bumps,
+                      (selection) => {
+                        bump = selection;
+                        return null;
+                      }
                     )
-                  )
+                  })
                 )
               ),
               create(() => null)
             )
           : null,
         tmp(
-          () => {
-            return configure({
+          () => ({
+            name: 'release-it.json',
+            content: configure({
               push: Boolean(opts.push),
               isMonorepoRoot: Boolean(isMonorepoRoot),
               runBefore: opts?.scripts?.before || null,
               runAfter: opts?.scripts?.after || null
-            });
-          },
-          (file) => {
+            })
+          }),
+          ({ files }) => {
             return exec('release-it', [
-              ...['-c', file],
+              ...['-c', files[0]],
               ...(bump ? ['--increment', bump] : []),
               ...(options.noInteractive ? ['--ci'] : []),
               '--verbose'
             ]);
-          },
-          { ext: 'json' }
+          }
         )
       );
     });
