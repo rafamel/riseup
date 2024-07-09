@@ -30,7 +30,7 @@ export const defaults: Deep.Required<Universal.Options> = {
   },
   tarball: {
     destination: null,
-    monorepo: false,
-    package: null
+    contents: null,
+    monorepo: false
   }
 };

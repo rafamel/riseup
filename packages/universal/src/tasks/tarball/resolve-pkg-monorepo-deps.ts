@@ -1,10 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { Context } from 'kpo';
 import semver from 'semver';
 
 import { PackageInformation, fetchMonorepoPackages } from '@riseup/utils';
+
+export interface ResolvePkgMonorepoDepsArgs {
+  packageDir: string;
+  packageContentsDir: string;
+}
 
 export interface ResolvePkgMonorepoDepsOptions {
   contents: string;
@@ -23,17 +27,17 @@ export type PackageDependencyPlacement =
   | 'optionalDependencies';
 
 export async function resolvePkgMonorepoDeps(
-  context: Context,
+  args: ResolvePkgMonorepoDepsArgs,
   options: ResolvePkgMonorepoDepsOptions
 ): Promise<PackageDependency[]> {
-  const packages = await fetchMonorepoPackages(context.cwd);
+  const packages = await fetchMonorepoPackages(args.packageDir);
 
   return ['dependencies', 'devDependencies', 'optionalDependencies'].reduce(
     (acc: Promise<PackageDependency[]>, placement) => {
       return acc.then((arr) => {
         return trunk(
           true,
-          context.cwd,
+          args.packageContentsDir,
           options.contents,
           options.noPrivate,
           packages,
@@ -64,7 +68,7 @@ async function trunk(
     throw new Error(`No package.json found at "${dir}"`);
   }
 
-  const pkgJson = JSON.parse(String(await fs.readFileSync(pkgPath)));
+  const pkgJson = JSON.parse(String(fs.readFileSync(pkgPath)));
 
   // Parse coincident package dependencies / monorepo packages
   const pkgDependenciesRecord = !root

@@ -1,16 +1,10 @@
 import path from 'node:path';
 import fs from 'node:fs';
 
-import { type Serial, TypeGuard, type UnaryFn } from 'type-core';
-import { type Task, copy, create, edit, series, tmp } from 'kpo';
-
-export interface TmpProjectCreateOptions {
-  package: null | Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
-}
+import { type Task, copy, create, series, tmp } from 'kpo';
 
 // TODO: deal with monorepos
 export function tmpProjectCreate(
-  options: TmpProjectCreateOptions,
   callback: (directory: string) => Task
 ): Task.Async {
   return tmp(null, ({ directory }) => {
@@ -37,19 +31,6 @@ export function tmpProjectCreate(
           await fs.promises.symlink(nodeModulesPath, nodeModulesDest, 'dir');
         }
       }),
-      // Package deep merges
-      options.package
-        ? edit(
-            path.join(directory, 'package.json'),
-            ({ buffer }) => {
-              const contents = JSON.parse(String(buffer));
-              return TypeGuard.isFunction(options.package)
-                ? options.package(contents)
-                : { ...contents, ...options.package };
-            },
-            { glob: false, strict: true }
-          )
-        : null,
       // Run callback's Task
       create(() => callback(directory))
     );

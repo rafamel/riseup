@@ -59,6 +59,12 @@ export function distribute(params: DistributeParams | null): Task.Async {
       });
     }
 
+    if (path.isAbsolute(opts.contents) || opts.contents.startsWith('..')) {
+      throw new Error(
+        'Distribute contents option must be a relative path: ' + opts.contents
+      );
+    }
+
     if (!isMonorepoRoot) {
       return publish([path.resolve(ctx.cwd, opts.contents || '')], [], {
         push: opts.push,
