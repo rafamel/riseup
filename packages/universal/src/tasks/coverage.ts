@@ -1,13 +1,14 @@
 import path from 'node:path';
 
 import { TypeGuard } from 'type-core';
-import { globSync } from 'glob';
+import { glob } from 'glob';
 import {
   type Task,
   copy,
   context,
   create,
   exec,
+  isCancelled,
   mkdir,
   progress,
   remove,
@@ -36,12 +37,13 @@ export function coverage(params: CoverageParams | null): Task.Async {
       : defaults.coverage.passWithoutFiles
   };
 
-  return create((ctx) => {
+  return create(async (ctx) => {
     const arr = Array.isArray(opts.files) ? opts.files : [opts.files];
-    const infiles = globSync(
+    const infiles = await glob(
       arr.map((x) => path.resolve(ctx.cwd, x)),
       { nodir: true }
     );
+    if (isCancelled(ctx)) return;
     if (!infiles && !opts.passWithoutFiles) {
       throw new Error('No coverage files found to merge');
     }
