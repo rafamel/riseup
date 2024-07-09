@@ -8,7 +8,6 @@ import {
   exec,
   isCancelled,
   log,
-  mkdir,
   move,
   series,
   tmp
@@ -26,7 +25,6 @@ export function pkgPackTask(options: PkgPackOptions): Task.Async {
     return tmp(null, ({ directory }) => {
       return series(
         log('debug', 'Pack' + (options.name ? `: ${options.name}` : '')),
-        mkdir(directory, { ensure: false }),
         exec('npm', ['pack', path.resolve(ctx.cwd, options.source)], {
           cwd: directory
         }),

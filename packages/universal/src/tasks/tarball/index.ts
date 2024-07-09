@@ -1,26 +1,19 @@
 import path from 'node:path';
-import fs from 'node:fs';
 
 import { type Serial, TypeGuard, type UnaryFn } from 'type-core';
-import {
-  type Task,
-  copy,
-  create,
-  edit,
-  mkdir,
-  progress,
-  run,
-  series,
-  tmp
-} from 'kpo';
+import { type Task, create, edit, progress, run, series } from 'kpo';
 
 import { defaults } from '../../defaults';
-import { pkgPackTask } from './helpers/pkg-pack-task';
-import { resolvePkgMonorepoDeps } from './helpers/resolve-pkg-monorepo-deps';
+import { pkgPackTask } from './pkg-pack-task';
+import { resolvePkgMonorepoDeps } from './resolve-pkg-monorepo-deps';
+import { tmpProjectCreate } from './tmp-project-create';
 
 export interface TarballParams {
+  /** Package tarball file name */
   destination?: null | string;
+  /** Enable monorepo dependencies inclusion in tarball */
   monorepo?: boolean | { contents?: string; noPrivate?: boolean };
+  /** Override package.json properties */
   package?: Serial.Object | UnaryFn<Serial.Object, Serial.Object> | null;
 }
 
@@ -59,49 +52,8 @@ export function tarball(params: TarballParams | null): Task.Async {
           destDir: destination ? null : './',
           destFile: destination
         })
-      : tmp(null, ({ directory }) => {
+      : tmpProjectCreate({ package: opts.package }, (directory) => {
           return series(
-            mkdir(directory, { ensure: true }),
-            // Copy project on temp directory
-            copy('./!(node_modules)', directory, {
-              glob: true,
-              single: false,
-              strict: true,
-              exists: 'error'
-            }),
-            // Link node_modules
-            create(async (ctx) => {
-              const nodeModulesPath = path.resolve(ctx.cwd, 'node_modules');
-              const nodeModulesDest = path.resolve(directory, 'node_modules');
-              const nodeModulesExist = await fs.promises
-                .access(nodeModulesPath, fs.constants.F_OK)
-                .then(
-                  () => true,
-                  () => false
-                );
-
-              if (nodeModulesExist) {
-                await fs.promises.symlink(
-                  nodeModulesPath,
-                  nodeModulesDest,
-                  'dir'
-                );
-              }
-            }),
-            // Package deep merges
-            opts.package
-              ? edit(
-                  path.join(directory, 'package.json'),
-                  (buffer) => {
-                    const contents = JSON.parse(String(buffer));
-                    return TypeGuard.isFunction(opts.package)
-                      ? opts.package(contents)
-                      : { ...contents, ...opts.package };
-                  },
-                  { glob: false, strict: true }
-                )
-              : null,
-            // Monorepo resolution
             monorepo
               ? create(async (ctx) => {
                   const resArr = await resolvePkgMonorepoDeps(ctx, {
