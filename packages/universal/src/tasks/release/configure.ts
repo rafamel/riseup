@@ -29,6 +29,7 @@ export function configure(options: ConfigureOptions): Serial.Type {
     },
     git: {
       push: options.push,
+      requireUpstream: false,
       requireCleanWorkingDir: false,
       commitMessage: 'chore: release v${version}'
     },
