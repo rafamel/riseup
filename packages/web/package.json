@@ -46,7 +46,7 @@
     "@types/favicons": "^7.0.0",
     "favicons": "^7.2.0",
     "htmlparser2": "^9.1.0",
-    "kpo": "^0.26.0",
+    "kpo": "^0.27.0",
     "nanoid": "^5.0.7",
     "size-limit": "^11.1.4",
     "source-map-explorer": "^2.5.2",
