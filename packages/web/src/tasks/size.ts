@@ -1,11 +1,12 @@
 import path from 'node:path';
-import { create, exec, log, print, series, Task } from 'kpo';
+
+import { TypeGuard } from 'type-core';
+import { type Task, create, exec, log, print, series } from 'kpo';
 
 import { paths } from '../paths';
 import { defaults } from '../defaults';
 import { getRecursiveFiles } from './helpers/get-recursive-files';
 import { ensureProjectBuilt } from './helpers/ensure-project-built';
-import { TypeGuard } from 'type-core';
 
 export interface SizeParams {
   dir?: string | null;

@@ -1,17 +1,18 @@
 import { create } from 'kpo';
+
 import { Preset } from '@riseup/utils';
 
 import {
+  type CommitParams,
+  type CoverageParams,
+  type DistributeParams,
+  type ReleaseParams,
+  type TarballParams,
   commit,
-  CommitParams,
   coverage,
-  CoverageParams,
   distribute,
-  DistributeParams,
   release,
-  ReleaseParams,
-  tarball,
-  TarballParams
+  tarball
 } from './tasks';
 
 export declare namespace Universal {

@@ -1,4 +1,5 @@
 import path from 'node:path';
+
 import { execa } from 'execa';
 
 import { readPackage } from './read-package';

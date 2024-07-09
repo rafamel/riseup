@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { bootstrap } from 'commitizen/dist/cli/git-cz.js';
+
 import { paths } from '../paths';
 
 process.on('uncaughtException', (err) => {

@@ -1,4 +1,5 @@
 import path from 'node:path';
+
 import { minimatch } from 'minimatch';
 
 import { getPackageRootDir } from './get-package-root-dir';

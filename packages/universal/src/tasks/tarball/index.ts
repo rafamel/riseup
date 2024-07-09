@@ -1,8 +1,9 @@
-import { Serial, UnaryFn, TypeGuard } from 'type-core';
 import path from 'node:path';
 import fs from 'node:fs';
+
+import { type Serial, TypeGuard, type UnaryFn } from 'type-core';
 import {
-  Task,
+  type Task,
   copy,
   create,
   edit,

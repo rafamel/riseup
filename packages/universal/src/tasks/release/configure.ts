@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import { Serial } from 'type-core';
+import type { Serial } from 'type-core';
 
 import { paths } from '../../paths';
 

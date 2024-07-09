@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Serial } from 'type-core';
+
+import type { Serial } from 'type-core';
 
 export function readPackage(cwd: string): Serial.Object | null {
   const file = path.resolve(cwd, 'package.json');

@@ -1,4 +1,5 @@
 import path from 'node:path';
+
 import { findUpSync } from 'find-up';
 
 export function getPackageRootDir(cwd: string): string | null {

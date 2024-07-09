@@ -1,16 +1,17 @@
 import path from 'node:path';
+
 import { TypeGuard } from 'type-core';
 import { globSync } from 'glob';
 import {
-  Task,
+  type Task,
   copy,
-  remove,
-  progress,
   context,
-  mkdir,
-  series,
   create,
   exec,
+  mkdir,
+  progress,
+  remove,
+  series,
   tmp
 } from 'kpo';
 

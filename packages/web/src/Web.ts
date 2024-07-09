@@ -1,13 +1,14 @@
 import { create } from 'kpo';
+
 import { Preset } from '@riseup/utils';
 
 import {
+  type AssetsParams,
+  type ExploreParams,
+  type SizeParams,
   assets,
-  AssetsParams,
   explore,
-  ExploreParams,
-  size,
-  SizeParams
+  size
 } from './tasks';
 
 export declare namespace Web {

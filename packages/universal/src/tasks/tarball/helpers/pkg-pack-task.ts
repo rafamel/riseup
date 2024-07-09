@@ -1,15 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
+
 import {
+  type Task,
+  context,
   create,
   exec,
+  isCancelled,
+  log,
   mkdir,
   move,
   series,
-  log,
-  isCancelled,
-  Task,
-  context,
   tmp
 } from 'kpo';
 

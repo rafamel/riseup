@@ -1,4 +1,4 @@
-import { Task } from 'kpo';
+import type { Task } from 'kpo';
 
 export class Preset<T extends string = string> {
   public static combine(...presets: Preset[]): Preset {

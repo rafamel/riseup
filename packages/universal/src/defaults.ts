@@ -1,6 +1,6 @@
-import { Deep } from 'type-core';
+import type { Deep } from 'type-core';
 
-import { Universal } from './Universal';
+import type { Universal } from './Universal';
 import { paths } from './paths';
 
 export const defaults: Deep.Required<Universal.Options> = {

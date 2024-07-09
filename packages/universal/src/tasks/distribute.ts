@@ -1,14 +1,15 @@
 import { TypeGuard } from 'type-core';
 import {
-  Task,
-  create,
+  type Task,
+  atValue,
   confirm,
   context,
+  create,
   exec,
   log,
-  series,
-  atValue
+  series
 } from 'kpo';
+
 import { getMonorepoRootDir, getPackageRootDir } from '@riseup/utils';
 
 import { defaults } from '../defaults';

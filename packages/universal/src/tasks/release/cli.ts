@@ -1,7 +1,7 @@
 import arg from 'arg';
 import { flags, safePairs } from 'cli-belt';
 import { stripIndent as indent } from 'common-tags';
-import { Task, print, raises, series, style, create } from 'kpo';
+import { type Task, create, print, raises, series, style } from 'kpo';
 
 export interface CLIOptions {
   bump: string | null;

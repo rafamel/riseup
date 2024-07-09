@@ -1,25 +1,29 @@
-import { Dictionary, Serial, TypeGuard } from 'type-core';
 import path from 'node:path';
 import fs from 'node:fs';
-import faviconsFn, { FaviconOptions, FaviconResponse } from 'favicons';
+
+import { type Dictionary, type Serial, TypeGuard } from 'type-core';
 import { parseDocument } from 'htmlparser2';
 import { nanoid } from 'nanoid';
+import faviconsFn, {
+  type FaviconOptions,
+  type FaviconResponse
+} from 'favicons';
 import {
+  type Context,
+  type Task,
+  copy,
   create,
+  mkdir,
   print,
   progress,
-  write,
-  series,
-  mkdir,
   remove,
-  copy,
   run,
-  Task,
-  Context
+  series,
+  write
 } from 'kpo';
 
 import { defaults } from '../defaults';
-import { CssFontType, fetchCss, fetchFontCss } from './helpers/fetch-css';
+import { type CssFontType, fetchCss, fetchFontCss } from './helpers/fetch-css';
 
 export interface AssetsParams {
   clean?: boolean;

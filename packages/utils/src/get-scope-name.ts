@@ -1,5 +1,6 @@
-import { TypeGuard } from 'type-core';
 import path from 'node:path';
+
+import { TypeGuard } from 'type-core';
 
 import { getMonorepoRootDir } from './get-monorepo-root-dir';
 import { getPackageRootDir } from './get-package-root-dir';

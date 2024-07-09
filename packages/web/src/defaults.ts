@@ -1,7 +1,7 @@
-import { Deep } from 'type-core';
+import type { Deep } from 'type-core';
 
+import type { Web } from './Web';
 import { paths } from './paths';
-import { Web } from './Web';
 
 export const defaults: Deep.Required<Web.Options> = {
   assets: {

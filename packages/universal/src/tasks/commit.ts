@@ -1,8 +1,8 @@
-import { create, exec, Task } from 'kpo';
+import { TypeGuard } from 'type-core';
+import { type Task, create, exec } from 'kpo';
 
 import { defaults } from '../defaults';
 import { paths } from '../paths';
-import { TypeGuard } from 'type-core';
 
 export interface CommitParams {
   /** See: https://github.com/commitizen/cz-cli */

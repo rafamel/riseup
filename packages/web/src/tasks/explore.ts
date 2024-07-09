@@ -1,5 +1,6 @@
 import path from 'node:path';
-import { create, exec, print, Task } from 'kpo';
+
+import { type Task, create, exec, print } from 'kpo';
 
 import { paths } from '../paths';
 import { defaults } from '../defaults';

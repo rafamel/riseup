@@ -1,6 +1,7 @@
-import { Serial } from 'type-core';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import type { Serial } from 'type-core';
 import { findUpSync } from 'find-up';
 
 export function getPackageJson(

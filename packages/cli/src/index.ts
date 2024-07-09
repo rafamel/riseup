@@ -1,5 +1,6 @@
-import { URL, fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { URL, fileURLToPath } from 'node:url';
+
 import { cli as _cli } from 'kpo';
 import { loadPackage } from 'cli-belt';
 

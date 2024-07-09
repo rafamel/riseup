@@ -1,9 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import semver from 'semver';
-import { Context } from 'kpo';
 
-import { fetchMonorepoPackages, PackageInformation } from '@riseup/utils';
+import type { Context } from 'kpo';
+import semver from 'semver';
+
+import { PackageInformation, fetchMonorepoPackages } from '@riseup/utils';
 
 export interface ResolvePkgMonorepoDepsOptions {
   contents: string;

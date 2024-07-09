@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { URL, fileURLToPath } from 'node:url';
+
 import { resolveBin } from '@riseup/utils';
 
 const url = new URL(import.meta.url);
