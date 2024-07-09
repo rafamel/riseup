@@ -14,7 +14,8 @@ export const defaults: Deep.Required<Universal.Options> = {
   },
   distribute: {
     push: true,
-    registry: null
+    registry: null,
+    contents: null
   },
   release: {
     push: false,
