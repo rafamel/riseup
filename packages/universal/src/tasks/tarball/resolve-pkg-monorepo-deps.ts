@@ -3,7 +3,11 @@ import path from 'node:path';
 
 import semver from 'semver';
 
-import { PackageInformation, fetchMonorepoPackages } from '@riseup/utils';
+import {
+  PackageInformation,
+  fetchMonorepoPackages,
+  getMonorepoRootDir
+} from '@riseup/utils';
 
 export interface ResolvePkgMonorepoDepsArgs {
   packageDir: string;
@@ -30,8 +34,12 @@ export async function resolvePkgMonorepoDeps(
   args: ResolvePkgMonorepoDepsArgs,
   options: ResolvePkgMonorepoDepsOptions
 ): Promise<PackageDependency[]> {
-  const packages = await fetchMonorepoPackages(args.packageDir);
+  const monorepoRootDir = getMonorepoRootDir(args.packageDir);
+  if (!monorepoRootDir) {
+    throw new Error(`No workspaces root found for: ${args.packageDir}`);
+  }
 
+  const packages = await fetchMonorepoPackages(monorepoRootDir);
   return ['dependencies', 'devDependencies', 'optionalDependencies'].reduce(
     (acc: Promise<PackageDependency[]>, placement) => {
       return acc.then((arr) => {
@@ -52,24 +60,22 @@ export async function resolvePkgMonorepoDeps(
 
 async function trunk(
   root: boolean,
-  cwd: string,
-  contents: string,
+  packageContents: string,
+  monorepoContents: string,
   noPrivate: boolean,
   packages: PackageInformation[],
   placement: PackageDependencyPlacement,
   history: string[]
 ): Promise<PackageDependency[]> {
   // Find package.json
-  const dir = path.resolve(cwd, contents);
+  const dir = packageContents;
   const pkgPath = path.join(dir, 'package.json');
   const pkgExists = fs.existsSync(pkgPath);
-
   if (!pkgExists) {
     throw new Error(`No package.json found at "${dir}"`);
   }
 
   const pkgJson = JSON.parse(String(fs.readFileSync(pkgPath)));
-
   // Parse coincident package dependencies / monorepo packages
   const pkgDependenciesRecord = !root
     ? {
@@ -126,7 +132,7 @@ async function trunk(
         return trunk(
           false,
           data.path,
-          contents,
+          monorepoContents,
           noPrivate,
           packages,
           placement,
