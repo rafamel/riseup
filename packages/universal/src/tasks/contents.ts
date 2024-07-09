@@ -58,8 +58,7 @@ export function contents(params: ContentsParams | null): Task.Async {
           glob: false,
           single: false,
           strict: false,
-          exists: 'overwrite',
-          from: asset
+          exists: 'overwrite'
         });
       }),
       pkg
