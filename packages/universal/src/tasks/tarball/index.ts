@@ -95,7 +95,7 @@ export function tarball(params: TarballParams | null): Task.Async {
                     }),
                     edit(
                       path.join(directory, 'package.json'),
-                      (buffer) => {
+                      ({ buffer }) => {
                         const json = JSON.parse(String(buffer));
                         if (!TypeGuard.isArray(json.files)) {
                           throw new TypeError(

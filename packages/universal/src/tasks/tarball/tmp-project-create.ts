@@ -41,7 +41,7 @@ export function tmpProjectCreate(
       options.package
         ? edit(
             path.join(directory, 'package.json'),
-            (buffer) => {
+            ({ buffer }) => {
               const contents = JSON.parse(String(buffer));
               return TypeGuard.isFunction(options.package)
                 ? options.package(contents)
