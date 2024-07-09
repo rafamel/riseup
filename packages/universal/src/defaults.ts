@@ -7,6 +7,12 @@ export const defaults: Deep.Required<Universal.Options> = {
   commit: {
     path: paths.conventionalChangelogDir
   },
+  contents: {
+    destination: null,
+    clean: true,
+    assets: null,
+    package: false
+  },
   coverage: {
     files: [],
     destination: './coverage/lcov.info',
