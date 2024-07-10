@@ -1,7 +1,5 @@
 # monorepo-template
 
-<!-- [![License](https://img.shields.io/github/license/rafamel/monorepo-template.svg)](https://github.com/rafamel/monorepo-template/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/rafamel/riseup.svg)](https://github.com/rafamel/riseup/blob/master/LICENSE)
 
-> Riseup monorepo template
-
-## Packages -->
+> A riseup monorepo template.

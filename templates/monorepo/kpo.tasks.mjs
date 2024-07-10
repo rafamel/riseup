@@ -1,36 +1,29 @@
-import { recreate, lift, exec, catches, series, context, create } from 'kpo';
+import { recreate, lift, exec, catches, series, create } from 'kpo';
 
 import riseup from './riseup.config.mjs';
 
 export default recreate({ announce: true }, () => {
   const tasks = {
-    run: riseup.tasks.run,
-    execute: riseup.tasks.execute,
-    build: series(
-      exec('lerna', ['link']),
-      context({ args: ['build'] }, riseup.tasks.run)
-    ),
-    lint: riseup.tasks.lintmd,
-    coverage: riseup.tasks.coverage,
+    build: exec('npm', ['run', 'build', '-ws']),
     commit: riseup.tasks.commit,
-    release: context({ args: ['--no-verify'] }, riseup.tasks.release),
+    coverage: riseup.tasks.coverage,
+    release: exec('lerna', ['version', '--no-push', '--conventional-commits']),
     distribute: riseup.tasks.distribute,
     validate: series(
-      exec('lerna', ['link']),
-      context({ args: ['validate'] }, riseup.tasks.run),
-      create(() => tasks.version)
+      create(() => tasks.checks),
+      exec('npm', ['run', 'validate', '-ws'])
     ),
     /* Hooks */
-    postinstall: series(
-      exec('lerna', ['bootstrap', '--ci']),
-      create(() => tasks.build)
-    ),
+    postinstall: create(() => tasks.build),
     version: series(
-      create(() => tasks.lint),
+      create(() => tasks.checks),
+      exec('npm', ['run', 'version', '-ws'])
+    ),
+    /* Reusable */
+    checks: series(
       create(() => tasks.coverage),
       lift({ purge: true, mode: 'audit' }, () => tasks),
-      catches({ level: 'silent' }, exec('npm', ['outdated'])),
-      exec('git', ['add', '.'])
+      catches({ level: 'silent' }, exec('npm', ['audit']))
     )
   };
   return tasks;

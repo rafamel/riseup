@@ -1,43 +1,44 @@
 {
-  "name": "monorepo-template",
-  "description": "Riseup monorepo template",
+  "name": "@riseup/monorepo-template",
+  "description": "A riseup monorepo template",
   "version": "0.0.0",
-  "author": "Rafa Mel",
-  "license": "MIT",
+  "author": "rafamel",
+  "license": "UNLICENSED",
   "private": true,
   "publishConfig": {
     "access": "restricted"
   },
   "keywords": [],
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
-    "run": "kpo run --",
-    "execute": "kpo execute --",
     "build": "kpo build --",
-    "lint": "kpo lint --",
-    "coverage": "kpo coverage --",
     "commit": "kpo commit --",
+    "coverage": "kpo coverage --",
     "release": "kpo release --",
     "distribute": "kpo distribute --",
     "validate": "kpo validate --",
     "postinstall": "kpo postinstall --",
-    "version": "kpo version --"
+    "version": "kpo version --",
+    "checks": "kpo checks --"
   },
-  "homepage": "https://github.com/rafamel/monorepo-template",
+  "homepage": "https://github.com/rafamel/riseup",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafamel/monorepo-template"
+    "url": "git+https://github.com/rafamel/riseup.git"
   },
   "bugs": {
-    "url": "https://github.com/rafamel/monorepo-template/issues"
+    "url": "https://github.com/rafamel/riseup/issues"
   },
   "devDependencies": {
-    "@riseup/monorepo": "file:../../packages/monorepo/tarball.tgz",
+    "@lerna-lite/version": "^3.6.0",
     "@riseup/universal": "file:../../packages/universal/tarball.tgz",
     "@riseup/utils": "file:../../packages/utils/tarball.tgz",
-    "kpo": "^0.23.2",
-    "lerna": "^5.0.0"
+    "kpo": "^0.26.0"
   }
 }
