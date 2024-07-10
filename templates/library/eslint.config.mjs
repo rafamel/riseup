@@ -1,5 +1,4 @@
 import afc from '@antfu/eslint-config';
-import jest from 'eslint-plugin-jest';
 import prettier from 'eslint-plugin-prettier/recommended';
 
 export default afc({
@@ -14,13 +13,12 @@ export default afc({
   jsonc: true,
   markdown: true,
   /* Frameworks & Libraries */
-  test: false,
+  test: true,
   react: false,
   stylistic: false
 }).then((opts) => [
   ...opts,
   prettier,
-  jest.configs['flat/recommended'],
   {
     rules: {
       /* ROOT */
@@ -37,7 +35,9 @@ export default afc({
       'ts/no-namespace': [
         2,
         { allowDeclarations: true, allowDefinitionFiles: true }
-      ]
+      ],
+      /* Test */
+      'test/consistent-test-it': [2, { fn: 'test' }]
     }
   }
 ]);
