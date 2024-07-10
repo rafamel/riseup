@@ -1,10 +1,8 @@
 import process from 'node:process';
-import { convert } from 'tsconfig-to-swcconfig';
 
 import project from './project.config.mjs';
 
 const extensions = project.extensions;
-const swc = convert();
 export default async () => ({
   /* Root Paths  */
   roots: ['<rootDir>/../src/', '<rootDir>/../test/'],
@@ -43,31 +41,16 @@ export default async () => ({
   ],
   /* Transforms */
   transformIgnorePatterns: [],
+  moduleNameMapper: await import('jest-module-name-mapper').then((nm) => {
+    return nm.default.default();
+  }),
   transform: {
     [`^.+\\.(${extensions.source.concat(extensions.content).join('|')})$`]: [
-      '@swc/jest',
+      'jest-esbuild',
       {
-        ...swc,
-        $schema: 'https://swc.rs/schema.json',
-        minify: false,
-        sourceMaps: 'inline',
-        module: {
-          ...swc.module,
-          type: 'es6',
-          resolveFully: false,
-          ignoreDynamic: false
-        },
-        env: {
-          ...swc.env,
-          targets: 'Node >= ' + process.version.split(/v|\./).at(1)
-        },
-        jsc: {
-          ...swc.jsc,
-          target: null,
-          keepClassNames: true,
-          externalHelpers: false,
-          preserveAllComments: true
-        }
+        format: 'cjs',
+        target: 'node' + process.version.split(/v|\./).at(1),
+        supported: { 'dynamic-import': false }
       }
     ]
   }
