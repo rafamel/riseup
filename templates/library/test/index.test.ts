@@ -1,5 +1,7 @@
 import { expect, test } from 'vitest';
 
-test(`description`, () => {
-  expect(true).toBe(true);
+import { main } from '@/index';
+
+test(`doesn't error`, async () => {
+  await expect(main()).resolves.not.toThrow();
 });
