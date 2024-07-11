@@ -39,6 +39,6 @@
     "@lerna-lite/version": "^3.6.0",
     "@riseup/universal": "file:../../packages/universal/tarball.tgz",
     "@riseup/utils": "file:../../packages/utils/tarball.tgz",
-    "kpo": "^0.26.0"
+    "kpo": "^0.27.0"
   }
 }
