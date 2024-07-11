@@ -10,8 +10,15 @@ export default recreate({ announce: true }, () => {
     build: exec('tsup', ['--config', './config/tsup.config.mts']),
     tarball: riseup.tasks.tarball,
     docs: exec('typedoc', ['--options', './config/typedoc.config.json']),
-    lint: finalize(exec('eslint', ['.']), exec('tsc', ['--noEmit'])),
-    fix: exec('eslint', ['.', '--fix']),
+    lint: finalize(
+      exec('eslint', ['.']),
+      exec('tsc', ['--noEmit']),
+      exec('prettier', ['.', '--log-level', 'warn', '--cache', '--check'])
+    ),
+    fix: series(
+      exec('eslint', ['.', '--fix']),
+      exec('prettier', ['.', '--log-level', 'warn', '--write'])
+    ),
     test: exec('vitest', ['run', '-c', './config/vitest.config.mts']),
     'test:watch': exec('vitest', ['watch', '-c', './config/vitest.config.mts']),
     benchmark: exec('vitest', ['bench', '-c', './config/vitest.config.mts']),

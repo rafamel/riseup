@@ -1,5 +1,4 @@
 import afc from '@antfu/eslint-config';
-import prettier from 'eslint-plugin-prettier/recommended';
 
 export default afc({
   /* Files */
@@ -18,7 +17,6 @@ export default afc({
   stylistic: false
 }).then((opts) => [
   ...opts,
-  prettier,
   {
     rules: {
       /* ROOT */
