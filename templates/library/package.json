@@ -27,8 +27,6 @@
     "lint": "kpo lint --",
     "fix": "kpo fix --",
     "test": "kpo test --",
-    "test:watch": "kpo test:watch --",
-    "benchmark": "kpo benchmark --",
     "commit": "kpo commit --",
     "release": "kpo release --",
     "distribute": "kpo distribute --",
