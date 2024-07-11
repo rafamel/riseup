@@ -19,7 +19,7 @@ export default recreate({ announce: true }, () => {
       exec('eslint', ['.', '--fix']),
       exec('prettier', ['.', '--log-level', 'warn', '--write'])
     ),
-    test: exec('vitest', ['run', '-c', './config/vitest.config.mts']),
+    test: exec('vitest', ['-c', './config/vitest.config.mts']),
     commit: riseup.tasks.commit,
     release: riseup.tasks.release,
     distribute: riseup.tasks.distribute,
