@@ -18,7 +18,10 @@ export default (build) => {
       validate: series(
         create(() => tasks.lint),
         create(() => tasks.test),
-        lift({ purge: true, mode: 'audit' }, () => tasks),
+        lift(
+          { purge: true, mode: 'audit', bin: '../node_modules/.bin/kpo' },
+          () => tasks
+        ),
         catches({ level: 'silent' }, exec('npm', ['outdated']))
       ),
       /* Hooks */
