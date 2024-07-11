@@ -26,6 +26,17 @@ export default afc({
         1,
         { terms: ['fixme', 'todo', 'refactor', 'xxx'] }
       ],
+      /* Import */
+      'import/order': [
+        2,
+        {
+          groups: [
+            ...['builtin', 'external'],
+            ...['internal', 'parent', 'sibling', 'index']
+          ],
+          pathGroups: [{ pattern: '@/**', group: 'internal' }]
+        }
+      ],
       /* JSONC */
       'jsonc/sort-keys': 0,
       /* Typescript */
