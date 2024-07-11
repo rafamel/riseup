@@ -1,4 +1,9 @@
 {
-  "version": "0.21.0",
-  "packages": ["cli", "universal", "utils", "web"]
+  "version": "0.22.0",
+  "packages": [
+    "cli",
+    "universal",
+    "utils",
+    "web"
+  ]
 }

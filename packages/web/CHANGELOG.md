@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/rafamel/riseup/compare/v0.21.0...v0.22.0) (2024-07-11)
+
+
+### Bug Fixes
+
+* **packages:** update dependencies ([7ba8841](https://github.com/rafamel/riseup/commit/7ba8841e351d0a2c1c698305e3b72c85844fc29c))
+* **packages:** update dependencies ([0f96337](https://github.com/rafamel/riseup/commit/0f963370f04664290fffcc4886fe8956f55530c6))
+* **packages:** update kpo version ([e9f6ad5](https://github.com/rafamel/riseup/commit/e9f6ad5ac3688141facab0efd155af4e2d315ee0))
+* **packages:** update kpo version ([f53b5fb](https://github.com/rafamel/riseup/commit/f53b5fb63885c1a86d90849c9ad06ee550a0ad03))
+* **packages:** update node version ([89d4e13](https://github.com/rafamel/riseup/commit/89d4e13a9767bb641ae5ce7e90e46e17f63915a8))
+
+
+### Code Refactoring
+
+* renames utils package to core and tooling to universal ([7e9caac](https://github.com/rafamel/riseup/commit/7e9caacc6c88265f5739ebd82ed7bd460ddb9574))
+* simplify project and remove main tooling tasks ([c62dc39](https://github.com/rafamel/riseup/commit/c62dc397800204f3dc507bfd9388dd15c696db46))
+
+
+### Features
+
+* **packages:** preset no longer has a configure field ([0f6d978](https://github.com/rafamel/riseup/commit/0f6d9782085475ac0d8bfe34e93f74527edc7d4f))
+
+
+### BREAKING CHANGES
+
+* **packages:** riseup supports node >= 22
+* **packages:** Preset class no longer has a configure field, and hence also lacks the retrieve and
+intercept methods
+* See commit description.
+* See commit description.
+
+
+
+
+
 # [0.21.0](https://github.com/rafamel/riseup/compare/v0.20.0...v0.21.0) (2022-06-01)
 
 

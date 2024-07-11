@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/rafamel/riseup/compare/v0.21.0...v0.22.0) (2024-07-11)
+
+
+### Bug Fixes
+
+* **packages/universal:** fix contents task asset copy ([9e835aa](https://github.com/rafamel/riseup/commit/9e835aa87b397bf1b5a9e9741a0ab2cc716469de))
+* **packages/universal:** fix tarball monorepo packages resolution ([bdea91d](https://github.com/rafamel/riseup/commit/bdea91d4fb968d3ef55bf10134305154400a84d9))
+* **packages/universal:** fix tarball task usage of kpo's edit ([b9df63b](https://github.com/rafamel/riseup/commit/b9df63bcde7d53876d8fa55754a0673adb7942a9))
+* **packages/universal:** release doesn't error when no git upstream is set ([8eea2ee](https://github.com/rafamel/riseup/commit/8eea2ee62e2177f6969812d22fe1f0acb2585b06))
+* **packages:** update dependencies ([7ba8841](https://github.com/rafamel/riseup/commit/7ba8841e351d0a2c1c698305e3b72c85844fc29c))
+* **packages:** update dependencies ([0f96337](https://github.com/rafamel/riseup/commit/0f963370f04664290fffcc4886fe8956f55530c6))
+* **packages:** update kpo version ([e9f6ad5](https://github.com/rafamel/riseup/commit/e9f6ad5ac3688141facab0efd155af4e2d315ee0))
+* **packages:** update kpo version ([f53b5fb](https://github.com/rafamel/riseup/commit/f53b5fb63885c1a86d90849c9ad06ee550a0ad03))
+* **packages:** update node version ([89d4e13](https://github.com/rafamel/riseup/commit/89d4e13a9767bb641ae5ce7e90e46e17f63915a8))
+
+
+### Code Refactoring
+
+* **packages:** cleanup core functions ([f19cc51](https://github.com/rafamel/riseup/commit/f19cc5142a2eb5356d5c517ac9d4efc538c8e670))
+* **packages:** use kpo's tmp instead of own getTmpDir ([cc3c4f9](https://github.com/rafamel/riseup/commit/cc3c4f90d696b560b9b7066980495b240afc44c9))
+* renames utils package to core and tooling to universal ([7e9caac](https://github.com/rafamel/riseup/commit/7e9caacc6c88265f5739ebd82ed7bd460ddb9574))
+* simplify project and remove main tooling tasks ([c62dc39](https://github.com/rafamel/riseup/commit/c62dc397800204f3dc507bfd9388dd15c696db46))
+
+
+### Features
+
+* make coverage merge independent of monorepo setups ([0a0f493](https://github.com/rafamel/riseup/commit/0a0f4931b703dabe835e0816c5f67625f6dc61a2))
+* **packages/universal:** add confirmation and select prompts to release ([1859c90](https://github.com/rafamel/riseup/commit/1859c90c674f0306b5956f27848697a0f461df5b))
+* **packages/universal:** add contents task ([0c7791d](https://github.com/rafamel/riseup/commit/0c7791d03c447b7a634e54dbce3ffa4ae7097f88))
+* **packages/universal:** distribute task takes a contents option ([e8a536c](https://github.com/rafamel/riseup/commit/e8a536c3326c4a5b352638faf9da7f7982223397))
+* **packages/universal:** handle monorepo workspaces when recreating a project for tarball ([f7d5c23](https://github.com/rafamel/riseup/commit/f7d5c233db8b6636ba5d9b9ff2e277760b6b1588))
+* **packages/universal:** implement release for monorepos ([235a84c](https://github.com/rafamel/riseup/commit/235a84c0e1afa385a3d153f851fcc4cb275039c8))
+* **packages/universal:** remove package option from tarball task in favor of contents ([8d1bde0](https://github.com/rafamel/riseup/commit/8d1bde0146a590e072062e1d938ed3ea951fbf14))
+* **packages:** preset no longer has a configure field ([0f6d978](https://github.com/rafamel/riseup/commit/0f6d9782085475ac0d8bfe34e93f74527edc7d4f))
+* **packages:** use npm workspaces instead of lerna ([a700ebc](https://github.com/rafamel/riseup/commit/a700ebccb822c1be02db27331686beb56968941e))
+
+
+### BREAKING CHANGES
+
+* **packages/universal:** the tarball task no longer has a package option
+* **packages:** utils package doesn't export getTmpDir
+* **packages:** riseup supports node >= 22
+* **packages:** Preset class no longer has a configure field, and hence also lacks the retrieve and
+intercept methods
+* **packages:** no longer using lerna for monorepos
+* **packages:** core/utils package doesn't export certain functions anymore; review the current
+documentation
+* coverage input files are now globs relative to where the task is running, not the
+monorepo packages
+* See commit description.
+* See commit description.
+
+
+
+
+
 # [0.21.0](https://github.com/rafamel/riseup/compare/v0.20.0...v0.21.0) (2022-06-01)
 
 
