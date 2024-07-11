@@ -35,6 +35,6 @@ export default new Universal({
     // Package registry
     registry: null,
     // Subdirectory to publish
-    contents: 'build'
+    contents: null
   }
 });
