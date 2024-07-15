@@ -1,9 +1,11 @@
+import path from 'node:path';
+
 import afc from '@antfu/eslint-config';
 
 export default afc({
   /* Files */
   ignores: ['docs/*'],
-  gitignore: true,
+  gitignore: { files: path.join(import.meta.dirname, '.gitignore') },
   /* Languages & Features */
   javascript: true,
   typescript: true,
