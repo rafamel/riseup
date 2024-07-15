@@ -1,3 +1,5 @@
+import process from 'node:process';
+
 import { TypeGuard } from 'type-core';
 import { type Task, create, exec } from 'kpo';
 

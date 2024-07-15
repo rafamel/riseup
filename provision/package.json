@@ -1,0 +1,28 @@
+{
+  "name": "@riseup/provision",
+  "version": "0.0.0",
+  "author": "rafamel",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "keywords": [],
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "homepage": "https://github.com/rafamel/riseup",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafamel/riseup.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "devDependencies": {
+    "@riseup/universal": "^0.22.0",
+    "@riseup/utils": "^0.22.0",
+    "kpo": "^0.27.0"
+  }
+}

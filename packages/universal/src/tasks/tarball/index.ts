@@ -40,11 +40,11 @@ export function tarball(params: TarballParams | null): Task.Async {
     opts.monorepo === true
       ? { contents: './', noPrivate: false }
       : opts.monorepo
-      ? {
-          contents: opts.monorepo.contents || './',
-          noPrivate: opts.monorepo.noPrivate || false
-        }
-      : null;
+        ? {
+            contents: opts.monorepo.contents || './',
+            noPrivate: opts.monorepo.noPrivate || false
+          }
+        : null;
 
   const task = series(
     opts.contents &&

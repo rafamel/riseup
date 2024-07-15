@@ -2,7 +2,7 @@
   "name": "@riseup/universal",
   "description": "Riseup universal tasks and configurations",
   "version": "0.22.0",
-  "author": "Rafa Mel",
+  "author": "rafamel",
   "license": "MIT",
   "private": false,
   "publishConfig": {
@@ -19,25 +19,30 @@
     "node": ">=22"
   },
   "scripts": {
-    "node": "../node_modules/.bin/kpo node --",
-    "build": "../node_modules/.bin/kpo build --",
-    "docs": "../node_modules/.bin/kpo docs --",
-    "fix": "../node_modules/.bin/kpo fix --",
-    "lint": "../node_modules/.bin/kpo lint --",
-    "test": "../node_modules/.bin/kpo test --",
-    "commit": "../node_modules/.bin/kpo commit --",
-    "release": "../node_modules/.bin/kpo release --",
-    "distribute": "../node_modules/.bin/kpo distribute --",
-    "validate": "../node_modules/.bin/kpo validate --",
-    "version": "../node_modules/.bin/kpo version --"
+    "start": "../../provision/node_modules/.bin/kpo start --",
+    "watch": "../../provision/node_modules/.bin/kpo watch --",
+    "build": "../../provision/node_modules/.bin/kpo build --",
+    "lint": "../../provision/node_modules/.bin/kpo lint --",
+    "fix": "../../provision/node_modules/.bin/kpo fix --",
+    "test": "../../provision/node_modules/.bin/kpo test --",
+    "commit": "../../provision/node_modules/.bin/kpo commit --",
+    "release": "../../provision/node_modules/.bin/kpo release --",
+    "distribute": "../../provision/node_modules/.bin/kpo distribute --",
+    "validate": "../../provision/node_modules/.bin/kpo validate --",
+    "version": "../../provision/node_modules/.bin/kpo version --"
   },
   "homepage": "https://github.com/rafamel/riseup/tree/master/packages/universal",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafamel/riseup"
+    "url": "git+https://github.com/rafamel/riseup.git"
   },
   "bugs": {
     "url": "https://github.com/rafamel/riseup/issues"
+  },
+  "devDependencies": {
+    "@types/common-tags": "^1.8.0",
+    "@types/node": "^20.14.10",
+    "@types/semver": "^7.3.5"
   },
   "dependencies": {
     "@release-it-plugins/workspaces": "^4.2.0",
@@ -48,16 +53,11 @@
     "commitizen": "^4.2.3",
     "common-tags": "^1.8.0",
     "cz-conventional-changelog": "^3.2.0",
-    "glob": "^11.0.0",
     "is-git-dirty": "^2.0.1",
     "kpo": "^0.27.0",
     "lcov-result-merger": "^5.0.1",
     "release-it": "^17.5.0",
     "semver": "^7.3.5",
     "type-core": "^0.13.0"
-  },
-  "devDependencies": {
-    "@types/common-tags": "^1.8.0",
-    "@types/semver": "^7.3.5"
   }
 }

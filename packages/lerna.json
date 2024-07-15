@@ -1,9 +1,5 @@
 {
   "version": "0.22.0",
-  "packages": [
-    "cli",
-    "universal",
-    "utils",
-    "web"
-  ]
+  "useWorkspaces": true,
+  "changelogPreset": "angular"
 }

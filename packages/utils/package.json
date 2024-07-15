@@ -2,7 +2,7 @@
   "name": "@riseup/utils",
   "description": "The core set of shared riseup utilities",
   "version": "0.22.0",
-  "author": "Rafa Mel",
+  "author": "rafamel",
   "license": "MIT",
   "private": false,
   "publishConfig": {
@@ -19,22 +19,22 @@
     "node": ">=22"
   },
   "scripts": {
-    "node": "../node_modules/.bin/kpo node --",
-    "build": "../node_modules/.bin/kpo build --",
-    "docs": "../node_modules/.bin/kpo docs --",
-    "fix": "../node_modules/.bin/kpo fix --",
-    "lint": "../node_modules/.bin/kpo lint --",
-    "test": "../node_modules/.bin/kpo test --",
-    "commit": "../node_modules/.bin/kpo commit --",
-    "release": "../node_modules/.bin/kpo release --",
-    "distribute": "../node_modules/.bin/kpo distribute --",
-    "validate": "../node_modules/.bin/kpo validate --",
-    "version": "../node_modules/.bin/kpo version --"
+    "start": "../../provision/node_modules/.bin/kpo start --",
+    "watch": "../../provision/node_modules/.bin/kpo watch --",
+    "build": "../../provision/node_modules/.bin/kpo build --",
+    "lint": "../../provision/node_modules/.bin/kpo lint --",
+    "fix": "../../provision/node_modules/.bin/kpo fix --",
+    "test": "../../provision/node_modules/.bin/kpo test --",
+    "commit": "../../provision/node_modules/.bin/kpo commit --",
+    "release": "../../provision/node_modules/.bin/kpo release --",
+    "distribute": "../../provision/node_modules/.bin/kpo distribute --",
+    "validate": "../../provision/node_modules/.bin/kpo validate --",
+    "version": "../../provision/node_modules/.bin/kpo version --"
   },
   "homepage": "https://github.com/rafamel/riseup/tree/master/packages/utils",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafamel/riseup"
+    "url": "git+https://github.com/rafamel/riseup.git"
   },
   "bugs": {
     "url": "https://github.com/rafamel/riseup/issues"

@@ -1,10 +1,1 @@
-import tasks from '../kpo.packages.mjs';
-
-export default tasks([
-  {
-    entries: {
-      index: 'src/index.ts',
-      riseup: 'src/riseup.ts'
-    }
-  }
-]);
+export { default } from '../../provision/package.kpo.mjs';

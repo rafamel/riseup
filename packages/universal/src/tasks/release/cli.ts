@@ -61,10 +61,7 @@ export function cli(cb: (options: CLIOptions) => Task): Task {
         raises(new Error(`Unknown subcommand: ${cmd._[1]}`))
       );
     }
-    if (
-      ![...bumps, null].includes(opts.bump) &&
-      !/^\d+\.\d+\.\d+(-.+)?$/.test(opts.bump || '')
-    ) {
+    if (![...bumps, null].includes(opts.bump)) {
       return series(
         print(help + '\n'),
         raises(new Error(`Invalid version bump: ${opts.bump}`))

@@ -1,3 +1,1 @@
-import tasks from '../kpo.packages.mjs';
-
-export default tasks([null]);
+export { default } from '../../provision/package.kpo.mjs';

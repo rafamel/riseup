@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 const USER_AGENTS = {
   default: 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116',
   eot: 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)',
@@ -58,14 +60,14 @@ async function downloadAsset(
 }
 
 async function handleCssUrls(css: string, agent: string): Promise<string> {
-  const regex = /url\([^)]*\)/gm;
+  const regex = /url\([^)]*\)/g;
   const matches = [...css.matchAll(regex)]
     .map((x) => x[0])
     .filter((x, i, arr) => arr.indexOf(x) === i)
     .map((text) => ({
       text,
       pattern: text.replace(/[$()*+./?[\\\]^{|}]/g, '\\$&'),
-      url: text.replace(/url\(["']{0,1}/, '').replace(/["']{0,1}\)/, '')
+      url: text.replace(/url\(["']?/, '').replace(/["']?\)/, '')
     }));
 
   const items = await Promise.all(

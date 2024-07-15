@@ -4,13 +4,12 @@ import { URL } from 'node:url';
 import { resolveBin, resolveModule } from '@riseup/utils';
 
 const url = new URL(import.meta.url);
-
 export const paths = {
   conventionalChangelogDir: path.resolve(
     resolveModule('cz-conventional-changelog/package.json', url),
     '../'
   ),
-  commitizenBin: resolveModule('./commitizen-bin.js', url),
+  commitizenBin: resolveModule('./provides/commitizen-bin.js', url),
   commitizenDir: path.resolve(
     resolveModule('commitizen/package.json', url),
     '../'

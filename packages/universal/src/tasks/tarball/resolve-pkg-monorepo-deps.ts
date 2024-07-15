@@ -4,7 +4,7 @@ import path from 'node:path';
 import semver from 'semver';
 
 import {
-  PackageInformation,
+  type PackageInformation,
   fetchMonorepoPackages,
   getMonorepoRootDir
 } from '@riseup/utils';

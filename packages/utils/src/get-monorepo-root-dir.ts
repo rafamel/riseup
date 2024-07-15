@@ -1,3 +1,4 @@
+/* eslint-disable ts/no-use-before-define */
 import path from 'node:path';
 
 import { minimatch } from 'minimatch';

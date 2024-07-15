@@ -1,4 +1,5 @@
 import path from 'node:path';
+import process from 'node:process';
 
 import { type Task, create, exec, print } from 'kpo';
 

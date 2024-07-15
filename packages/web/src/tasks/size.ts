@@ -1,4 +1,5 @@
 import path from 'node:path';
+import process from 'node:process';
 
 import { TypeGuard } from 'type-core';
 import { type Task, create, exec, log, print, series } from 'kpo';

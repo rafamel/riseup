@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { URL } from 'node:url';
+import type { URL } from 'node:url';
 
 import { TypeGuard } from 'type-core';
 import { findUpSync } from 'find-up';
@@ -48,8 +48,8 @@ export function resolveBin(lib: string, bin: string, from: URL): string {
       ? pkg.bin
       : null
     : TypeGuard.isRecord(pkg.bin)
-    ? pkg.bin[bin] || null
-    : null;
+      ? pkg.bin[bin] || null
+      : null;
 
   if (file === null) {
     throw new Error(`Executable ${bin} not found for ${lib}`);

@@ -4,7 +4,6 @@ import { URL, fileURLToPath } from 'node:url';
 import { resolveBin } from '@riseup/utils';
 
 const url = new URL(import.meta.url);
-
 export const paths = {
   rootDir: path.resolve(fileURLToPath(url), '../'),
   sizeLimitBin: resolveBin('size-limit', 'size-limit', url),
@@ -13,5 +12,5 @@ export const paths = {
     'source-map-explorer',
     url
   ),
-  faviconSvg: path.resolve(fileURLToPath(url), '../static/favicon.svg')
+  faviconSvg: path.resolve(fileURLToPath(url), '../../static/favicon.svg')
 };
