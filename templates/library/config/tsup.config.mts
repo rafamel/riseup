@@ -21,7 +21,7 @@ export default async (): Promise<Options> => ({
   watch: false,
   minify: false,
   bundle: true,
-  sourcemap: true,
+  sourcemap: 'inline',
   splitting: true,
   skipNodeModulesBundle: true,
   esbuildPlugins: [
