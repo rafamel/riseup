@@ -1,11 +1,10 @@
 import path from 'node:path';
+import { spawn } from 'node:child_process';
 
 import type { Options } from 'tsup';
-import { exec, run } from 'kpo';
 import { glob } from 'glob';
 
 import project from './project.config.mjs';
-import riseup from './riseup.config.mjs';
 
 const extensions = project.extensions;
 const destination = project.build.destination;
@@ -40,17 +39,19 @@ export default async (): Promise<Options> => ({
   ],
   plugins: [
     {
-      name: 'contents',
-      buildStart: () => run(null, riseup.tasks.contents)
-    },
-    {
       name: 'paths-resolve',
       buildEnd() {
-        const task = exec('tsc-alias', [
+        const ps = spawn('tsc-alias', [
           ...['--project', './tsconfig.json', '--outDir', this.options.outDir],
-          ...['--resolve-full-paths']
+          '--resolve-full-paths'
         ]);
-        return run(null, task);
+        return new Promise((resolve, reject) => {
+          ps.once('error', (err) => reject(err));
+          ps.once('exit', (code) => {
+            if (code) reject(new Error(`tsc-alias exit with code: ${code}`));
+            else resolve();
+          });
+        });
       }
     }
   ]

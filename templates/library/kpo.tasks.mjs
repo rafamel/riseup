@@ -7,7 +7,10 @@ export default recreate({ announce: true }, () => {
   const tasks = {
     start: exec('node', [project.build.destination]),
     watch: exec('tsx', ['--watch', './src']),
-    build: exec('tsup', ['--config', './config/tsup.config.mts']),
+    build: series(
+      riseup.tasks.contents,
+      exec('tsup', ['--config', './config/tsup.config.mts'])
+    ),
     tarball: riseup.tasks.tarball,
     docs: exec('typedoc', ['--options', './config/typedoc.config.json']),
     lint: finalize(
