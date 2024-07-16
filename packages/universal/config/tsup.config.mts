@@ -4,7 +4,7 @@ import { spawn } from 'node:child_process';
 import type { Options } from 'tsup';
 import { glob } from 'glob';
 
-import project from '../../../provision/package.project.mjs';
+import project from './project.config.mjs';
 
 const extensions = project.extensions;
 const destination = project.build.destination;

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-import project from '../../../provision/package.project.mjs';
+import project from './project.config.mjs';
 
 const extensions = project.extensions;
 export default defineConfig({

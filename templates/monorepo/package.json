@@ -41,7 +41,7 @@
     "@riseup/universal": "file:../../packages/universal/tarball.tgz",
     "@riseup/utils": "file:../../packages/utils/tarball.tgz",
     "eslint": "^8.57.0",
-    "kpo": "^0.27.0",
+    "kpo": "^0.28.0",
     "prettier": "^3.3.2"
   }
 }
