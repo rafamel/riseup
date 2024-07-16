@@ -54,7 +54,7 @@
     "common-tags": "^1.8.0",
     "cz-conventional-changelog": "^3.2.0",
     "is-git-dirty": "^2.0.1",
-    "kpo": "^0.27.0",
+    "kpo": "^0.28.0",
     "lcov-result-merger": "^5.0.1",
     "release-it": "^17.5.0",
     "semver": "^7.3.5",
