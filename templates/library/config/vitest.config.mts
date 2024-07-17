@@ -9,7 +9,7 @@ export default defineConfig({
   test: {
     /* Run options */
     watch: false,
-    reporters: ['verbose'],
+    reporters: ['basic'],
     passWithNoTests: true,
     /* Setup */
     setupFiles: [],
