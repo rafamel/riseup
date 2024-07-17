@@ -43,11 +43,13 @@ export default afc({
       'jsonc/sort-keys': 0,
       /* Typescript */
       'ts/no-redeclare': 0,
+      'ts/consistent-type-definitions': 0,
       'ts/no-namespace': [
         2,
         { allowDeclarations: true, allowDefinitionFiles: true }
       ],
       /* Test */
+      'test/prefer-lowercase-title': 0,
       'test/consistent-test-it': [2, { fn: 'test' }]
     }
   }
