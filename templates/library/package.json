@@ -45,22 +45,22 @@
     "@antfu/eslint-config": "^2.21.1",
     "@riseup/universal": "file:../../packages/universal/tarball.tgz",
     "@riseup/utils": "file:../../packages/utils/tarball.tgz",
-    "@types/node": "^20.14.10",
-    "@vitest/coverage-v8": "^2.0.2",
+    "@types/node": "^20.14.11",
+    "@vitest/coverage-v8": "^2.0.3",
     "eslint": "^8.57.0",
     "glob": "^11.0.0",
     "kpo": "^0.28.0",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "tsc-alias": "^1.8.10",
-    "tsup": "^8.1.0",
+    "tsup": "^8.1.1",
     "tsx": "^4.16.2",
     "typedoc": "^0.26.4",
     "typedoc-plugin-missing-exports": "^3.0.0",
     "typescript": "^5.5.3",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.0.2"
+    "vitest": "^2.0.3"
   },
   "dependencies": {
-    "es-toolkit": "^1.9.0"
+    "es-toolkit": "^1.10.1"
   }
 }
