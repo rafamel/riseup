@@ -14,23 +14,15 @@ export default Promise.resolve(defaults)
         commit,
         coverage,
         release: exec('lerna', [
-          'version',
-          '--no-push',
-          '--conventional-commits'
+          ...['version', '--no-push', '--conventional-commits'],
+          ...['--concurrency', '1']
         ]),
         distribute,
         validate: series(
-          create(() => tasks.checks),
+          create(() => tasks['validate:root']),
           exec('npm', ['run', 'validate', '-ws'])
         ),
-        /* Hooks */
-        postinstall: create(() => tasks.build),
-        version: series(
-          create(() => tasks.checks),
-          exec('npm', ['run', 'version', '-ws'])
-        ),
-        /* Reusable */
-        checks: series(
+        'validate:root': series(
           create(() => tasks.coverage),
           lift(
             {
@@ -41,6 +33,11 @@ export default Promise.resolve(defaults)
             () => tasks
           ),
           catches({ level: 'silent' }, exec('npm', ['audit']))
+        ),
+        /* Hooks */
+        version: series(
+          create(() => tasks['validate:root']),
+          exec('npm', ['run', 'version', '-ws'])
         )
       };
       return recreate({ announce: true }, tasks);

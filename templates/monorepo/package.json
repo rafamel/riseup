@@ -23,9 +23,9 @@
     "release": "kpo release --",
     "distribute": "kpo distribute --",
     "validate": "kpo validate --",
+    "validate:root": "kpo validate:root --",
     "postinstall": "kpo postinstall --",
-    "version": "kpo version --",
-    "checks": "kpo checks --"
+    "version": "kpo version --"
   },
   "homepage": "https://github.com/rafamel/riseup",
   "repository": {

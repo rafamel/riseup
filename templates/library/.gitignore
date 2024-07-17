@@ -1,3 +1,17 @@
+# Project Specific #
+####################
+lib
+pkg
+out
+dist
+build
+vendor
+deploy
+public
+coverage
+_test*
+!**/deps/*.tgz
+
 # Environment Variables #
 #########################
 .env
@@ -59,17 +73,3 @@ yarn-error.log*
 .Trashes
 Thumbs.db
 ehthumbs.db
-
-# Project Specific #
-####################
-lib
-pkg
-out
-dist
-build
-vendor
-deploy
-public
-coverage
-_test*
-!**/deps/*.tgz

@@ -14,7 +14,10 @@ export default Promise.resolve(defaults)
         exec('tsup', ['--config', './config/tsup.config.mts'])
       ),
       tarball,
-      docs: exec('typedoc', ['--options', './config/typedoc.config.json']),
+      docs: exec('typedoc', [
+        ...['--out', './docs'],
+        ...['--options', './config/typedoc.config.json']
+      ]),
       lint: finalize(
         exec('eslint', ['.']),
         exec('tsc', ['--noEmit']),
