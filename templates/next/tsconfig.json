@@ -39,14 +39,12 @@
     "alwaysStrict": true,
     // Don't transform/elide imports/exports not marked as type-only.
     "verbatimModuleSyntax": true,
+
     /* Type Checking */
     // Specify files to include.
     "lib": [
       "ES2022",
-      "ES2023.Array",
-      "DOM",
-      "DOM.Iterable",
-      "DOM.AsyncIterable"
+      "ES2023.Array" /* "DOM", "DOM.Iterable", "DOM.AsyncIterable" */
     ],
     // Specify type declaration files to include.
     "types": [],
@@ -92,6 +90,7 @@
     "noImplicitReturns": false,
     // Error for fallthrough cases in switch statement.
     "noFallthroughCasesInSwitch": false,
+
     /* Emit Types */
     "noEmit": true,
     // Do not emit comments to output.
