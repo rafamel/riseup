@@ -19,8 +19,8 @@ export default Promise.resolve(defaults)
         ]),
         distribute,
         validate: series(
-          create(() => tasks['validate:root']),
-          exec('npm', ['run', 'validate', '-ws'])
+          exec('npm', ['run', 'validate', '-ws']),
+          create(() => tasks['validate:root'])
         ),
         'validate:root': series(
           create(() => tasks.coverage),
