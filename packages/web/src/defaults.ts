@@ -13,7 +13,7 @@ export const defaults: Deep.Required<Web.Options> = {
       logo: paths.faviconSvg,
       options: null
     },
-    result: {
+    summary: {
       url: null,
       path: null,
       values: null

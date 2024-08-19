@@ -32,7 +32,7 @@ export interface AssetsParams {
   copy?: string[] | null;
   fonts?: null | AssetsParamsFont;
   favicons?: null | AssetsParamsFavicons;
-  result?: null | AssetsParamsResult;
+  summary?: null | AssetsParamsSummary;
 }
 
 export type AssetsParamsFont =
@@ -44,7 +44,7 @@ export interface AssetsParamsFavicons {
   options?: FaviconOptions | null;
 }
 
-export interface AssetsParamsResult {
+export interface AssetsParamsSummary {
   url?: string | null;
   path?: string | null;
   values?: Serial.Type | null;
@@ -59,7 +59,7 @@ export function assets(params: AssetsParams | null): Task.Async {
     copy: params?.copy || defaults.assets.copy,
     fonts: params?.fonts || defaults.assets.fonts,
     favicons: params?.favicons || defaults.assets.favicons,
-    result: params?.result || defaults.assets.result
+    summary: params?.summary || defaults.assets.summary
   };
 
   return create((ctx) => {
@@ -71,9 +71,11 @@ export function assets(params: AssetsParams | null): Task.Async {
     const copyOpts = opts.copy;
     const fontsOpts = opts.fonts;
     const faviconsOpts = opts.favicons;
-    const resultOpts = opts.result;
+    const summaryOpts = opts.summary;
 
-    const result: Dictionary = resultOpts ? { values: resultOpts.values } : {};
+    const summary: Dictionary = summaryOpts
+      ? { values: summaryOpts.values }
+      : {};
 
     return series(
       opts.clean
@@ -96,10 +98,10 @@ export function assets(params: AssetsParams | null): Task.Async {
         ? progress(
             { message: 'Download fonts' },
             create(async (ctx) => {
-              result.fonts = await runFonts(
+              summary.fonts = await runFonts(
                 ctx,
                 destination,
-                (opts.result && opts.result.url) || null,
+                (opts.summary && opts.summary.url) || null,
                 fontsOpts
               );
             })
@@ -109,26 +111,26 @@ export function assets(params: AssetsParams | null): Task.Async {
         ? progress(
             { message: 'Build icons and manifest' },
             create(async (ctx) => {
-              result.favicons = await runFavicons(
+              summary.favicons = await runFavicons(
                 ctx,
                 destination,
-                (opts.result && opts.result.url) || null,
+                (opts.summary && opts.summary.url) || null,
                 faviconsOpts
               );
             })
           )
         : print('No favicons to build'),
-      resultOpts
+      summaryOpts
         ? create(() => {
-            const filename = resultOpts.path
-              ? path.resolve(ctx.cwd, resultOpts.path)
-              : path.resolve(destination, 'result.json');
+            const filename = summaryOpts.path
+              ? path.resolve(ctx.cwd, summaryOpts.path)
+              : path.resolve(destination, 'summary.json');
             return series(
               mkdir(path.dirname(filename), { ensure: true }),
-              write(filename, result, { exists: 'overwrite' })
+              write(filename, summary, { exists: 'overwrite' })
             );
           })
-        : print('No result file to generate')
+        : print('No summary file to generate')
     );
   });
 }
@@ -188,8 +190,7 @@ async function runFavicons(
   options: AssetsParamsFavicons
 ): Promise<Dictionary<Dictionary[]>> {
   const urlPath = 'favicons-' + String(Math.random()).replace('.', '');
-  const urlPathRegex = new RegExp(urlPath, 'g');
-  const urlPathSlashRegex = new RegExp(urlPath + '\\/?', 'g');
+  const urlPathRegex = new RegExp('/?' + urlPath + '/?', 'g');
 
   const response: FaviconResponse = await faviconsFn(
     options.logo || Buffer.from(''),
@@ -206,7 +207,10 @@ async function runFavicons(
         });
       }),
       ...response.files.map((asset) => {
-        const content = String(asset.contents).replace(urlPathSlashRegex, '');
+        const content = String(asset.contents).replace(
+          urlPathRegex,
+          publicUrl ? `${publicUrl.replace(/\/$/, '')}/` : ''
+        );
 
         return write(path.join(destination, asset.name), content, {
           exists: 'overwrite'
@@ -215,10 +219,11 @@ async function runFavicons(
     )
   );
 
-  const html = response.html.map((x) => {
-    return publicUrl
-      ? x.replace(urlPathRegex, publicUrl.replace(/\/$/, ''))
-      : x.replace(urlPathSlashRegex, '');
+  const html = response.html.map((str) => {
+    return str.replace(
+      urlPathRegex,
+      publicUrl ? `${publicUrl.replace(/\/$/, '')}/` : ''
+    );
   });
 
   return faviconsHtmlToElements(html);
