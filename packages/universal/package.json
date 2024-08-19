@@ -1,7 +1,7 @@
 {
   "name": "@riseup/universal",
   "description": "Riseup universal tasks and configurations",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "author": "rafamel",
   "license": "MIT",
   "private": false,
@@ -46,7 +46,7 @@
   "dependencies": {
     "@release-it-plugins/workspaces": "^4.2.0",
     "@release-it/conventional-changelog": "^8.0.1",
-    "@riseup/utils": "^0.22.0",
+    "@riseup/utils": "^0.22.1",
     "arg": "^5.0.2",
     "cli-belt": "^2.0.0",
     "commitizen": "^4.2.3",

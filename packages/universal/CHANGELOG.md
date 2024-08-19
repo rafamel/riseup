@@ -3,8 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.22.0](https://github.com/rafamel/riseup/compare/v0.21.0...v0.22.0) (2024-07-11)
+## [0.22.1](https://github.com/rafamel/riseup/compare/v0.22.0...v0.22.1) (2024-08-19)
 
+### Bug Fixes
+
+* **packages/universal:** publish only packages with new versions in a monorepo ([ab99cb9](https://github.com/rafamel/riseup/commit/ab99cb94a32941078a5735d43ccae7e67acb7dbe))
+* **packages:** update dependencies ([1bd5a3c](https://github.com/rafamel/riseup/commit/1bd5a3c750b3b6ee8f61d08d25f10d3d5bbb4409))
+* **packages:** update kpo to v0.28.0 ([f14f909](https://github.com/rafamel/riseup/commit/f14f909e761bbc607f8601d0267510ad208a9f22))
+
+# [0.22.0](https://github.com/rafamel/riseup/compare/v0.21.0...v0.22.0) (2024-07-11)
 
 ### Bug Fixes
 
@@ -18,14 +25,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **packages:** update kpo version ([f53b5fb](https://github.com/rafamel/riseup/commit/f53b5fb63885c1a86d90849c9ad06ee550a0ad03))
 * **packages:** update node version ([89d4e13](https://github.com/rafamel/riseup/commit/89d4e13a9767bb641ae5ce7e90e46e17f63915a8))
 
-
 ### Code Refactoring
 
 * **packages:** cleanup core functions ([f19cc51](https://github.com/rafamel/riseup/commit/f19cc5142a2eb5356d5c517ac9d4efc538c8e670))
 * **packages:** use kpo's tmp instead of own getTmpDir ([cc3c4f9](https://github.com/rafamel/riseup/commit/cc3c4f90d696b560b9b7066980495b240afc44c9))
 * renames utils package to core and tooling to universal ([7e9caac](https://github.com/rafamel/riseup/commit/7e9caacc6c88265f5739ebd82ed7bd460ddb9574))
 * simplify project and remove main tooling tasks ([c62dc39](https://github.com/rafamel/riseup/commit/c62dc397800204f3dc507bfd9388dd15c696db46))
-
 
 ### Features
 
@@ -38,7 +43,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **packages/universal:** remove package option from tarball task in favor of contents ([8d1bde0](https://github.com/rafamel/riseup/commit/8d1bde0146a590e072062e1d938ed3ea951fbf14))
 * **packages:** preset no longer has a configure field ([0f6d978](https://github.com/rafamel/riseup/commit/0f6d9782085475ac0d8bfe34e93f74527edc7d4f))
 * **packages:** use npm workspaces instead of lerna ([a700ebc](https://github.com/rafamel/riseup/commit/a700ebccb822c1be02db27331686beb56968941e))
-
 
 ### BREAKING CHANGES
 
@@ -55,36 +59,24 @@ monorepo packages
 * See commit description.
 * See commit description.
 
-
-
-
-
 # [0.21.0](https://github.com/rafamel/riseup/compare/v0.20.0...v0.21.0) (2022-06-01)
-
 
 ### Bug Fixes
 
 * **packages/tooling:** Transpiler.resolve resolves externals; returns an object instead of a string ([bdc7bc3](https://github.com/rafamel/riseup/commit/bdc7bc396e0594a448e4fd28e08c62a0bf5bdfee))
 * **packages:** update dependencies ([d95b5a1](https://github.com/rafamel/riseup/commit/d95b5a108b659deb5d362f43d84b05fa889b4082))
 
-
 ### Features
 
 * **package/tooling:** soften jsx linter rules ([8dfd658](https://github.com/rafamel/riseup/commit/8dfd65856174c9e3d3bff98a088d1772fb17464a))
 * **packages/tooling:** simplify Transpiler.extensions and Builder.extensions api ([ab2ab8c](https://github.com/rafamel/riseup/commit/ab2ab8c4968dbf323d2a4fc249cf5aad8e9e0a8f))
-
 
 ### BREAKING CHANGES
 
 * **packages/tooling:** Transpiler.resolve returns an object instead of a string
 * **packages/tooling:** Transpiler.extensions and Builder.extensions methods non longer take any arguments
 
-
-
-
-
 # [0.20.0](https://github.com/rafamel/riseup/compare/v0.19.0...v0.20.0) (2022-05-30)
-
 
 ### Bug Fixes
 
@@ -98,23 +90,16 @@ monorepo packages
 * **packages/tooling:** use brute force approach on Transpile for cjs shims to prevent coverage reports ([b138b2b](https://github.com/rafamel/riseup/commit/b138b2bfa65ff92dd89599efcaade697fe5e23c5))
 * **packages:** enable .cts and .mts extensions as defaults ([37dc2ba](https://github.com/rafamel/riseup/commit/37dc2baa96ce77f5f8c6679546c40bddf83e9437))
 
-
 ### Features
 
 * **packages/tooling:** disable linter rule unicorn/no-useless-promise-resolve-reject ([8facc4b](https://github.com/rafamel/riseup/commit/8facc4b2c5e54184385984979e583e1e674c6acc))
 
-
-
-
-
 # [0.19.0](https://github.com/rafamel/riseup/compare/v0.18.0...v0.19.0) (2022-05-27)
-
 
 ### Bug Fixes
 
 * **packages/tooling:** fix json imports on jest ([ed62249](https://github.com/rafamel/riseup/commit/ed62249eefe854f0d86ee2381db2720437c71e14))
 * update dependencies ([675ade5](https://github.com/rafamel/riseup/commit/675ade5cc60898765cb1fefdcc56afecb141e31f))
-
 
 ### Features
 
@@ -122,76 +107,51 @@ monorepo packages
 * **package/tooling:** improve default eslint rules ([1741a67](https://github.com/rafamel/riseup/commit/1741a677d4a8ac93cc5ca4da947b39377194068f))
 * **packages/tooling:** add package entrypoint for transpile loader ([eaf22b5](https://github.com/rafamel/riseup/commit/eaf22b5126543337a4f65d0e65f5a0eabc9c649d))
 
-
-
-
-
 # [0.18.0](https://github.com/rafamel/riseup/compare/v0.17.0...v0.18.0) (2022-05-24)
-
 
 ### Bug Fixes
 
 * **packages/tooling:** fix package tarballs requiring node_modules dependencies ([efb703f](https://github.com/rafamel/riseup/commit/efb703f927ba7e8a7540e799a5941ee024266c7f))
 * **packages:** update dependencies ([7f8d067](https://github.com/rafamel/riseup/commit/7f8d067e4842828800231cc8eff390ef6f2922f5))
 
-
 ### Code Refactoring
 
 * **packages:** move tarball task from library to tooling package ([1dbe8ce](https://github.com/rafamel/riseup/commit/1dbe8ce021b9b2b64c8c66ddfe915a4b87ccbc89))
-
 
 ### Features
 
 * **packages/rooling:** allow package tarballs to have a modified package.json w/ a callback function ([3e6b26a](https://github.com/rafamel/riseup/commit/3e6b26ae2ff8416ce2c69194c42222cafaff0539))
 * **packages/tooling:** soften several unicorn rules configuration ([4b3e082](https://github.com/rafamel/riseup/commit/4b3e0828bf7a2a4583058c7f882e4101b2c074f0))
 
-
 ### BREAKING CHANGES
 
 * **packages:** the library package no longer provides the tarball task; it is now included in the
 tooling package
 
-
-
-
-
 # [0.17.0](https://github.com/rafamel/riseup/compare/v0.16.0...v0.17.0) (2022-04-04)
-
 
 ### Bug Fixes
 
 * update dependencies ([4892adb](https://github.com/rafamel/riseup/commit/4892adb01f2ce2837bba4a40017fcc076d437620))
 * update dependencies ([3d17e1b](https://github.com/rafamel/riseup/commit/3d17e1b70c6a90f4233bff55f2bb5b2f165ab44d))
 
-
-
-
-
 # [0.16.0](https://github.com/rafamel/riseup/compare/v0.15.0...v0.16.0) (2022-03-24)
-
 
 ### Bug Fixes
 
 * **packages/tooling:** fix build include/exclude patterns ([bf3d7a1](https://github.com/rafamel/riseup/commit/bf3d7a137e1ac0bff0b764f6adf26d5510e56ed9))
-
 
 ### Features
 
 * **packages/tooling, templates/library:** enable code splitting by default on build ([e330369](https://github.com/rafamel/riseup/commit/e33036973386a1dd1c8f6da40766746ebacd87ab))
 * **packages/tooling:** disable no static only class linter rule on default configuration ([1047d3f](https://github.com/rafamel/riseup/commit/1047d3f9014d9f66e2e81974552c748e237ba8c5))
 
-
-
-
-
 # [0.15.0](https://github.com/rafamel/riseup/compare/v0.14.0...v0.15.0) (2022-03-22)
-
 
 ### Bug Fixes
 
 * **packages/tooling:** fix lint task for typescript incremental configuration ([4e0a7e1](https://github.com/rafamel/riseup/commit/4e0a7e151e6f627858cf1c612af71568706b633e))
 * **packages:** update dependencies ([6b49a4c](https://github.com/rafamel/riseup/commit/6b49a4c17d6c70b0a3974102215923f01929c8ed))
-
 
 ### Features
 
@@ -199,119 +159,69 @@ tooling package
 * **packages/tooling:** disable too restrictive linter rules ([da4c592](https://github.com/rafamel/riseup/commit/da4c5920a44e1dafac269f447dd0611631d7e7b7))
 * **packages:** throw on non serializable configurations ([f7903bc](https://github.com/rafamel/riseup/commit/f7903bc87e0931e3d9d71f04b185479fd7d07a5d))
 
-
 ### BREAKING CHANGES
 
 * **packages/tooling:** build, node, and test tasks no longer take params.exclude as a RegExp/boolean.
 Please see latest documentation.
 
-
-
-
-
 # [0.14.0](https://github.com/rafamel/riseup/compare/v0.13.1...v0.14.0) (2022-03-16)
-
 
 ### Features
 
 * **packages:** project redesign and rewrite ([28e03c9](https://github.com/rafamel/riseup/commit/28e03c9ba72dcbd4388a954be282a86b4411e23f))
 
-
 ### BREAKING CHANGES
 
 * **packages:** project has been almost entirely rewritten; please check latest documentation
 
-
-
-
-
 ## [0.13.1](https://github.com/rafamel/riseup/compare/v0.12.0...v0.13.1) (2021-09-28)
-
 
 ### Features
 
 * **packages/tooling:** set allowDeclareFields as true for @babel/preset-typescript ([dff7d49](https://github.com/rafamel/riseup/commit/dff7d4945352a16f7f67ad44e1741b4359b26134))
 
-
-
-
-
 # [0.12.0](https://github.com/rafamel/riseup/compare/v0.11.0...v0.12.0) (2021-09-16)
 
 **Note:** Version bump only for package @riseup/tooling
-
-
-
-
 
 # [0.11.0](https://github.com/rafamel/riseup/compare/v0.10.0...v0.11.0) (2021-09-15)
 
 **Note:** Version bump only for package @riseup/tooling
 
-
-
-
-
 # [0.10.0](https://github.com/rafamel/riseup/compare/v0.9.2...v0.10.0) (2021-09-14)
-
 
 ### Bug Fixes
 
 * **packages:** update dependencies ([fda9969](https://github.com/rafamel/riseup/commit/fda9969aaf64671eccaea5916f80eaa8867dc9e0))
 
-
 ### Features
 
 * **packages/tooling:** independent prettierignore resolution; parse formatting only with prettier ([1a32f85](https://github.com/rafamel/riseup/commit/1a32f851c5601bc90a9f5c549c275131b56c8123))
 
-
-
-
-
 ## [0.9.2](https://github.com/rafamel/riseup/compare/v0.9.1...v0.9.2) (2021-06-30)
-
 
 ### Bug Fixes
 
 * **packages/tooling:** disable no-dupe-class-members eslint rule for typescript ([b12a622](https://github.com/rafamel/riseup/commit/b12a622dad4fefaa7ff0b6562a639f2e7a90131b))
 
-
-
-
-
 ## [0.9.1](https://github.com/rafamel/riseup/compare/v0.9.0...v0.9.1) (2021-06-28)
-
 
 ### Bug Fixes
 
 * **packages:** update dependencies ([d8fabf9](https://github.com/rafamel/riseup/commit/d8fabf9d8cfb5180ecba281c3ac1194268dda2e8))
 
-
-
-
-
 # [0.9.0](https://github.com/rafamel/riseup/compare/v0.8.0...v0.9.0) (2021-06-22)
 
 **Note:** Version bump only for package @riseup/tooling
 
-
-
-
-
 # [0.8.0](https://github.com/rafamel/riseup/compare/v0.7.0...v0.8.0) (2021-06-20)
-
 
 ### Features
 
 * **packages/utils:** interceptor sets up an in memory fs; defaults to the filesystem; wider compatibility ([5de75d4](https://github.com/rafamel/riseup/commit/5de75d4d327c18cc8a472d8847895148a451e31e))
 * **packages/utils:** rename tmpTask to temporal; files are overriden by existing files ([f5e389b](https://github.com/rafamel/riseup/commit/f5e389b497e941c2352c715ac0eeec96c8b03876))
 
-
-
-
-
 # [0.7.0](https://github.com/rafamel/riseup/compare/v0.6.0...v0.7.0) (2021-06-18)
-
 
 ### Bug Fixes
 
@@ -320,7 +230,6 @@ Please see latest documentation.
 * **packages/tooling:** add noEmit to default tsconfig ([bf9c736](https://github.com/rafamel/riseup/commit/bf9c73675f2d218133716091ddc28d9688e6fa58))
 * **packages/tooling:** fix coverage directories on jest configuration ([429625a](https://github.com/rafamel/riseup/commit/429625a7cdf2a98ad077e7f520eaa8590ca7035d))
 
-
 ### Features
 
 * **packages:** replace react pacakge by next package ([eb8052b](https://github.com/rafamel/riseup/commit/eb8052b6baee6207cdc192728348b2bebc4cac03))
@@ -328,12 +237,7 @@ Please see latest documentation.
 * **packages/tooling:** disable node/no-callback-literal eslint rule ([8806386](https://github.com/rafamel/riseup/commit/88063862a27ec3779a3005d6471780a4ab491ae2))
 * **packages/tooling:** support react for eslint/lint ([0ca8c02](https://github.com/rafamel/riseup/commit/0ca8c0225bbedde9797b8ef7e1b6c5892e1d81fb))
 
-
-
-
-
 # [0.6.0](https://github.com/rafamel/riseup/compare/v0.5.0...v0.6.0) (2021-06-13)
-
 
 ### Bug Fixes
 
@@ -354,7 +258,6 @@ Please see latest documentation.
 * **packages/tooling:** fixes prettier handling of directories and log level on lint and fix tasks ([77159d9](https://github.com/rafamel/riseup/commit/77159d9694defc7b1a2fb665ed04527ffcb94d77))
 * **packages/tooling:** include user rules in eslint configuration ([5463f9a](https://github.com/rafamel/riseup/commit/5463f9aa36bdc1c8bc56ee1151e523c367723a8a))
 * **packages/tooling:** properly handle escape characters on babel configuration ([f6cb96a](https://github.com/rafamel/riseup/commit/f6cb96aaec9d114034414cd45af2235706db4933))
-
 
 ### Features
 
@@ -383,39 +286,23 @@ Please see latest documentation.
 * **packages/tooling:** use different typescript include configurations per task ([4ad8341](https://github.com/rafamel/riseup/commit/4ad834189b3317a7ee4bce8ac1564fb37ad158c5))
 * **packages/utils:** take file extension on tmpTask ([19f14d9](https://github.com/rafamel/riseup/commit/19f14d957fe24de22f0078bf0abf72b536fc0105))
 
-
-
-
-
 # [0.5.0](https://github.com/rafamel/riseup/compare/v0.4.0...v0.5.0) (2019-11-01)
-
 
 ### Bug Fixes
 
 * **deps:** updates dependencies ([23a20b5](https://github.com/rafamel/riseup/commit/23a20b597feea8e75c7c87e9e51f6863be075da5))
 
-
 ### Features
 
 * sets engine as and transpiles for node 12 ([d14174d](https://github.com/rafamel/riseup/commit/d14174d9d1fc890cc4fb68c9bf04c3a84a38c2ed))
 
-
-
-
-
 # [0.4.0](https://github.com/rafamel/riseup/compare/v0.3.0...v0.4.0) (2019-09-12)
-
 
 ### Features
 
 * **packages/tooling:** disables lines-between-class-members and changes @typescript-eslint/no-infer ([e28cf3e](https://github.com/rafamel/riseup/commit/e28cf3e))
 
-
-
-
-
 # [0.3.0](https://github.com/rafamel/riseup/compare/v0.2.0...v0.3.0) (2019-09-12)
-
 
 ### Bug Fixes
 
@@ -425,7 +312,6 @@ Please see latest documentation.
 * **packages/tooling:** fixes eslint array-type configuration ([4e2e2e2](https://github.com/rafamel/riseup/commit/4e2e2e2))
 * **packages/tooling:** fixes eslint config when !typescript ([628fe98](https://github.com/rafamel/riseup/commit/628fe98))
 
-
 ### Features
 
 * **packages:** removes commit check; renames pre-commit to verify; establishes difference between v ([f68cf75](https://github.com/rafamel/riseup/commit/f68cf75))
@@ -433,37 +319,22 @@ Please see latest documentation.
 * **packages/tooling:** resolves eslint plugins relative to tooling package ([5b64c4a](https://github.com/rafamel/riseup/commit/5b64c4a))
 * **packages/toooling:** disables @typescript-eslint/ban-ts-ignore eslint rule ([da46e28](https://github.com/rafamel/riseup/commit/da46e28))
 
-
-
-
-
 # [0.2.0](https://github.com/rafamel/riseup/compare/v0.1.0...v0.2.0) (2019-08-04)
 
 **Note:** Version bump only for package @riseup/tooling
 
-
-
-
-
 # [0.1.0](https://github.com/rafamel/riseup/compare/v0.0.2...v0.1.0) (2019-08-04)
-
 
 ### Bug Fixes
 
 * **deps:** updates dependencies ([f06ef87](https://github.com/rafamel/riseup/commit/f06ef87))
 * changes precommit script name to pre-commit to avoid husky double runs ([bc9b754](https://github.com/rafamel/riseup/commit/bc9b754))
 
-
 ### Features
 
 * **tooling:eslint:** disables no-return-await rule ([1b41cc4](https://github.com/rafamel/riseup/commit/1b41cc4))
 
-
-
-
-
 ## [0.0.2](https://github.com/rafamel/riseup/compare/v0.0.1...v0.0.2) (2019-07-02)
-
 
 ### Bug Fixes
 
