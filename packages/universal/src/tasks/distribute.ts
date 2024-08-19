@@ -1,4 +1,5 @@
 import path from 'node:path';
+import type { Buffer } from 'node:buffer';
 
 import { TypeGuard } from 'type-core';
 import {
