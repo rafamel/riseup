@@ -1,6 +1,6 @@
-const pkg = require('./package.json');
+import pkg from './package.json' with { type: 'json' };
 
-module.exports = {
+export default {
   // Source image for favicons
   logo: 'static/favicon.svg',
   // Enable Progressive Web App capabilities

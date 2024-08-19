@@ -1,51 +1,63 @@
 import {
-  recreate,
-  context,
-  create,
-  series,
-  lift,
-  exec,
   catches,
-  silence
+  create,
+  exec,
+  finalize,
+  lift,
+  recreate,
+  remove,
+  series
 } from 'kpo';
 
-import riseup from './riseup.config.mjs';
+import defaults from './config/riseup.config.mjs';
 
-export default recreate({ announce: true }, () => {
-  const tasks = {
-    node: riseup.tasks.node,
-    start: create(() => context({ args: ['start'] }, tasks.watch)),
-    watch: series(
-      context({ args: [] }, silence(exec('next', ['telemetry', 'disable']))),
-      exec('next')
-    ),
-    build: series(
-      create(() => tasks.lint),
-      create(() => context({ args: ['build', '--no-lint'] }, tasks.watch)),
-      create(() => tasks.size)
-    ),
-    export: create(() => context({ args: ['export'] }, tasks.watch)),
-    assets: riseup.tasks.assets,
-    tarball: riseup.tasks.tarball,
-    explore: riseup.tasks.explore,
-    size: riseup.tasks.size,
-    fix: riseup.tasks.fix,
-    lint: series(riseup.tasks.lintmd, riseup.tasks.lint),
-    test: riseup.tasks.test,
-    commit: riseup.tasks.commit,
-    release: context({ args: ['--no-verify'] }, riseup.tasks.release),
-    validate: series(
-      create(() => tasks.lint),
-      create(() => tasks.test),
-      lift({ purge: true, mode: 'audit' }, () => tasks),
-      catches({ level: 'silent' }, exec('npm', ['outdated']))
-    ),
-    /* Hooks */
-    postinstall: series(
-      exec('patch-package'),
-      create(() => tasks.assets)
-    ),
-    version: create(() => tasks.validate)
-  };
-  return tasks;
-});
+export default Promise.resolve(defaults)
+  .then(({ tasks }) => tasks)
+  .then(({ assets, commit, explore, size, tarball }) => {
+    const tasks = {
+      start: exec('next', ['start'], {
+        env: { NODE_NO_WARNINGS: 1, NEXT_TELEMETRY_DISABLED: 1 }
+      }),
+      watch: series(
+        remove('.next/*', { glob: true, recursive: true }),
+        exec('next', ['dev'], {
+          env: { NODE_NO_WARNINGS: 1, NEXT_TELEMETRY_DISABLED: 1 }
+        })
+      ),
+      build: series(
+        create(() => tasks.assets),
+        remove('build/*', { glob: true, recursive: true }),
+        exec('next', ['build'], {
+          env: { NODE_NO_WARNINGS: 1, NEXT_TELEMETRY_DISABLED: 1 }
+        })
+      ),
+      tarball,
+      lint: finalize(
+        exec('eslint', ['.']),
+        exec('tsc', ['--noEmit']),
+        exec('prettier', ['.', '--log-level', 'warn', '--cache', '--check'])
+      ),
+      fix: series(
+        exec('eslint', ['.', '--fix']),
+        exec('prettier', ['.', '--log-level', 'warn', '--write'])
+      ),
+      test: exec('vitest', ['-c', './config/vitest.config.mts']),
+      assets,
+      explore,
+      size,
+      commit,
+      validate: series(
+        create(() => tasks.lint),
+        create(() => tasks.test),
+        lift({ purge: true, mode: 'audit' }, () => tasks),
+        catches({ level: 'silent' }, exec('npm', ['audit']))
+      ),
+      /* Hooks */
+      version: series(
+        create(() => tasks.validate),
+        create(() => tasks.build),
+        create(() => series(tasks.docs, exec('git', ['add', '.'])))
+      )
+    };
+    return recreate({ announce: true }, tasks);
+  });
