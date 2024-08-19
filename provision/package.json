@@ -13,8 +13,8 @@
     "node": ">=22"
   },
   "devDependencies": {
-    "@riseup/universal": "^0.22.0",
-    "@riseup/utils": "^0.22.0",
+    "@riseup/universal": "^0.22.1",
+    "@riseup/utils": "^0.22.1",
     "kpo": "^0.28.0"
   }
 }
