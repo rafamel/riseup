@@ -7,7 +7,7 @@ import { findUpSync } from 'find-up';
 export function getPackageJson(
   cwd: string,
   recursive: boolean
-): Serial.Object | null {
+): { [key: string]: Serial } | null {
   let file: string | undefined = path.resolve(cwd, 'package.json');
 
   try {

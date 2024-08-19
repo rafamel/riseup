@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { type Serial, TypeGuard, type UnaryFn } from 'type-core';
+import { type Callable, type Serial, TypeGuard } from 'type-core';
 import { type Task, copy, create, edit, mkdir, remove, series } from 'kpo';
 
 import { defaults } from '../defaults';
@@ -13,7 +13,10 @@ export interface ContentsParams {
   /** Path of assets to copy into destination folder */
   assets?: null | string | string[];
   /** Copy package.json and optionally override its properties */
-  package?: boolean | Serial.Object | UnaryFn<Serial.Object, Serial.Object>;
+  package?:
+    | boolean
+    | { [key: string]: Serial }
+    | Callable<{ [key: string]: Serial }, { [key: string]: Serial }>;
 }
 
 export function contents(params: ContentsParams | null): Task.Async {
@@ -76,7 +79,7 @@ export function contents(params: ContentsParams | null): Task.Async {
                   ({ buffer }) => {
                     const contents = JSON.parse(String(buffer));
                     return TypeGuard.isFunction(pkg)
-                      ? { ...contents, ...pkg(contents) }
+                      ? { ...contents, ...(pkg(contents) as any) }
                       : { ...contents, ...pkg };
                   },
                   { glob: false, strict: true }

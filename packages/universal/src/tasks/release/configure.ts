@@ -10,7 +10,7 @@ export interface ConfigureOptions {
   runAfter: null | string | string[];
 }
 
-export function configure(options: ConfigureOptions): Serial.Type {
+export function configure(options: ConfigureOptions): Serial {
   const before = options.runBefore
     ? Array.isArray(options.runBefore)
       ? options.runBefore

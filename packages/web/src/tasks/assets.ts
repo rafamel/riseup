@@ -47,7 +47,7 @@ export interface AssetsParamsFavicons {
 export interface AssetsParamsSummary {
   url?: string | null;
   path?: string | null;
-  values?: Serial.Type | null;
+  values?: Serial | null;
 }
 
 export function assets(params: AssetsParams | null): Task.Async {
