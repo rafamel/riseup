@@ -26,12 +26,18 @@ export default defineConfig({
     unstubEnvs: true,
     unstubGlobals: true,
     /* Test Match */
-    include: [`{src,test}/**/*.{test,spec}.{${extensions.source.join(',')}}`],
+    include: [
+      `src/**/__tests__/**/*.{${extensions.source.join(',')}}`,
+      `{src,test}/**/*.{test,spec}.{${extensions.source.join(',')}}`
+    ],
     /* Typecheck */
     typecheck: {
       enabled: true,
       checker: 'tsc',
-      include: [`{src,test}/**/*.test-d.{${extensions.source.join(',')}}`]
+      include: [
+        `src/**/__tests__/**/*.d.{${extensions.source.join(',')}}`,
+        `{src,test}/**/*.test-d.{${extensions.source.join(',')}}`
+      ]
     },
     /* Coverage */
     coverage: {
@@ -40,7 +46,14 @@ export default defineConfig({
       reporter: ['text', 'lcov'],
       reportsDirectory: './coverage',
       include: [`src/**/*.{${extensions.source.join(',')}}`],
-      exclude: ['**/*.d.ts', '**/__mocks__/**', '**/@types/**', '**/vendor/**']
+      exclude: [
+        '**/*.d.ts',
+        `**/*.{test,spec}.{${extensions.source.join(',')}}`,
+        '**/__mocks__/**',
+        '**/__tests__/**',
+        '**/@types/**',
+        '**/vendor/**'
+      ]
     }
   }
 });

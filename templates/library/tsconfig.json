@@ -12,6 +12,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    // Enable incremental compilation.
+    "incremental": false,
     // Support TC39 stage 2 draft decorators.
     "experimentalDecorators": false,
     // Emit ECMAScript-standard-compliant class fields.
@@ -29,7 +31,10 @@
 
     /* Type Checking */
     // Specify files to include.
-    "lib": ["ES2022" /* "DOM", "DOM.Iterable", "DOM.AsyncIterable" */],
+    "lib": [
+      "ES2022",
+      "ES2023.Array" /* "DOM", "DOM.Iterable", "DOM.AsyncIterable" */
+    ],
     // Specify type declaration files to include.
     "types": ["node"],
     // Specify module system.

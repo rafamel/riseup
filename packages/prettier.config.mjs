@@ -10,7 +10,6 @@ export default getSupportInfo()
   })
   .then((arr) => `(${arr.join('|')})`)
   .then((ext) => ({
-    $schema: 'https://json.schemastore.org/prettierrc',
     tabWidth: 2,
     useTabs: false,
     endOfLine: 'lf',
@@ -24,9 +23,10 @@ export default getSupportInfo()
     overrides: [
       {
         files: [
+          'LICENSE',
           '**/*.md',
           `**/docs/**/*.${ext}`,
-          `**/{lib,pkg,out,dist,build,vendor,deploy,coverage}/**/*.${ext}`,
+          `**/{pkg,out,dist,build,vendor,deploy,coverage}/**/*.${ext}`,
           `**/{.cache,.vscode,.vercel,.tsup,node_modules}/**/*.${ext}`
         ],
         options: {

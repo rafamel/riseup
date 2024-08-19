@@ -23,9 +23,10 @@ export default getSupportInfo()
     overrides: [
       {
         files: [
+          'LICENSE',
           '**/*.md',
           `**/docs/**/*.${ext}`,
-          `**/{lib,pkg,out,dist,build,vendor,deploy,coverage}/**/*.${ext}`,
+          `**/{pkg,out,dist,build,vendor,deploy,coverage}/**/*.${ext}`,
           `**/{.cache,.vscode,.vercel,.tsup,node_modules}/**/*.${ext}`
         ],
         options: {
